@@ -18,5 +18,10 @@ class SubEtapa extends Model
         return $this->belongsTo('App\Etapa');
     }
 
+    public function trilhasDeVendas()
+    {
+        return $this->belongsToMany('App\TrilhaDeVenda');
+    }
+
 
 }

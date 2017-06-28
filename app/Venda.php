@@ -28,9 +28,19 @@ class Venda extends Model
         return $this->belongsTo('App\Cliente');
     }
 
+    public function vendedor()
+    {
+        return $this->belongsTo('App\Vendedor');
+    }
+
     public function status()
     {
         return $this->belongsTo('App\StatusVenda');
+    }
+
+    public function trilhaDeVenda()
+    {
+        return $this->belongsTo('App\TrilhaDeVendas');
     }
 
 }

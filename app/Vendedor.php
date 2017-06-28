@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cliente extends Model
+class Vendedor extends Model
 {
-    protected $table = 'clientes';
+    protected $table = 'vendedores';
 
     public function vendas()
     {

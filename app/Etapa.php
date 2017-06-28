@@ -17,4 +17,9 @@ class Etapa extends Model
     {
         return $this->hasMany('App\SubEtapa');
     }
+
+    public function trilhasDeVendas()
+    {
+        return $this->belongsToMany('App\TrilhaDeVenda');
+    }
 }
