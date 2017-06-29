@@ -16,4 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/test/show', 'TestController@show');
-
+Route::get('/empreendimento', 'EmpreendimentoController@index');

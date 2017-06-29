@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder {
 		Model::unguard();
 
 		// Estados
-        $this->call('EstadosTableSeeder');
+        $this->call(EstadosTableSeeder::class);
 
         // Cidades
         $this->call('CidadesAcreSeeder');

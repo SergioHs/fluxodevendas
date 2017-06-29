@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Empreendimento;
 use Illuminate\Http\Request;
 
 class EmpreendimentoController extends Controller
@@ -13,7 +14,7 @@ class EmpreendimentoController extends Controller
      */
     public function index()
     {
-        //
+        return view('empreendimentos.index',['empreeendimentos' => Empreendimento::all()]);
     }
 
     /**
