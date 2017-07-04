@@ -17,3 +17,7 @@ Route::get('/', function () {
 
 Route::get('/test/show', 'TestController@show');
 Route::get('/empreendimento', 'EmpreendimentoController@index');
+Route::post('/empreendimento/adicionar', 'EmpreendimentoController@store');
+Route::get('/empreendimento/adicionar', 'EmpreendimentoController@create');
+Route::get('/cliente/adicionar', 'ClienteController@create');
+Route::get('/cidades/por-estado/{id}', 'CidadeController@getByEstado');

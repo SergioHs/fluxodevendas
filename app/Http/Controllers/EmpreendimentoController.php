@@ -24,7 +24,7 @@ class EmpreendimentoController extends Controller
      */
     public function create()
     {
-        //
+        return view('empreendimentos.create');
     }
 
     /**

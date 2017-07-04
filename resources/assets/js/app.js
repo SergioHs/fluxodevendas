@@ -1,22 +1,44 @@
+$(document).ready(function(){
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+    $("#select-estados").on('change', function(ev){
+        if(this.value){
+            var id = this.value;
+            fetch('/public/cidades/por-estado/'+id, function(data){console.log(data)});
+        }
+    });
 
-require('./bootstrap');
-
-window.Vue = require('vue');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-Vue.component('example', require('./components/Example.vue'));
-
-const app = new Vue({
-    el: '#app'
 });
+
+function ArgumentException(message){
+    this.name = "Argument Exception";
+    this.message = message;
+}
+
+function fetch(url, success, error, complete){
+    var endpoint;
+    if(url.indexOf("http") === 0){
+        endpoint = url
+    } else {
+        var protocol = window.location.protocol;
+        var separator = '//';
+        var currentHost = window.location.hostname;
+        endpoint = protocol+separator+currentHost;
+    }
+
+    if(success && typeof success != "function")
+        throw new ArgumentException("Argument 'exception' must be a function");
+
+    if(error && typeof  error != "function")
+        throw new ArgumentException("Argument 'error' must be a function");
+
+    if(complete && typeof  error != "function")
+        throw new ArgumentException("Argument 'error' must be a function");
+
+    $.get({
+        url: endpoint,
+        success: success || undefined,
+        error: error || undefined,
+        complete: complete || undefined
+    })
+}
+
