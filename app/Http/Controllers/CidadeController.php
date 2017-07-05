@@ -12,7 +12,7 @@ class CidadeController extends Controller
 {
     public function getByEstado($estado_id)
     {
-        $cidades = Estado::find($estado_id)->cidades->toArray();
-        return response()->json($cidades);
+        $cidades = Estado::cidadesPorId($estado_id);
+        return response()->json($cidades->toArray());
     }
 }

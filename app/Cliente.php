@@ -8,6 +8,8 @@ class Cliente extends Model
 {
     protected $table = 'clientes';
 
+    protected $guarded = ['id'];
+
     public function vendas()
     {
         return $this->hasMany('App\Venda');

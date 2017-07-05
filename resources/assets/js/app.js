@@ -3,7 +3,16 @@ $(document).ready(function(){
     $("#select-estados").on('change', function(ev){
         if(this.value){
             var id = this.value;
-            fetch('/cidades/por-estado/'+id, function(data){console.log(data)});
+            fetch('/cidades/por-estado/'+id,
+                function(data){
+                    var selectCidades = $("#select-cidades");
+                    selectCidades.empty();
+                    $.each(data, function(a,e,i){
+                        selectCidades.append("<option value='"+e.id+"'>" + e.cidade + "</option>");
+                    });
+
+                }
+            );
         }
     });
 

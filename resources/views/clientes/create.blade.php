@@ -6,6 +6,8 @@
         <h2>Cadastrar Cliente</h2>
     </div>
 </div>
+<form method="post" action="{{url('/cliente/store')}}">
+{{ csrf_field() }}
 <div class="grid-x grid-padding-x">
     <div class="medium-4 cell">
         <label>
@@ -16,7 +18,7 @@
     <div class="medium-4 cell">
         <label>
             CPF
-            <input type="text" name="cpf">
+            <input type="text" name="cpf_cnpj">
         </label>
     </div>
     <div class="medium-4 cell">
@@ -28,28 +30,13 @@
     <div class="medium-4 cell">
         <label>
             Telefone
-            <input type="text" name="Telefone">
+            <input type="text" name="telefone">
         </label>
     </div>
-    <div class="medium-4 cell">
-        <label>
-            Estado
-            <select id="select-estados" name="estado">
-                @foreach($estados as $e)
-                    <option value="{{$e->id}}">{{$e->sigla}}</option>
-                @endforeach
-            </select>
-        </label>
-    </div>
-    <div class="medium-4 cell">
-        <label>
-            Cidade
-            <select id="select-cidades" name="Cidade">
-                <option>Balneário Camboriú</option>
-                <option>Florianópolis</option>
-            </select>
-        </label>
-    </div>
+
+    @component('components.cidades',['estados' => $estados])
+    @endcomponent
+
     <div class="medium-8 cell">
         <label>
             Observações
@@ -59,6 +46,6 @@
     <div class="medium-12 cell small-12">
         <button class="button" type="submit">Enviar</button>
     </div>
-
 </div>
+</form>
 @endsection

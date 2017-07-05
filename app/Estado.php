@@ -13,4 +13,15 @@ class Estado extends Model
     {
         return $this->hasMany('App\Cidade');
     }
+
+    public static function getCidades($id)
+    {
+        return static::find($id)->cidades;
+    }
+
+    public function scopeCidadesPorId($query, $id)
+    {
+        return $query->find($id)->cidades;
+    }
+
 }
