@@ -12,7 +12,7 @@
                     <td>CNPJ/CPF</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody data-open="exampleModal1">
             @foreach($clientes as $c)
                 <tr>
                     <td>{{$c->nome}}</td>

@@ -64,6 +64,22 @@
 </div>
 @show
 
+@section('flash-message')
+    @if(Session::has("flash-error"))
+        <div class="grid-x grid-padding-x">
+            <div class="medium-12 cell">
+                <div class="alert callout small">
+                    {{Session::get("flash")}}
+                </div>
+            </div>
+        </div>
+
+    @endif
+@show
+
+@component('components.flash-message')
+@endcomponent
+
 @yield('content')
 
 <script src="<?=asset('/js/app.js')?>"></script>
