@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http;
+namespace App\Http\Controllers;
 
 use App\Vendedor;
 use App\Estado;
 use Illuminate\Http\Request;
-
-use App\Http\Controllers\Controller;
 
 class VendedorController extends Controller
 {
@@ -38,7 +36,7 @@ class VendedorController extends Controller
 
         $request->session()->flash('success', 'vendedor cadastrado com sucesso');
 
-        return redirect()->action('vendedorController@index');
+        return redirect()->action('VendedorController@index');
     }
 
     public function detail($id)

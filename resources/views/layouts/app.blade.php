@@ -25,7 +25,7 @@
                 <a href="#">Pessoas</a>
                 <ul class="submenu menu vertical nested " data-submenu>
                     <li><a href="{{action("ClienteController@index")}}">Clientes</a></li>
-                    <li><a href="#">Vendedores</a></li>
+                    <li><a href="{{action("VendedorController@index")}}">Vendedores</a></li>
                 </ul>
             </li>
             <li class="has-submenu ">

@@ -6,7 +6,7 @@
             <h3>Cadastrar Vendedor</h3>
         </div>
     </div>
-    <form method="post" action="{{action('App\Http\VendedorController@store')}}">
+    <form method="post" action="{{action('VendedorController@store')}}">
         {{ csrf_field() }}
         <div class="grid-x grid-padding-x">
             <div class="medium-4 cell">

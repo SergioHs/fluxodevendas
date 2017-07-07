@@ -24,9 +24,9 @@ Route::get('/cliente', 'ClienteController@index');
 Route::get('/cliente/detail/{id}', 'ClienteController@detail');
 Route::post('/cliente/store', 'ClienteController@store');
 
-Route::get('/vendedor/adicionar', 'App\Http\VendedorController@create');
-Route::get('/vendedor', 'App\Http\VendedorController@index');
-Route::get('/vendedor/detail/{id}', 'App\Http\VendedorController@detail');
-Route::post('/vendedor/store', 'App\Http\VendedorController@store');
+Route::get('/vendedor/adicionar', 'VendedorController@create');
+Route::get('/vendedor', 'VendedorController@index');
+Route::get('/vendedor/detail/{id}', 'VendedorController@detail');
+Route::post('/vendedor/store', 'VendedorController@store');
 
 Route::get('/cidades/por-estado/{id}', 'CidadeController@getByEstado');
