@@ -1,10 +1,20 @@
 @extends('layouts.app')
 @section('title', 'Listar Clientes')
 @section('content')
+    <div class="grid-x grid-padding-x grid-padding-y">
+        <div class="auto cell">
+            <h3 style="display: inline;">Clientes</h3>
+            <a class="button" href="{{action('ClienteController@create')}}">Cadastrar</a>
+        </div>
+        <div class="auto cell">
+            
+        </div>
+    </div>
 <div class="grid-x grid-padding-x grid-padding-y">
+
     <div class="medium-12 cell">
-        <h3>Clientes</h3>
-        <table class="hover">
+
+        <table class="hover ajax-modal-table" data-modal="#cliente-detail-modal" data-route="/cliente/detail">
             <thead>
                 <tr>
                     <td>Nome</td>
@@ -12,9 +22,9 @@
                     <td>CNPJ/CPF</td>
                 </tr>
             </thead>
-            <tbody data-open="exampleModal1">
+            <tbody  data-open="cliente-detail-modal">
             @foreach($clientes as $c)
-                <tr>
+                <tr data-entity-id="{{$c->id}}">
                     <td>{{$c->nome}}</td>
                     <td>{{$c->email}}</td>
                     <td>{{$c->cpf_cnpj}}</td>
@@ -24,4 +34,8 @@
         </table>
         @endsection
     </div>
+</div>
+
+<div class="reveal" id="cliente-detail-modal" data-reveal>
+
 </div>

@@ -46,5 +46,11 @@ class ClienteController extends Controller
         return redirect()->action('ClienteController@index');
     }
 
+    public function detail($id)
+    {
+        $cliente = Cliente::with('cidade')->findOrFail($id);
+        return view('clientes.detail',['cliente' => $cliente]);
+    }
+
 
 }

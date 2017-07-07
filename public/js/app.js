@@ -26,6 +26,8 @@ $(document).ready(function(){
         }
     });
 
+
+
 });
 
 function ArgumentException(message){
@@ -64,4 +66,17 @@ function fetch(url, success, error, complete){
         complete: complete || undefined
     });
 }
+
+$('table.ajax-modal-table').on('click', 'tr', function(ev){
+    //this eh tr
+    var $entityId = $(this).attr('data-entity-id');
+    var $route = $(ev.delegateTarget).attr('data-route');
+    var $modal = $(ev.delegateTarget).attr('data-modal');
+
+    fetch($route + "/" + $entityId,
+        function(data){
+            $($modal).html(data).foundation('open');
+        })
+
+});
 
