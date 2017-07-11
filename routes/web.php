@@ -20,6 +20,7 @@ Route::post('/empreendimento/adicionar', 'EmpreendimentoController@store');
 Route::get('/empreendimento/adicionar', 'EmpreendimentoController@create');
 
 Route::get('/cliente/adicionar', 'ClienteController@create');
+Route::get('/cliente/editar/{id}','ClienteController@edit');
 Route::get('/cliente', 'ClienteController@index');
 Route::get('/cliente/detail/{id}', 'ClienteController@detail');
 Route::post('/cliente/store', 'ClienteController@store');

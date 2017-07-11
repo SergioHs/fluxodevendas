@@ -10,7 +10,6 @@ $(document).ready(function(){
                     $.each(data, function(a,e,i){
                         selectCidades.append("<option value='"+e.id+"'>" + e.cidade + "</option>");
                     });
-
                 }
             );
         }

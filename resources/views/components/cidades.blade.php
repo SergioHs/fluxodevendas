@@ -12,6 +12,13 @@
     <label>
         Cidade
         <select id="select-cidades" name="cidade_id">
+            @if(isset($cidades))
+                @foreach($cidades as $c)
+                    <option value="{{$c->id}}">{{$c->cidade}}</option>
+                @endforeach
+            @endif
         </select>
+        @component('components.form-errors',['field' => 'cidade_id'])
+        @endcomponent
     </label>
 </div>

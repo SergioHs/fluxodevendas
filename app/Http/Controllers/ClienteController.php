@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use App\Estado;
+use App\Cidade;
 use Illuminate\Http\Request;
 
 
@@ -28,6 +29,15 @@ class ClienteController extends Controller
         return view('clientes.create', ['estados' => $estados]);
     }
 
+    public function edit($id)
+    {
+        $estados = Estado::all();
+        $cliente = Cliente::with('cidade.estado')->findOrFail($id);
+        $cidades = Cidade::where("estado_id", $cliente->toArray()['cidade']['estado_id'])->get();
+
+        return view('clientes.create', ['cliente' => $cliente, 'estados' => $estados, 'cidades' => $cidades]);
+    }
+
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -37,7 +47,11 @@ class ClienteController extends Controller
 
         ]);
 
-        $cliente = new Cliente();
+        if(isset($request->id))
+            $cliente = Cliente::findOrFail($request->id);
+        else
+            $cliente = new Cliente();
+
         $cliente->fill($request->all());
         $cliente->save();
 
