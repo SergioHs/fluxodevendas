@@ -31,3 +31,11 @@ Route::get('/vendedor/detail/{id}', 'VendedorController@detail');
 Route::post('/vendedor/store', 'VendedorController@store');
 
 Route::get('/cidades/por-estado/{id}', 'CidadeController@getByEstado');
+
+Route::get('/trilhadevenda', 'TrilhaDeVendaController@index');
+Route::get('/trilhadevenda/adicionar', 'TrilhaDeVendaController@create');
+Route::post('/trilhadevenda/store','TrilhaDeVendaController@store');
+
+Route::get('/etapa', 'EtapaController@index');
+Route::get('/etapa/adicionar','EtapaController@create');
+Route::post('/etapa/store','EtapaController@store');

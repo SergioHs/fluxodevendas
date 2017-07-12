@@ -32,5 +32,8 @@
             <dt>Observações</dt>
             <dd>{{$cliente->observacoes ?: ""}}</dd>
         </div>
+        <div class="medium-12 cell">
+            <a href="{{action('ClienteController@edit',['id' => $cliente->id])}}" class="button secondary">Editar</a>
+        </div>
     </div>
 </div>

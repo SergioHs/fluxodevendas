@@ -11,9 +11,8 @@
         </div>
     </div>
     <div class="grid-x grid-padding-x grid-padding-y">
-
         <div class="medium-12 cell">
-
+            @if(count($vendedores) > 0)
             <table class="hover ajax-modal-table" data-modal="#vendedor-detail-modal" data-route="/vendedor/detail">
                 <thead>
                 <tr>
@@ -32,10 +31,13 @@
                 @endforeach
                 </tbody>
             </table>
-            @endsection
+            @else
+            @component('components.nenhum-resultado',['link' => 'VendedorController@create'])
+            @endcomponent
+            @endif
         </div>
     </div>
+<div class="reveal" id="vendedor-detail-modal" data-reveal>
 
-    <div class="reveal" id="vendedor-detail-modal" data-reveal>
-
-    </div>
+</div>
+@endsection

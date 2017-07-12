@@ -20,7 +20,6 @@ $(document).ready(function(){
                     $.each(data, function(a,e,i){
                         selectCidades.append("<option value='"+e.id+"'>" + e.cidade + "</option>");
                     });
-
                 }
             );
         }
@@ -76,7 +75,7 @@ $('table.ajax-modal-table').on('click', 'tr', function(ev){
     fetch($route + "/" + $entityId,
         function(data){
             $($modal).html(data).foundation('open');
-        })
+        });
 
 });
 

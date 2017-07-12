@@ -57,7 +57,7 @@
 </form>
 @endsection
 
-@if(isset($cliente))
+@isset($cliente)
 @section('footer')
 <script type="text/javascript">
         $(document).ready(function(){
@@ -66,4 +66,4 @@
         });
 </script>
 @endsection
-@endif
+@endisset

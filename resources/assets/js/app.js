@@ -14,9 +14,6 @@ $(document).ready(function(){
             );
         }
     });
-
-
-
 });
 
 function ArgumentException(message){
@@ -66,6 +63,5 @@ $('table.ajax-modal-table').on('click', 'tr', function(ev){
         function(data){
             $($modal).html(data).foundation('open');
         });
-
 });
 

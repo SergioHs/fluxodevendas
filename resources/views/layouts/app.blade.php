@@ -31,7 +31,7 @@
             <li class="has-submenu ">
                 <a href="#">Trilhas de venda</a>
                 <ul class="submenu menu vertical nested " data-submenu>
-                    <li><a href="#">Trilhas</a></li>
+                    <li><a href="{{action("TrilhaDeVendaController@index")}}">Trilhas</a></li>
                     <li><a href="#">Etapas</a></li>
                 </ul>
             </li>
