@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubEtapa extends Model
 {
     protected $table = 'subetapas';
+    protected $guarded = ['id'];
 
     public function vendas()
     {

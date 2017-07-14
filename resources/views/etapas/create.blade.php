@@ -6,11 +6,11 @@
         <h3>Cadastro de Etapa</h3>
     </div>
 </div>
-<form method="post" action="{{action('EtapaController@store')}}">
+<form method="post" id="etapa-form" action="{{action('EtapaController@store')}}">
     {{csrf_field()}}
     <div class="grid-x grid-padding-x">
         <div class="medium-4 cell">
-            <div class="hidden">
+            <div class="hidden" id="subetapas-input-container">
 
             </div>
             <label>
@@ -28,6 +28,9 @@
                 @endcomponent
             </label>
         </div>
+        <div class="medium-4 cell">
+            <input type="submit" class="button">
+        </div>
     </div>
 </form>
 <div class="grid-x grid-padding-x grid-padding-y">
@@ -38,9 +41,9 @@
                 <a href="#" class="accordion-title">Vincule sub-etapas</a>
                 <!-- Accordion tab content: it would start in the open state due to using the `is-active` state class. -->
                 <div class="accordion-content" data-tab-content>
-                    <input type="text" id="nome-subetapa">
+                    <input type="text" id="nome-subetapa" title="Nome da sub-etapa">
                     <div id="nome-subetapa-error" class="callout alert small hidden">
-                        Preencha um nome
+
                     </div>
                     <button class="button primary" id="btn-nova-subetapa">+ Nova Sub-Etapa</button>
                 </div>
@@ -55,15 +58,54 @@
 @endsection
 @section('footer')
 <script type="text/javascript">
+$(document).ready(function(){
+
+    var subEtapas = [];
+
     $("#btn-nova-subetapa").on('click',function(ev){
-        ev.preventDefault()
+        ev.preventDefault();
         var inputNome = $("#nome-subetapa");
         if(inputNome.val().length == 0){
-            $("#nome-subetapa-error").slideDown('slow');
+            $("#nome-subetapa-error").text("Preencha um nome").slideDown('fast');
+        } else if(_.find(subEtapas,function(i){return i.nome == inputNome.val()})){
+            $("#nome-subetapa-error").text("Esse nome já está em uso").slideDown('fast');
         } else {
-            $("#panel-subetapas").append("<p>"+inputNome.val()+"</p>");
+            var $subEtapaCard = $("<div>",{class: 'card'});
+            var $subEtapaCardContent = $("<div>",{class: 'card-section'})
+                    .append($("<p>").text(inputNome.val()))
+                    .append($("<button>",{class: 'button seccondary small', text: "Remover", }));
+            $subEtapaCard.append($subEtapaCardContent).appendTo($("#panel-subetapas"));
+            subEtapas.push({nome: inputNome.val()});
+            inputNome.val("");
+            $("#nome-subetapa-error").slideUp('fast');
         }
+    });
 
-    })
+    $("#panel-subetapas").on('click', 'button', function(){
+        var subEtapaText = $(this).siblings("p").text();
+        subEtapas = _.reject(subEtapas,function(i){return i.nome == subEtapaText});
+        $(this).closest("div.card").slideUp('fast');
+    });
+
+    var submeteu = false;
+
+    $("#etapa-form").on('submit', function(ev) {
+        if (!submeteu) {
+            ev.preventDefault();
+
+            _.each(subEtapas, function (el, index, list) {
+                console.log(el)
+
+                $("div#subetapas-input-container").append("<input type='hidden' name='subetapas[]' value='"+el.nome+"'>");
+            });
+            submeteu = true;
+            $(this).trigger('submit');
+        }
+    });
+
+
+
+});
+
 </script>
 @endsection
