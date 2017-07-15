@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Cadastrar Cliente')
+@section('title', 'Cadastro de Cliente')
 @section('content')
 <div class="grid-x grid-padding-x">
     <div class="medium-12 cell">

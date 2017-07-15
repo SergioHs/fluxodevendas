@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Listar Clientes')
+@section('title', 'Clientes')
 @section('content')
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="auto cell">

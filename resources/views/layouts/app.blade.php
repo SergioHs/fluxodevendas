@@ -57,7 +57,9 @@
 @component('components.flash-message')
 @endcomponent
 
-@yield('content')
+<div class="grid-container">
+    @yield('content')
+</div>
 
 <script src="<?=asset('/js/app.js')?>"></script>
 <script> $(document).foundation();</script>
