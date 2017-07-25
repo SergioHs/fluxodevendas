@@ -19,9 +19,10 @@ class TrilhaDeVendaController extends Controller
         return view('trilhasdevenda.create', ['etapas' => $etapas]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-
+        var_dump($request->all());
+        die;
     }
 
 
