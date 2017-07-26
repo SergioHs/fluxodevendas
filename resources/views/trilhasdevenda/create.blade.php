@@ -17,7 +17,7 @@
             </div>
         </div>
     @else
-        <form method="post" action="{{action('TrilhaDeVendaController@store')}}">
+        <form method="post"  id="trilhadevenda-form" action="{{action('TrilhaDeVendaController@store')}}">
             {{csrf_field()}}
 
             <div class="grid-x grid-padding-x grid-padding-y">
@@ -56,7 +56,7 @@
                     <input type="submit" class="button">
                 </div>
                 <div class="medium-4 cell">
-                    <div id="etapas-selecionadas" class="hidden">
+                    <div id="etapas-selecionadas">
                         <p class="lead">Etapas selecionadas</p>
 
 
@@ -76,21 +76,89 @@
                 var idEtapa = $(this).val();
                 $("#etapas-selecionadas").removeClass("hidden");//.append($("<p></p>").text(nomeEtapa));
                 $("#etapas-selecionadas").append($("<input>",{type:"hidden",value:idEtapa,id:nomeEtapa,name:"etapas[]"}));
-                var $etapaCard = $("<div>",{class: 'card'});
+                var $etapaCard = $("<div>",{class: 'card', draggable: true, id: 'card-'+nomeEtapa});
+                var $etapaGrid = $("<div></div>",{class: "grid-x"});
+                var $etapaTextWrapper = $("<div></div>", {class : "medium-11 cell"}).append($("<p>").text(nomeEtapa));
+                var $etapaBtnWrapper = $("<div></div>",{class: "medium-1 cell"}).append($("<button>",{class: 'button alert tiny', type: "button", text: "X", }));
+                $etapaGrid.append($etapaTextWrapper).append($etapaBtnWrapper);
+
                 var $etapaCardContent = $("<div>",{class: 'card-section'})
-                        .append($("<p>").text(nomeEtapa))
-                        .append($("<button>",{class: 'button alert small', type: "button", text: "Remover", }));
+                        .append($etapaGrid);
                 $etapaCard.append($etapaCardContent).appendTo($("#etapas-selecionadas"));
                 $('option:selected', this).remove();
             });
 
             $("#etapas-selecionadas").on('click', 'button', function(){
-                var removedEtapaText = $(this).siblings("p").text();
+                //ARRUMAR
+                var removedEtapaText = $(this).parent().prev().first("p").text();
                 var removedEtapaId = $("#etapas-selecionadas input#"+removedEtapaText).val();
                 $("#select-etapas").append($("<option></option>",{value:removedEtapaId}).text(removedEtapaText));
                 $("#etapas-selecionadas input#"+removedEtapaText).remove();
                 $(this).closest("div.card").slideUp('fast');
             });
+
+            var $container = $("#etapas-selecionadas");
+
+
+
+            $container.on('dragover', function (ev) {
+                ev.preventDefault();
+            });
+
+            $("#etapas-selecionadas").on('dragenter','.card', function (ev) {
+//
+//                var text = $("#" + ev.originalEvent.dataTransfer.getData("id")).text();
+//                console.log(text);
+//                var $ghostItem = $("<li></li>", { class: "list-item ghost", draggable: "true"}).text(text);
+//                $(this).after($ghostItem);
+            });
+
+            $("#etapas-selecionadas").on('dragleave','.card', function (ev) {
+                $(this).next(".ghost").remove();
+            });
+
+            $container.on('drop', '.card', function (ev) {
+                ev.preventDefault();
+
+                var $srcElt = $("#" + ev.originalEvent.dataTransfer.getData("id"));
+
+                var $targetElt = $(this);
+
+                $targetElt.next(".ghost").remove();
+                $targetElt.after($srcElt);
+                console.log("dropou")
+            });
+
+            $container.on('dragstart', '.card', function (ev) {
+                console.log('dragstart')
+                var $target = $(ev.target);
+                $target.css('opacity', '0.5');
+                ev.originalEvent.dataTransfer.setData("id", $target.attr("id"));
+            });
+
+            $container.on('dragend', '.card', function (ev) {
+                $(ev.target).css('opacity', '1');
+            })
+
+            var submeteu = false;
+            $("#trilhadevenda-form").on('submit', function(ev){
+
+                if(!submeteu){
+                    ev.preventDefault();
+                    submeteu = true;
+
+                    $("input[name='etapas[]'").each(function(index){
+                        console.log(this);
+                    })
+
+                    $(this).trigger('submit');
+                }
+
+
+
+            })
+
+
         })
 
     </script>
