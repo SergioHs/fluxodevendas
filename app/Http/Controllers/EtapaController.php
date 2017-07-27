@@ -34,7 +34,6 @@ class EtapaController extends Controller
             array_push($subEtapas, new SubEtapa(['nome' => $arr, 'etapa_id' => $etapa->id]));
         },$req->subetapas);
 
-
         $etapa->subEtapas()->saveMany($subEtapas);
 
         $req->session()->flash('success', 'Etapa cadastrada com sucesso');

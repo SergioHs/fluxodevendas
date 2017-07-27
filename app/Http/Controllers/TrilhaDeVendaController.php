@@ -21,8 +21,29 @@ class TrilhaDeVendaController extends Controller
 
     public function store(Request $request)
     {
-        var_dump($request->all());
-        die;
+        $this->validate($request,[
+            'nome' => 'required|max:255',
+            'descricao' => 'max:255',
+            'observacoes' => 'max:255',
+            'etapas' => 'required'
+        ]);
+
+        $trilha = new TrilhaDeVendas();
+        $trilha->nome = $request->nome;
+        $trilha->descricao = $request->descricao;
+        $trilha->observacoes = $request->observacoes;
+        $trilha->save();
+
+        $i = 1;
+        $etapas = [];
+        foreach($request->etapas as $e){
+            $etapas[$e] = ['ordem' => $i];
+            $i++;
+        }
+        $trilha->etapas()->sync($etapas);
+
+        $request->session()->flash('success', 'Trilha de venda cadastrada com sucesso');
+        return redirect()->action('TrilhaDeVendaController@index');
     }
 
 

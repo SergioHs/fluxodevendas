@@ -15,11 +15,7 @@ class TrilhaDeVendas extends Model
 
     public function etapas()
     {
-        return $this->belongsToMany('App\Etapas');
+        return $this->belongsToMany('App\Etapa','trilhasdevendas_etapas','trilhadevendas_id', 'etapa_id');
     }
 
-    public function subEtapas()
-    {
-        return $this->belongsToMany('App\SubEtapas');
-    }
 }

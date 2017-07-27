@@ -21,13 +21,13 @@
         <table class="hover ajax-modal-table" data-modal="#trilha-detail-modal" data-route="/trilha/detail">
             <thead>
             <tr>
-
+                Nome
             </tr>
             </thead>
             <tbody  data-open="cliente-detail-modal">
             @foreach($trilhas as $t)
-                <tr data-entity-id="{{$c->id}}">
-
+                <tr data-entity-id="{{$t->id}}">
+                    {{$t->nome}}
                 </tr>
             @endforeach
             </tbody>

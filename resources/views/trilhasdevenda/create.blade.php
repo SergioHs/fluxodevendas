@@ -40,7 +40,7 @@
                 <div class="medium-4 cell">
                     <label>
                         Observações
-                        <textarea rows="1">{{old('observacoes')}}</textarea>
+                        <textarea name="observacoes" rows="1">{{old('observacoes')}}</textarea>
                     </label>
                 </div>
             </div>
@@ -146,10 +146,10 @@
                 if(!submeteu){
                     ev.preventDefault();
                     submeteu = true;
-
-                    $("input[name='etapas[]'").each(function(index){
-                        console.log(this);
-                    })
+                    var contadorDeOrdem = 1;
+//                    $("input[name='etapas[]'").each(function(index){
+//                        $("#trilhadevenda-form").append($("<input>", { type:"hidden", value:contadorDeOrdem}))
+//                    });
 
                     $(this).trigger('submit');
                 }
