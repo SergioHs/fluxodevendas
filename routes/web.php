@@ -15,9 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/empreendimento', 'EmpreendimentoController@index');
-Route::post('/empreendimento/adicionar', 'EmpreendimentoController@store');
 Route::get('/empreendimento/adicionar', 'EmpreendimentoController@create');
+Route::get('/empreendimento/editar/{id}','EmpreendimentoController@edit');
+Route::get('/empreendimento', 'EmpreendimentoController@index');
+Route::get('/empreendimento/detail/{id}', 'EmpreendimentoController@detail');
+Route::post('/empreendimento/store', 'EmpreendimentoController@store');
 
 Route::get('/cliente/adicionar', 'ClienteController@create');
 Route::get('/cliente/editar/{id}','ClienteController@edit');
@@ -35,6 +37,9 @@ Route::get('/cidades/por-estado/{id}', 'CidadeController@getByEstado');
 Route::get('/trilhadevenda', 'TrilhaDeVendaController@index');
 Route::get('/trilhadevenda/adicionar', 'TrilhaDeVendaController@create');
 Route::post('/trilhadevenda/store','TrilhaDeVendaController@store');
+Route::get('/trilhadevenda/editar/{id}', 'TrilhaDeVendaController@edit');
+Route::get('/trilhadevenda/detail/{id}', 'TrilhaDeVendaController@detail');
+
 
 Route::get('/etapa', 'EtapaController@index');
 Route::get('/etapa/adicionar','EtapaController@create');

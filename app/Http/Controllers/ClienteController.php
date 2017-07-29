@@ -38,7 +38,6 @@ class ClienteController extends Controller
             'nome' => 'required|max:255',
             'cidade_id' => 'required|numeric',
             'email' => 'nullable|email'
-
         ]);
 
         if(isset($request->id))

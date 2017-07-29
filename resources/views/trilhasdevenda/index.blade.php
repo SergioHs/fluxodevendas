@@ -18,16 +18,22 @@
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="medium-12 cell">
         @if(count($trilhas) > 0)
-        <table class="hover ajax-modal-table" data-modal="#trilha-detail-modal" data-route="/trilha/detail">
+        <table class="hover ajax-modal-table" data-modal="#trilha-detail-modal" data-route="/trilhadevenda/detail">
             <thead>
-            <tr>
-                Nome
-            </tr>
+                <tr>
+                    <td> Nome </td>
+                    <td> Descrição </td>
+                </tr>
             </thead>
             <tbody  data-open="cliente-detail-modal">
             @foreach($trilhas as $t)
                 <tr data-entity-id="{{$t->id}}">
-                    {{$t->nome}}
+                    <td>
+                        {{$t->nome}}
+                    </td>
+                    <td>
+                        {{$t->descricao}}
+                    </td>
                 </tr>
             @endforeach
             </tbody>

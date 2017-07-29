@@ -19,6 +19,12 @@ class TrilhaDeVendaController extends Controller
         return view('trilhasdevenda.create', ['etapas' => $etapas]);
     }
 
+    public function edit($id)
+    {
+        return view('trilhadevenda.create');
+    }
+
+
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -46,5 +52,9 @@ class TrilhaDeVendaController extends Controller
         return redirect()->action('TrilhaDeVendaController@index');
     }
 
-
+    public function detail($id)
+    {
+        $trilha = TrilhaDeVendas::with('etapas.subetapas')->findOrFail($id);
+        return view('trilhasdevenda.detail',['trilha' => $trilha]);
+    }
 }

@@ -35,7 +35,7 @@
                     <li><a href="#">Etapas</a></li>
                 </ul>
             </li>
-            <li><a href="#">Empreendimentos</a></li>
+            <li><a href="{{action("EmpreendimentoController@index")}}">Empreendimentos</a></li>
         </ul>
     </div>
 </div>

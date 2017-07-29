@@ -4,32 +4,42 @@
 
 <div class="grid-x grid-padding-y grid-padding-x">
     <div class="medium-12 cell">
-        <h2>Cadastrar Empreendimento</h2>
+        <h3>Cadastrar Empreendimento</h3>
     </div>
 </div>
 <form action="{{action('EmpreendimentoController@store')}}" method="POST">
+    {{csrf_field()}}
     <div class="grid-x grid-padding-x">
-        <div class="medium-6 cell">
+        <div class="medium-4 cell">
             <label> Nome
-                <input type="text">
+                <input type="text" name="nome">
             </label>
         </div>
-        <div class="medium-6 cell">
+        <div class="medium-4 cell">
             <label> Endereço
                 <input type="text" name="endereco">
             </label>
         </div>
-        <div class="medium-6 cell">
-            <label> Estado
-                <select type="text" name="estado">
-                    <option> SC </option>
-                    <option> SP </option>
-                </select>
+        @component('components.cidades',['estados' => $estados, 'cidades' => $cidades ?? null])
+        @endcomponent
+        <div class="medium-2 cell">
+            <label> Nº de blocos
+                <input type="text" name="numero_blocos">
             </label>
         </div>
-        <div class="medium-6 cell">
-            <label> Cidade
-                <input type="text" name="cidade">
+        <div class="medium-2 cell">
+            <label> Nº de andares
+                <input type="text" name="numero_andares">
+            </label>
+        </div>
+        <div class="medium-2 cell">
+            <label> Nº de ap/andares
+                <input type="text" name="numero_ap_andares">
+            </label>
+        </div>
+        <div class="medium-2 cell">
+            <label> Nº inicial apartamento
+                <input type="text" name="numero_inicial_apartamentos">
             </label>
         </div>
     </div>

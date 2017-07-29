@@ -29,11 +29,13 @@
             </dl>
         </div>
         <div class="medium-12 cell">
-            <dt>Observações</dt>
-            <dd>{{$cliente->observacoes ?: ""}}</dd>
+            <dl>
+                <dt>Observações</dt>
+                <dd>{{$cliente->observacoes ?: ""}}</dd>
+            </dl>
         </div>
         <div class="medium-12 cell">
-            <a href="{{action('ClienteController@edit',['id' => $cliente->id])}}" class="button secondary">Editar</a>
+            <a href="{{action('TrilhaDeVendaController@create',['id' => $cliente->id])}}" class="button secondary">Editar</a>
         </div>
     </div>
 </div>
