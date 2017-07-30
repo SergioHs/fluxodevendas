@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Apartamento;
 use App\Empreendimento;
+use App\Utils;
 use App\Estado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmpreendimentoController extends Controller
 {
@@ -16,7 +18,8 @@ class EmpreendimentoController extends Controller
      */
     public function index()
     {
-        return view('empreendimentos.index',['empreeendimentos' => Empreendimento::all()]);
+        $empreendimentos = Empreendimento::with('cidade.estado')->get();
+        return view('empreendimentos.index',['empreendimentos' => $empreendimentos]);
     }
 
     /**
@@ -38,30 +41,46 @@ class EmpreendimentoController extends Controller
      */
     public function store(Request $r)
     {
-        $empreendimento = new Empreendimento();
-        $empreendimento->nome = $r->nome;
-        $empreendimento->endereco = $r->endereco;
-        $empreendimento->cidade_id = $r->cidade_id;
-        $empreendimento->saveOrFail();
+        $this->validate($r,[
+            'nome' => 'required|max:255',
+            'cidade_id' => 'required|numeric',
+            'endereco' => 'nullable|max:255'
+        ]);
 
-        $apartamentos = [];
+        try {
+            DB::transaction(function () use ($r) {
+                $empreendimento = new Empreendimento();
+                $empreendimento->nome = $r->nome;
+                $empreendimento->endereco = $r->endereco;
+                $empreendimento->cidade_id = $r->cidade_id;
+                $empreendimento->saveOrFail();
 
-        for($i = 0; $i <= $r->numero_blocos; $i++){
-            for($j = 0; $j <= $r->numero_andares; $j++){
-                for($k =0; $k <= $r->numero_ap_andares; $k++){
-                    $ap = new Apartamento();
-                    $ap->bloco = $i+1;
-                    $ap->andar = $j+1;
-                    $ap->numero = (int)substr_replace($r->numero_inicial_apartamentos,$j+1,0,1) + $k;
-                    $ap->empreendimento_id = $empreendimento->id;
+                $apartamentos = [];
 
-                    array_push($apartamentos,$ap);
+                for ($bloco = 0; $bloco < $r->numero_blocos; $bloco++) {
+                    for ($andar = 0; $andar <= $r->numero_andares; $andar++) {
+                        for ($k = 0; $k <= $r->numero_ap_andares; $k++) {
+                            $ap = new Apartamento();
+                            $ap->bloco = $r->nomenclatura_bloco == "algarismo" ? $bloco + 1 : Utils::alfabeto[$bloco];
+                            $ap->andar = $andar + 1;
+                            $ap->numero = (int)substr_replace($r->numero_inicial_apartamentos, $andar + 1, 0, 1) + $k;
+                            $ap->empreendimento_id = $empreendimento->id;
 
+                            array_push($apartamentos, $ap);
+
+                        }
+                    }
                 }
-            }
-        }
 
-        $empreendimento->apartamentos()->saveMany($apartamentos);
+                $empreendimento->apartamentos()->saveMany($apartamentos);
+
+            });
+
+            $r->session()->flash('success', 'Empreendimento cadastrado com sucesso');
+            return redirect()->action('EmpreendimentoController@index');
+        } catch(\Exception $e) {
+
+        }
 
 
     }
@@ -74,7 +93,8 @@ class EmpreendimentoController extends Controller
      */
     public function detail($id)
     {
-        //
+        $empreendimento = Empreendimento::with(['cidade.estado','apartamentos'])->findOrFail($id);
+        return view('empreendimentos.detail',['empreendimento' => $empreendimento]);
     }
 
     /**

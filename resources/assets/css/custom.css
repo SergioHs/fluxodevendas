@@ -5,3 +5,7 @@ table.hover tbody tr:hover{
 .hidden {
     display: none;
 }
+
+div.draggable{
+    border: 3px dashed #b8d7f3;
+}

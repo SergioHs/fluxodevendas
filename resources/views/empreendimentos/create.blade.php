@@ -42,6 +42,14 @@
                 <input type="text" name="numero_inicial_apartamentos">
             </label>
         </div>
+        <div class="medium-3 cell">
+            <label> Nomencladura de bloco
+                <select name="nomenclatura_bloco">
+                    <option value="alfabeto">Alfabeto</option>
+                    <option value="algarismo">Algarismo</option>
+                </select>
+            </label>
+        </div>
     </div>
     <div class="grid-x grid-padding-x">
         <div class="medium-12 cell">

@@ -84,5 +84,5 @@ $('table.ajax-modal-table').on('click', 'tr', function(ev){
 $('#trilha-detail-modal').on('click', 'table#etapas-table tr', function(ev){
     console.log("----entrou-----");
     var etapaId = $(this).attr('data-toggle');
-    $("div#"+etapaId).slideDown('slow');
+    $("div#"+etapaId).slideDown();
 })

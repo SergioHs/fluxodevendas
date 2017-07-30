@@ -12,4 +12,9 @@ class Empreendimento extends Model
     {
         return $this->hasMany('App\Apartamento');
     }
+
+    public function cidade()
+    {
+        return $this->belongsTo('App\Cidade');
+    }
 }

@@ -56,8 +56,8 @@
                     <input type="submit" class="button">
                 </div>
                 <div class="medium-4 cell">
-                    <div id="etapas-selecionadas">
-                        <p class="lead">Etapas selecionadas</p>
+                    <div id="etapas-selecionadas" class="hidden draggable">
+                        <p>Etapas selecionadas</p>
 
 
                     </div>
@@ -74,6 +74,7 @@
                 if(!$(this).val()) return;
                 var nomeEtapa = $(this).children(':selected').text();
                 var idEtapa = $(this).val();
+                $("#etapas-selecionadas").fadeIn();
                 $("#etapas-selecionadas").removeClass("hidden");//.append($("<p></p>").text(nomeEtapa));
                 $("#etapas-selecionadas").append($("<input>",{type:"hidden",value:idEtapa,id:nomeEtapa,name:"etapas[]"}));
                 var $etapaCard = $("<div>",{class: 'card', draggable: true, id: 'card-'+nomeEtapa});
