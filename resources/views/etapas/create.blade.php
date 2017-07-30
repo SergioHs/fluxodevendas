@@ -47,7 +47,7 @@
                     </div>
                 </li>
             </ul>
-            <input type="submit" class="button">
+            <input type="submit" class="button" value="Cadastrar">
         </div>
         <div id="panel-subetapas" class="medium-4 cell">
 

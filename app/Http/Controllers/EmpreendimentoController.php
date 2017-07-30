@@ -67,13 +67,11 @@ class EmpreendimentoController extends Controller
                             $ap->empreendimento_id = $empreendimento->id;
 
                             array_push($apartamentos, $ap);
-
                         }
                     }
                 }
 
                 $empreendimento->apartamentos()->saveMany($apartamentos);
-
             });
 
             $r->session()->flash('success', 'Empreendimento cadastrado com sucesso');
@@ -81,8 +79,6 @@ class EmpreendimentoController extends Controller
         } catch(\Exception $e) {
 
         }
-
-
     }
 
     /**
@@ -93,7 +89,8 @@ class EmpreendimentoController extends Controller
      */
     public function detail($id)
     {
-        $empreendimento = Empreendimento::with(['cidade.estado','apartamentos'])->findOrFail($id);
+        $empreendimento = Empreendimento::with(['cidade.estado','apartamentos.vendas.status'])->findOrFail($id);
+
         return view('empreendimentos.detail',['empreendimento' => $empreendimento]);
     }
 

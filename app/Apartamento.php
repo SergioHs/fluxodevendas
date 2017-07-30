@@ -16,6 +16,6 @@ class Apartamento extends Model
 
     public function vendas()
     {
-        return $this->hasMany('App\Vendas', 'apartamento_id');
+        return $this->hasMany('App\Venda', 'apartamento_id');
     }
 }

@@ -53,7 +53,7 @@
                             <option value="{{$e->id}}">{{$e->nome}}</option>
                         @endforeach
                     </select>
-                    <input type="submit" class="button">
+                    <input type="submit" class="button" value="Cadastrar">
                 </div>
                 <div class="medium-4 cell">
                     <div id="etapas-selecionadas" class="hidden draggable">
