@@ -40,7 +40,8 @@ Route::post('/trilhadevenda/store','TrilhaDeVendaController@store');
 Route::get('/trilhadevenda/editar/{id}', 'TrilhaDeVendaController@edit');
 Route::get('/trilhadevenda/detail/{id}', 'TrilhaDeVendaController@detail');
 
-
 Route::get('/etapa', 'EtapaController@index');
 Route::get('/etapa/adicionar','EtapaController@create');
 Route::post('/etapa/store','EtapaController@store');
+
+Route::get('/venda/adicionar', 'VendaController@create');

@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder {
 	{
 		Model::unguard();
 
+
+        $this->call(StatusVendasSeeder::class);
+
 		// Estados
         $this->call(EstadosTableSeeder::class);
 

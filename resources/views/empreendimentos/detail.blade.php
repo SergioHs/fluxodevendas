@@ -7,15 +7,23 @@
             <div class="medium-12 cell">
                 <h3> Detalhe do empreendimento <small>{{$empreendimento->nome}}</small></h3>
                 <dl>
+                    <dt> Endereço </dt>
+                    <dd> {{$empreendimento->endereco ?: "Não informado" }}</dd>
                     <dt>Cidade</dt>
                     <dd>{{$empreendimento->cidade->cidade .  " " . $empreendimento->cidade->estado->sigla}}</dd>
                 </dl>
             </div>
+            @if(count($apartamentos) > 0)
             <div class="medium-12 cell">
-                @foreach($empreendimento->apartamentos as $a)
-                    {{"Numero: " . $a->numero . " Bloco: " . $a->bloco . "Andar:" . $a->andar . "Status:"  }}<br>
+                <p class="lead">Apartamentos</p>
+                @foreach($apartamentos as $a)
+                    <a href={{action("VendaController@create",['apartamento' => $a->id, 'cliente' => null])}} data-open="modal-venda" class="button small {{$a->status == "VENDIDO" ? "alert" : ($a->status == "RESERVADO" ? "warning" : "success")}}">
+                        <strong>Numero:</strong> {{ $a->numero }} <strong>Bloco: </strong> {{ $a->bloco }} <strong> Andar:</strong> {{$a->andar }}
+                    </a>
                 @endforeach
             </div>
+
+            @endif
         </div>
     </div>
 </div>

@@ -89,9 +89,20 @@ class EmpreendimentoController extends Controller
      */
     public function detail($id)
     {
+
+        $apartamento = Apartamento::select(DB::raw("apartamentos.*,
+                                          (CASE
+                                           WHEN (sum(if(vendas.statusvendas_id = 1, 1,0)) > 0)  THEN \"VENDIDO\"
+                                           WHEN (sum(if(vendas.statusvendas_id = 2, 1,0)) > 0)  THEN \"RESERVADO\"
+                                           ELSE \"DISPONIVEL\"
+                                           END) as status"))->leftJoin("vendas","apartamentos.id","=","vendas.apartamento_id")
+                                            ->where('apartamentos.empreendimento_id','=',$id)
+                                            ->groupBy('apartamentos.id')
+                                            ->get();
+
         $empreendimento = Empreendimento::with(['cidade.estado','apartamentos.vendas.status'])->findOrFail($id);
 
-        return view('empreendimentos.detail',['empreendimento' => $empreendimento]);
+        return view('empreendimentos.detail',['empreendimento' => $empreendimento, 'apartamentos' => $apartamento]);
     }
 
     /**
