@@ -17,7 +17,7 @@
             <div class="medium-12 cell">
                 <p class="lead">Apartamentos</p>
                 @foreach($apartamentos as $a)
-                    <a href={{action("VendaController@create",['apartamento' => $a->id, 'cliente' => null])}} data-open="modal-venda" class="button small {{$a->status == "VENDIDO" ? "alert" : ($a->status == "RESERVADO" ? "warning" : "success")}}">
+                    <a @if($a->status == "DISPONIVEL") href={{action("VendaController@create",['apartamento' => $a->id, 'cliente' => null])}} @endif data-open="modal-venda" class="button small {{$a->status == "VENDIDO" ? "alert disabled" : ($a->status == "RESERVADO" ? "warning disabled " : "success")}}">
                         <strong>Numero:</strong> {{ $a->numero }} <strong>Bloco: </strong> {{ $a->bloco }} <strong> Andar:</strong> {{$a->andar }}
                     </a>
                 @endforeach

@@ -10,6 +10,6 @@ class StatusVenda extends Model
 
     public function vendas()
     {
-        return $this->hasMany('App\Venda', 'statusvenda_id');
+        return $this->hasMany('App\Venda', 'statusvendas_id');
     }
 }

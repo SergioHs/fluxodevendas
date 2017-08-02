@@ -44,4 +44,7 @@ Route::get('/etapa', 'EtapaController@index');
 Route::get('/etapa/adicionar','EtapaController@create');
 Route::post('/etapa/store','EtapaController@store');
 
+Route::get('/venda', 'VendaController@index');
+route::get('/venda/detail/{id}','VendaController@detail');
 Route::get('/venda/adicionar', 'VendaController@create');
+Route::post('/venda/store', 'VendaController@store');

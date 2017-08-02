@@ -2,20 +2,23 @@
 
 namespace App;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
 class Venda extends Model
 {
     protected $table = 'vendas';
 
+    protected $guarded = ['id'];
+
     public function etapas()
     {
-        return $this->belongsToMany('App\Etapa', 'vendas_etapas');
+        return $this->belongsToMany('App\Etapa', 'vendas_etapas', 'venda_id', 'etapa_id');
     }
 
     public function subEtapas()
     {
-        return $this->belongsToMany('App\SubEtapa', 'vendas_subetapas');
+        return $this->belongsToMany('App\SubEtapa', 'vendas_subetapas', 'venda_id', 'subetapa_id');
     }
 
     public function apartamento()
@@ -35,12 +38,12 @@ class Venda extends Model
 
     public function status()
     {
-        return $this->belongsTo('App\StatusVenda');
+        return $this->belongsTo('App\StatusVenda','statusvendas_id');
     }
 
     public function trilhaDeVenda()
     {
-        return $this->belongsTo('App\TrilhaDeVendas');
+        return $this->belongsTo('App\TrilhaDeVendas', 'trilhadevendas_id');
     }
 
 }

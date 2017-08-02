@@ -24,8 +24,7 @@ class EtapaController extends Controller
             'nome' => 'required'
         ]);
         $etapa = new Etapa();
-        $etapa->nome = $req->nome;
-        $etapa->prazo = $req->prazo;
+        $etapa->fill($req->except('subetapas'));
         $etapa->save();
 
         $subEtapas = [];
