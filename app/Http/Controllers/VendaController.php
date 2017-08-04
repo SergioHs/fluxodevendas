@@ -6,6 +6,7 @@ use App\Apartamento;
 use App\Cliente;
 use App\Empreendimento;
 use App\Events\VendaCadastrada;
+use App\StatusEtapasEnum;
 use App\TrilhaDeVendas;
 use App\Venda;
 use App\Vendedor;
@@ -22,8 +23,16 @@ class VendaController extends Controller
 
     public function detail($id)
     {
-        $venda = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda'])->findOrFail($id);
-        return view('vendas.detail',['venda' => $venda]);
+        $venda = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas'])->findOrFail($id);
+        $etapasConcluidas = $venda->etapas->filter(function($v,$k){
+            return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ADANTAMENTO;
+        });
+
+        //$etapaEmAndameto = $venda->etapas->whereNotIn('')
+
+        //$todasEtapasDaVenda
+
+        return view('vendas.detail',['venda' => $venda, 'etapasConcluidas' => $etapasConcluidas]);
     }
 
     public function create(Request $r)

@@ -10,10 +10,12 @@
 
     </div>
 </div>
+
+
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="medium-12 cell">
         @if(count($vendas) > 0)
-        <table class="hover ajax-modal-table" data-modal="#venda-detail-modal" data-route="/venda/detail">
+        <table class="hover stack ajax-modal-table" data-modal="#venda-detail-modal" data-route="/venda/detail">
             <thead>
             <tr>
                 <td> Cliente </td>
@@ -59,6 +61,8 @@
         @endif
     </div>
 </div>
+
+
 
 <div class="reveal" id="venda-detail-modal" data-reveal>
 

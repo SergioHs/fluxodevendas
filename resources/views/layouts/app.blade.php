@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>Fluxo de vendas - @yield('title')</title>
+    <meta name="viewport" content="width=device-width">
     <link href="<?=asset('/css/app.css')?>" rel="stylesheet">
     <link href="<?=asset('/css/custom.css')?>" rel="stylesheet">
 </head>
