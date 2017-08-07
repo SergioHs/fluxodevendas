@@ -15,19 +15,19 @@ div.etapas-subetapas div.etapa {
     padding: 10px;
 }
 
-div.etapas-subetapas div.etapa div.subEtapa {
+div.etapas-subetapas div.etapa div.sub-etapa {
     margin-left: 25px;
     background-color: #e6e6e6;
     padding: 10px;
     margin-bottom: 5px;
 }
 
-div.etapas-subetapas div.etapa div.subEtapa div.subEtapaContent {
+div.etapas-subetapas div.etapa div.sub-etapa div.sub-etapa-content {
     display: flex;
     align-items: center;
 }
 
-div.etapas-subetapas div.etapa div.subEtapa div.subEtapaContent  input{
+div.etapas-subetapas div.etapa div.sub-etapa div.sub-etapa-content  input{
     margin-bottom: 0px;
     flex-shrink: 0;
 }

@@ -35,28 +35,20 @@
     </div>
     <div class="medium-12 cell">
         <h5>Etapas</h5>
-
+            @foreach($venda->etapas as $e)
             <div class="etapas-subetapas">
                 <div class="etapa">
-                    <p> Etapa </p>
-                    <div class="subEtapa">
-                        <div class="subEtapaContent">
-                            <input name="subetapa-1" type="checkbox"><label for="subetapa-1">Sub Etapa 1Sub Etapa 1Sub Etapa 1Sub Etb Etapa 1 Etapa 1Etapa 1Etapa 1Etapa 1</label>
+                    <p> {{$e->nome}} </p>
+                    @foreach($e->subetapas as $s)
+                    <div class="sub-etapa">
+                        <div class="sub-etapa-content">
+                            <input name="subetapa-3" type="checkbox"><label for="subetapa-2">{{$s->nome}}</label>
                         </div>
                     </div>
-                    <div class="subEtapa">
-                        <div class="subEtapaContent">
-                            <input name="subetapa-2" type="checkbox"><label for="subetapa-2">Sub Etapa 2</label>
-                        </div>
-                    </div>
-                    <div class="subEtapa">
-                        <div class="subEtapaContent">
-                            <input name="subetapa-3" type="checkbox"><label for="subetapa-2">Sub Etapa 3</label>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-
+            @endforeach
     </div>
     <div class="medium-12 cell">
         <button class="button alert small">Cancelar venda</button>

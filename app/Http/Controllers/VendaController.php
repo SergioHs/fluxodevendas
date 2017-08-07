@@ -25,14 +25,27 @@ class VendaController extends Controller
     {
         $venda = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas'])->findOrFail($id);
         $etapasConcluidas = $venda->etapas->filter(function($v,$k){
+            return $v->pivot->statusetapas_id == StatusEtapasEnum::COMPLETA;
+        });
+
+        $etapaEmAndamento = $venda->etapas->filter(function($v,$k){
             return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ADANTAMENTO;
         });
 
-        //$etapaEmAndameto = $venda->etapas->whereNotIn('')
+        $etapasEmEspera = $venda->etapas->filter(function($v,$k){
+            return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ESPERA;
+        });
 
         //$todasEtapasDaVenda
 
-        return view('vendas.detail',['venda' => $venda, 'etapasConcluidas' => $etapasConcluidas]);
+        return view('vendas.detail',
+            [
+            'venda' => $venda,
+            'etapasConcluidas' => $etapasConcluidas,
+            'etapaEmAndamento' => $etapaEmAndamento,
+            'etapasEmEspera' => $etapasEmEspera
+            ]
+        );
     }
 
     public function create(Request $r)

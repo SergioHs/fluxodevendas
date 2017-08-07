@@ -31,9 +31,9 @@ class VinculaEtapasAsVendas
     public function handle(VendaCadastrada $event)
     {
         $trilha = TrilhaDeVendas::with('etapas.subetapas')->findOrFail($event->venda->trilhadevendas_id);
-
         $this->vinculaPrimeiraEtapa($event->venda, $trilha);
         $this->vinculaSubEtapasDaPrimeiraEtapa($event->venda, $trilha);
+        $this->vinculaEtapasRestantes($event->venda, $trilha);
     }
 
     private function vinculaPrimeiraEtapa($venda, $trilha)
@@ -46,13 +46,26 @@ class VinculaEtapasAsVendas
     private function vinculaSubEtapasDaPrimeiraEtapa($venda, $trilha)
     {
         $subEtapasIds = [];
-
-        foreach($trilha->etapas[0]->subEtapas as $s){
-
-
+        foreach($trilha->etapas[0]->subetapas as $s){
             $subEtapasIds[$s->id] =  ['statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO];
         }
 
+        $venda->subEtapas()->attach($subEtapasIds);
+    }
+
+    private function vinculaEtapasRestantes($venda, $trilha)
+    {
+        $trilha->etapas->shift();
+        $etapasIds = [];
+        $subEtapasIds = [];
+        foreach($trilha->etapas as $e){
+            $etapasIds[$e->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA];
+            foreach($e->subetapas as $s){
+                $subEtapasIds[$s->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA];
+            }
+        }
+
+        $venda->etapas()->attach($etapasIds);
         $venda->subEtapas()->attach($subEtapasIds);
     }
 
