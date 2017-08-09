@@ -65,8 +65,20 @@ $('table.ajax-modal-table').on('click', 'tr', function(ev){
         });
 });
 
-$('#trilha-detail-modal').on('click', 'table#etapas-table tr', function(ev){
-    console.log("----entrou-----");
-    var etapaId = $(this).attr('data-toggle');
-    $("div#"+etapaId).slideDown();
-})
+$('#venda-detail-modal').on('change', "#etapas-container input[type='checkbox']", function(ev){
+   $(this).next('label').toggleClass('has-line-through');
+});
+
+$('#venda-detail-modal').on('click', 'button#concluir-etapa', function(ev){
+    var vendaId = $("#input-venda-id").val();
+
+    fetch('/venda/'+vendaId+'/concluir-etapa-em-andamento',
+        function(){
+            fetch('/venda/detail/'+vendaId,
+                function(data){
+                    $("#venda-detail-modal").html(data).foundation('open');
+                });
+        });
+
+
+});

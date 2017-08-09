@@ -79,4 +79,20 @@ class VendaController extends Controller
 
     }
 
+    public function concluirEtapaEmAndamento($id)
+    {
+        $venda = Venda::with('etapas')->findOrFail($id);
+        $etapaEmAndamento = $venda->etapas->filter(function($v,$k){
+           return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ADANTAMENTO;
+        })->first();
+
+        $proximaEtapaEmEspera = $venda->etapas->filter(function($v,$k){
+            return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ESPERA;
+        })->first();
+
+        $venda->etapas()->updateExistingPivot($etapaEmAndamento->id, ['statusetapas_id' => StatusEtapasEnum::COMPLETA]);
+        $venda->etapas()->updateExistingPivot($proximaEtapaEmEspera->id, ['statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
+    }
+
+
 }

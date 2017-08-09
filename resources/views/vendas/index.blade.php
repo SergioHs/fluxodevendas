@@ -21,8 +21,6 @@
                 <td> Cliente </td>
                 <td> Empreendimento</td>
                 <td> Apartamento </td>
-                <td> Bloco</td>
-                <td> Andar</td>
                 <td> Vendedor </td>
                 <td> Status </td>
             </tr>
@@ -37,13 +35,7 @@
                     {{$v->apartamento->empreendimento->nome}}
                 </td>
                 <td>
-                    {{$v->apartamento->numero}}
-                </td>
-                <td>
-                    {{$v->apartamento->bloco}}
-                </td>
-                <td>
-                    {{$v->apartamento->andar}}
+                    {{$v->apartamento->numero}}, bloco {{$v->apartamento->bloco}}, {{$v->apartamento->andar}}&deg; andar
                 </td>
                 <td>
                     {{$v->vendedor->nome}}
@@ -64,7 +56,7 @@
 
 
 
-<div class="reveal" id="venda-detail-modal" data-reveal>
+<div class="reveal has-scroll" id="venda-detail-modal" data-reveal>
 
 </div>
 @endsection

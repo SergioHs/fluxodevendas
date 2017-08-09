@@ -31,3 +31,12 @@ div.etapas-subetapas div.etapa div.sub-etapa div.sub-etapa-content  input{
     margin-bottom: 0px;
     flex-shrink: 0;
 }
+
+div.reveal.has-scroll {
+    overflow:scroll !important;
+    max-height: 90%;
+}
+
+.has-line-through {
+    text-decoration: line-through;
+}

@@ -48,3 +48,4 @@ Route::get('/venda', 'VendaController@index');
 route::get('/venda/detail/{id}','VendaController@detail');
 Route::get('/venda/adicionar', 'VendaController@create');
 Route::post('/venda/store', 'VendaController@store');
+Route::get('/venda/{id}/concluir-etapa-em-andamento', 'VendaController@concluirEtapaEmAndamento');
