@@ -23,7 +23,10 @@ class VendaController extends Controller
 
     public function detail($id)
     {
-        $venda = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas'])->findOrFail($id);
+        $venda = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas','subetapas'])->findOrFail($id);
+        //var_dump($venda->subEtapas->toArray());die;
+
+
         $etapasConcluidas = $venda->etapas->filter(function($v,$k){
             return $v->pivot->statusetapas_id == StatusEtapasEnum::COMPLETA;
         });
@@ -92,6 +95,21 @@ class VendaController extends Controller
 
         $venda->etapas()->updateExistingPivot($etapaEmAndamento->id, ['statusetapas_id' => StatusEtapasEnum::COMPLETA]);
         $venda->etapas()->updateExistingPivot($proximaEtapaEmEspera->id, ['statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
+    }
+
+    public function mudarStatusSubEtapa($vendaId, $subEtapaid)
+    {
+        $venda = Venda::with('subetapas')->findOrFail($vendaId);
+
+        $statusAntigo = \DB::table('vendas')
+                ->join('vendas_subetapas','vendas.id','=','vendas_subetapas.venda_id')
+                ->where([['vendas.id','=',$vendaId],['vendas_subetapas.subetapa_id','=',$subEtapaid]])
+                ->select('vendas_subetapas.statusetapas_id')
+                ->first()->statusetapas_id;
+
+        $statusNovo = in_array($statusAntigo,[StatusEtapasEnum::EM_ADANTAMENTO, StatusEtapasEnum::EM_ESPERA]) ? StatusEtapasEnum::COMPLETA : StatusEtapasEnum::EM_ADANTAMENTO;
+
+        $venda->subEtapas()->updateExistingPivot($subEtapaid, ['statusetapas_id' => $statusNovo]);
     }
 
 

@@ -41,12 +41,14 @@
                     <div class="etapas-subetapas">
                         <div class="etapa">
                             <p> {{$e->nome}} </p>
-                            @foreach($e->subetapas as $s)
-                                <div class="sub-etapa">
-                                    <div class="sub-etapa-content">
-                                        <input name="subetapa-3" checked disabled title="Etapa já concluída" type="checkbox"><label class="has-line-through" for="subetapa-2">{{$s->nome}}</label>
+                            @foreach($venda->subetapas as $s)
+                                @if($s->etapa_id == $e->id)
+                                    <div class="sub-etapa">
+                                        <div class="sub-etapa-content">
+                                            <input name="subetapa-3" value="{{$s->id}}" {{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "checked" : ""}}disabled title="Etapa já concluída" type="checkbox"><label class="{{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "has-line-through" : "" }}" for="subetapa-2">{{$s->nome}}</label>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
@@ -58,12 +60,14 @@
                     <div class="etapas-subetapas">
                         <div class="etapa">
                             <p> {{$e->nome}} </p>
-                            @foreach($e->subetapas as $s)
-                            <div class="sub-etapa">
-                                <div class="sub-etapa-content">
-                                    <input name="subetapa-3" type="checkbox"><label for="subetapa-2">{{$s->nome}}</label>
-                                </div>
-                            </div>
+                            @foreach($venda->subetapas as $s)
+                                @if($s->etapa_id == $e->id)
+                                    <div class="sub-etapa">
+                                        <div class="sub-etapa-content">
+                                            <input name="subetapa-3" {{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "checked" : ""}} value="{{$s->id}}" type="checkbox"><label for="subetapa-2" class="{{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "has-line-through" : "" }}">{{$s->nome}}</label>
+                                        </div>
+                                    </div>
+                                @endif
                             @endforeach
                             <div>
                                 <button class="button success small" id="concluir-etapa">Concluir etapa</button>
@@ -78,12 +82,14 @@
                 <div class="etapas-subetapas">
                     <div class="etapa">
                         <p> {{$e->nome}} </p>
-                        @foreach($e->subetapas as $s)
-                            <div class="sub-etapa">
-                                <div class="sub-etapa-content">
-                                    <input name="subetapa-3"  title="Conclua a etapa em andamento antes" disabled type="checkbox"><label for="subetapa-2">{{$s->nome}}</label>
+                        @foreach($venda->subetapas as $s)
+                            @if($s->etapa_id == $e->id)
+                                <div class="sub-etapa">
+                                    <div class="sub-etapa-content">
+                                        <input name="subetapa-3" value="{{$s->id}}" title="Conclua a etapa em andamento antes" disabled type="checkbox"><label for="subetapa-2">{{$s->nome}}</label>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
