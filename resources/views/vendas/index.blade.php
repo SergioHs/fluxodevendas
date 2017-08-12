@@ -41,7 +41,7 @@
                     {{$v->vendedor->nome}}
                 </td>
                 <td>
-                    <span class="label {{$v->status->id == 1 ? "success" : ($v->status->id == 2 ?  "warning" : "success") }}">{{$v->status->nome}}</span>
+                    <span class="label {{$v->status->id == \App\StatusVendasEnum::VENDIDO ? "success" : ($v->status->id == \App\StatusVendasEnum::RESERVADO ?  "warning" : "alert") }}">{{$v->status->nome}}</span>
                 </td>
             </tr>
             @endforeach

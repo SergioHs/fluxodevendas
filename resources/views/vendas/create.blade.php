@@ -4,6 +4,7 @@
 <div class="grid-x grid-padding-y grid-padding-x">
     <div class="medium-12 cell">
         <h3>Iniciar venda </h3>
+        <p>{{$apartamento->empreendimento->nome}}, apartamento {{$apartamento->numero}}, bloco {{$apartamento->bloco}},  {{$apartamento->andar}}&deg; andar</p>
     </div>
 </div>
 <form action="{{action("VendaController@store")}}" method="POST">

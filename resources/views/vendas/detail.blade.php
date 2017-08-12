@@ -60,11 +60,12 @@
                     <div class="etapas-subetapas">
                         <div class="etapa">
                             <p> {{$e->nome}} </p>
+                            <p>Prazo: {{ date('d/m/Y',strtotime($e->pivot->prazo))}}</p>
                             @foreach($venda->subetapas as $s)
                                 @if($s->etapa_id == $e->id)
                                     <div class="sub-etapa">
                                         <div class="sub-etapa-content">
-                                            <input name="subetapa-3" {{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "checked" : ""}} value="{{$s->id}}" type="checkbox"><label for="subetapa-2" class="{{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "has-line-through" : "" }}">{{$s->nome}}</label>
+                                            <input name="subetapa-3" {{$venda->status->id != \App\StatusVendasEnum::RESERVADO ? "disabled" : ""}} {{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "checked" : ""}} value="{{$s->id}}" type="checkbox"><label for="subetapa-2" class="{{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "has-line-through" : "" }}">{{$s->nome}}</label>
                                         </div>
                                     </div>
                                 @endif
@@ -96,7 +97,11 @@
             @endforeach
         @endif
     </div>
+
     <div class="medium-12 cell">
-        <button class="button alert small">Cancelar venda</button>
+        <div class="button-group">
+            <a href="{{action("VendaController@mudarStatusVenda",['id' => $venda->id, 'status' => \App\StatusVendasEnum::VENDIDO])}}" id="concluir-venda" class="button success {{$mostraBotaoDeConcluir ? "" : "disabled"}}">Concluir venda</a>
+            <a href="{{action("VendaController@mudarStatusVenda",['id' => $venda->id, 'status' => \App\StatusVendasEnum::CANCELADO])}}" id="cancelar-venda" class="button alert {{$venda->status->id === \App\StatusVendasEnum::RESERVADO}}">Cancelar venda</a>
+        </div>
     </div>
 </div>

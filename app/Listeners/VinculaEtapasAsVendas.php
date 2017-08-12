@@ -38,9 +38,9 @@ class VinculaEtapasAsVendas
 
     private function vinculaPrimeiraEtapa($venda, $trilha)
     {
-        $now = new \DateTime();
-        $now->add(new \DateInterval('P'.$trilha->etapas[0]->prazo.'D'));
-        $venda->etapas()->attach($trilha->etapas[0]->id,['prazo' => $now, 'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
+        $prazo = new \DateTime();
+        $prazo->add(new \DateInterval('P'.$trilha->etapas[0]->prazo.'D'));
+        $venda->etapas()->attach($trilha->etapas[0]->id,['prazo' => $prazo, 'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
     }
 
     private function vinculaSubEtapasDaPrimeiraEtapa($venda, $trilha)

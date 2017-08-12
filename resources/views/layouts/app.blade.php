@@ -17,7 +17,7 @@
 <div class="top-bar" id="example-menu">
     <div class="top-bar-right">
         <ul class="menu">
-            <li class="menu-text">Vendas</li>
+            <li class="menu-text">Controle de Vendas</li>
         </ul>
     </div>
     <div class="top-bar-left">
@@ -25,18 +25,19 @@
             <li class="has-submenu ">
                 <a href="#">Pessoas</a>
                 <ul class="submenu menu vertical nested " data-submenu>
-                    <li><a href="{{action("ClienteController@index")}}">Clientes</a></li>
-                    <li><a href="{{action("VendedorController@index")}}">Vendedores</a></li>
+                    <li><a href="{{action("ClienteController@index")}}" title="Listar clientes">Clientes</a></li>
+                    <li><a href="{{action("VendedorController@index")}}" title="Listar vendedores">Vendedores</a></li>
                 </ul>
             </li>
             <li class="has-submenu ">
                 <a href="#">Trilhas de venda</a>
                 <ul class="submenu menu vertical nested " data-submenu>
-                    <li><a href="{{action("TrilhaDeVendaController@index")}}">Trilhas</a></li>
-                    <li><a href="#">Etapas</a></li>
+                    <li><a href="{{action("TrilhaDeVendaController@index")}}" title="Listar trilhas de vendas">Trilhas</a></li>
+                    <li><a href="{{action("EtapaController@index")}}" title="Listar etapas">Etapas</a></li>
                 </ul>
             </li>
-            <li><a href="{{action("EmpreendimentoController@index")}}">Empreendimentos</a></li>
+            <li><a href="{{action("EmpreendimentoController@index")}}" title="Listar empreendimentos">Empreendimentos</a></li>
+            <li><a href="{{action("VendaController@index")}}" title="Listar vendas">Vendas</a></li>
         </ul>
     </div>
 </div>

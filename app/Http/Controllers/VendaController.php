@@ -12,6 +12,7 @@ use App\Venda;
 use App\Vendedor;
 use Illuminate\Http\Request;
 use App\StatusVendasEnum;
+use Illuminate\Support\Facades\DB;
 
 class VendaController extends Controller
 {
@@ -39,14 +40,16 @@ class VendaController extends Controller
             return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ESPERA;
         });
 
-        //$todasEtapasDaVenda
+        $todasEtapasForamConcluidas = count($etapasConcluidas) === count($venda->etapas);
+        $mostraBotaoDeConcluir = $todasEtapasForamConcluidas && $venda->status->id != StatusVendasEnum::VENDIDO;
 
         return view('vendas.detail',
             [
             'venda' => $venda,
             'etapasConcluidas' => $etapasConcluidas,
             'etapaEmAndamento' => $etapaEmAndamento,
-            'etapasEmEspera' => $etapasEmEspera
+            'etapasEmEspera' => $etapasEmEspera,
+            'mostraBotaoDeConcluir' => $mostraBotaoDeConcluir
             ]
         );
     }
@@ -94,14 +97,17 @@ class VendaController extends Controller
         })->first();
 
         $venda->etapas()->updateExistingPivot($etapaEmAndamento->id, ['statusetapas_id' => StatusEtapasEnum::COMPLETA]);
-        $venda->etapas()->updateExistingPivot($proximaEtapaEmEspera->id, ['statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
+
+        if(count($proximaEtapaEmEspera) > 0) {
+            $prazo = new \DateTime();
+            $prazo->add(new \DateInterval('P' . $proximaEtapaEmEspera->prazo . 'D'));
+            $venda->etapas()->updateExistingPivot($proximaEtapaEmEspera->id, ['statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO, 'prazo' => $prazo]);
+        }
     }
 
     public function mudarStatusSubEtapa($vendaId, $subEtapaid)
     {
-        $venda = Venda::with('subetapas')->findOrFail($vendaId);
-
-        $statusAntigo = \DB::table('vendas')
+        $statusAntigo = DB::table('vendas')
                 ->join('vendas_subetapas','vendas.id','=','vendas_subetapas.venda_id')
                 ->where([['vendas.id','=',$vendaId],['vendas_subetapas.subetapa_id','=',$subEtapaid]])
                 ->select('vendas_subetapas.statusetapas_id')
@@ -109,8 +115,27 @@ class VendaController extends Controller
 
         $statusNovo = in_array($statusAntigo,[StatusEtapasEnum::EM_ADANTAMENTO, StatusEtapasEnum::EM_ESPERA]) ? StatusEtapasEnum::COMPLETA : StatusEtapasEnum::EM_ADANTAMENTO;
 
-        $venda->subEtapas()->updateExistingPivot($subEtapaid, ['statusetapas_id' => $statusNovo]);
+        DB::table('vendas_subetapas')
+            ->where([['vendas_subetapas.venda_id','=',$vendaId],['vendas_subetapas.subetapa_id','=',$subEtapaid]])
+            ->update(['statusetapas_id' => $statusNovo]);
+
     }
+
+    public function mudarStatusVenda($id, $status)
+    {
+        $venda = Venda::findOrFail($id);
+        $venda->statusvendas_id = $status;
+        $venda->save();
+
+        if($status == StatusVendasEnum::VENDIDO)
+            \Illuminate\Support\Facades\Request::session()->flash('success','Venda concludía com sucesso');
+        else
+            \Illuminate\Support\Facades\Request::session()->flash('success','Venda cancelada');
+        
+        return redirect()->action('VendaController@index');
+    }
+
+
 
 
 }
