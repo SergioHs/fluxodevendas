@@ -31,6 +31,8 @@
         <dl>
             <dt>Apartamento</dt>
             <dd>{{$venda->apartamento->numero}}, bloco {{$venda->apartamento->bloco}}, {{$venda->apartamento->andar}}&deg; andar</dd>
+            <dt> Status </dt>
+            <dd>@component('components.status-vendas',['status' => $venda->status]) @endcomponent</dd>
         </dl>
     </div>
     <div class="medium-12 cell" id="etapas-container">
@@ -45,7 +47,7 @@
                                 @if($s->etapa_id == $e->id)
                                     <div class="sub-etapa">
                                         <div class="sub-etapa-content">
-                                            <input name="subetapa-3" value="{{$s->id}}" {{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "checked" : ""}}disabled title="Etapa já concluída" type="checkbox"><label class="{{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "has-line-through" : "" }}" for="subetapa-2">{{$s->nome}}</label>
+                                            <input name="subetapa-3" value="{{$s->id}}" {{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "checked" : ""}} disabled title="Etapa já concluída" type="checkbox"><label class="{{$s->pivot->statusetapas_id == \App\StatusEtapasEnum::COMPLETA ? "has-line-through" : "" }}" for="subetapa-2">{{$s->nome}}</label>
                                         </div>
                                     </div>
                                 @endif

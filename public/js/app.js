@@ -82,10 +82,12 @@ $('table.ajax-modal-table').on('click', 'tr', function(ev){
 });
 
 $('#venda-detail-modal').on('change', "#etapas-container input[type='checkbox']", function(ev){
-   $(this).next('label').toggleClass('has-line-through');
-   var vendaId = $("#input-venda-id").val();
+    var self = this;
+    //$(this).next('label').toggleClass('has-line-through');
+    var vendaId = $("#input-venda-id").val();
     fetch('/venda/'+vendaId+"/mudar-status-subetapa/"+$(this).val(),
         function(){
+            $(self).next('label').toggleClass('has-line-through');
             alert("Etapa atualizada");
     })
 });
@@ -100,6 +102,4 @@ $('#venda-detail-modal').on('click', 'button#concluir-etapa', function(ev){
                     $("#venda-detail-modal").html(data).foundation('open');
                 });
         });
-
-
 });

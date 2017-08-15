@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Apartamento;
 use App\Cliente;
+use App\DataService;
 use App\Empreendimento;
 use App\Events\VendaCadastrada;
 use App\StatusEtapasEnum;
@@ -134,6 +135,55 @@ class VendaController extends Controller
         
         return redirect()->action('VendaController@index');
     }
+
+    public function pendencies()
+    {
+
+//        $emVencimento = \DB::table('vendas')
+//            ->join('vendas_etapas', 'vendas.id','=','vendas_etapas.venda_id')
+//            ->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO)
+//            ->where('vendas.statusvendas_id','=',StatusVendasEnum::RESERVADO)
+//            ->whereDate('vendas_etapas.prazo','=',DataService::SqlToday())
+//            ->get();
+
+        $vencidas = Venda::whereHas('etapas',function($q){
+            $q->whereDate(
+                'vendas_etapas.prazo','<', DataService::SqlToday()
+            )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
+
+        })
+            ->with('etapas')
+            ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+            ->get();
+
+        $emVencimento = Venda::whereHas('etapas',function($q){
+            $q->whereDate(
+                'vendas_etapas.prazo','=', DataService::SqlToday()
+            )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
+
+        })
+            ->with('etapas')
+            ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+            ->get();
+
+        $venceLogo = Venda::whereHas('etapas',function($q){
+            $q->whereDate(
+                'vendas_etapas.prazo','=', DataService::SqlTomorrow()
+            )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
+
+        })
+            ->with(['etapas','cliente','status','vendedor','apartamento'])
+            ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+            ->get();
+
+        return view('vendas.pendencies',[
+            'vencidas' => $vencidas,
+            'emVencimento' => $emVencimento,
+            'venceLogo' => $venceLogo
+        ]);
+
+    }
+
 
 
 

@@ -9,6 +9,7 @@ class DataService
 
     public static function Adia($prazo, \DateTime $aPartirDe)
     {
+        $aPartirDe->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
         $aPartirDe->add(new \DateInterval('P' . $prazo . 'D'));
 
         if(self::$apenasDiasUteis){
@@ -20,6 +21,21 @@ class DataService
 
 
         return $aPartirDe;
-
     }
+
+    public static function SqlToday()
+    {
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+        return $now->format('Y-m-d');
+    }
+
+    public static function SqlTomorrow()
+    {
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+        $tomorrow = $now->add(new \DateInterval('P1D'));
+        return $tomorrow->format('Y-m-d');
+    }
+
 }

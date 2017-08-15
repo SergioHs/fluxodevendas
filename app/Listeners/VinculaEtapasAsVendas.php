@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\DataService;
 use App\Events\VendaCadastrada;
 use App\StatusEtapasEnum;
 use App\TrilhaDeVendas;
@@ -38,8 +39,7 @@ class VinculaEtapasAsVendas
 
     private function vinculaPrimeiraEtapa($venda, $trilha)
     {
-        $prazo = new \DateTime();
-        $prazo->add(new \DateInterval('P'.$trilha->etapas[0]->prazo.'D'));
+        $prazo = DataService::Adia($trilha->etapas[0]->prazo, new \DateTime());
         $venda->etapas()->attach($trilha->etapas[0]->id,['prazo' => $prazo, 'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
     }
 

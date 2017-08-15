@@ -51,3 +51,4 @@ Route::post('/venda/store', 'VendaController@store');
 Route::get('/venda/{id}/concluir-etapa-em-andamento', 'VendaController@concluirEtapaEmAndamento');
 Route::get('/venda/{vendaId}/mudar-status-subetapa/{subEtapId}', 'VendaController@mudarStatusSubEtapa');
 Route::get('/venda/{id}/mudar-status/{status}', 'VendaController@mudarStatusVenda');
+Route::get('/pendencias','VendaController@pendencies');
