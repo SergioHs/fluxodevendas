@@ -19,12 +19,14 @@
     @else
         <form method="post"  id="trilhadevenda-form" action="{{action('TrilhaDeVendaController@store')}}">
             {{csrf_field()}}
-
+            @if(isset($trilha))
+                <input type="hidden" name="id" value="{{$trilha->id}}">
+            @endif
             <div class="grid-x grid-padding-x grid-padding-y">
                 <div class="medium-4 cell">
                     <label>
                         Nome
-                        <input type="text" name="nome" value="{{old('nome')}}">
+                        <input type="text" name="nome" value="{{old('nome') ?: $trilha->nome ?? ''}}">
                         @component('components.form-errors',['field' => 'nome'])
                         @endcomponent
                     </label>
@@ -32,7 +34,7 @@
                 <div class="medium-4 cell">
                     <label>
                         Descrição
-                        <input type="text" name="descricao" value="{{old('descricao')}}">
+                        <input type="text" name="descricao" value="{{old('descricao') ?: $trilha->descricao ?? ''}}">
                         @component('components.form-errors',['field' => 'descricao'])
                         @endcomponent
                     </label>
@@ -40,7 +42,7 @@
                 <div class="medium-4 cell">
                     <label>
                         Observações
-                        <textarea name="observacoes" rows="1">{{old('observacoes')}}</textarea>
+                        <textarea name="observacoes" rows="1">{{old('observacoes') ?: $trilha->observacoes ?? ''}}</textarea>
                     </label>
                 </div>
             </div>
@@ -56,9 +58,23 @@
                     <input type="submit" class="button" value="Cadastrar">
                 </div>
                 <div class="medium-4 cell">
-                    <div id="etapas-selecionadas" class="hidden draggable">
+                    <div id="etapas-selecionadas" class="{{isset($trilha) ?  '' : 'hidden'}} draggable">
                         <p>Etapas selecionadas</p>
-
+                        @if(isset($trilha))
+                            @foreach($trilha->etapas as $e)
+                            <div class="card" draggable="true" id="card-{{str_replace(" ","",$e->nome)}}">
+                                <input type="hidden" name="etapas[]" id="{{str_replace(" ","",$e->nome)}}" value="{{$e->id}}">
+                                <div class="card-section">
+                                    <div class="grid-x">
+                                        <div class="medium-11 cell"><p>{{$e->nome}}</p></div>
+                                        <div class="medium-1 cell">
+                                            <button class="button alert tiny" type="button">X</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        @endif
 
                     </div>
                 </div>
@@ -76,42 +92,36 @@
                 var idEtapa = $(this).val();
                 $("#etapas-selecionadas").fadeIn();
                 $("#etapas-selecionadas").removeClass("hidden");//.append($("<p></p>").text(nomeEtapa));
-                $("#etapas-selecionadas").append($("<input>",{type:"hidden",value:idEtapa,id:nomeEtapa,name:"etapas[]"}));
-                var $etapaCard = $("<div>",{class: 'card', draggable: true, id: 'card-'+nomeEtapa});
+                //$("#etapas-selecionadas");
+                var $etapaCard = $("<div>",{class: 'card', draggable: true, id: 'card-'+(nomeEtapa.replace(" ",""))});
                 var $etapaGrid = $("<div></div>",{class: "grid-x"});
                 var $etapaTextWrapper = $("<div></div>", {class : "medium-11 cell"}).append($("<p>").text(nomeEtapa));
                 var $etapaBtnWrapper = $("<div></div>",{class: "medium-1 cell"}).append($("<button>",{class: 'button alert tiny', type: "button", text: "X", }));
                 $etapaGrid.append($etapaTextWrapper).append($etapaBtnWrapper);
-
                 var $etapaCardContent = $("<div>",{class: 'card-section'})
                         .append($etapaGrid);
-                $etapaCard.append($etapaCardContent).appendTo($("#etapas-selecionadas"));
+                $etapaCard.append($("<input>",{type:"hidden",value:idEtapa,id:nomeEtapa.replace(" ",""),name:"etapas[]"})).append($etapaCardContent).appendTo($("#etapas-selecionadas"));
                 $('option:selected', this).remove();
             });
 
             $("#etapas-selecionadas").on('click', 'button', function(){
                 //ARRUMAR
                 var removedEtapaText = $(this).parent().prev().first("p").text();
-                var removedEtapaId = $("#etapas-selecionadas input#"+removedEtapaText).val();
+                var removedEtapaId = $("#etapas-selecionadas input#"+(removedEtapaText.replace(" ",""))).val();
                 $("#select-etapas").append($("<option></option>",{value:removedEtapaId}).text(removedEtapaText));
-                $("#etapas-selecionadas input#"+removedEtapaText).remove();
-                $(this).closest("div.card").slideUp('fast');
+                $("input#"+(removedEtapaText.replace(" ",""))).remove();
+                $(this).closest("div.card").remove();
             });
 
             var $container = $("#etapas-selecionadas");
-
-
 
             $container.on('dragover', function (ev) {
                 ev.preventDefault();
             });
 
-            $("#etapas-selecionadas").on('dragenter','.card', function (ev) {
-//
-//                var text = $("#" + ev.originalEvent.dataTransfer.getData("id")).text();
-//                console.log(text);
-//                var $ghostItem = $("<li></li>", { class: "list-item ghost", draggable: "true"}).text(text);
-//                $(this).after($ghostItem);
+            $("#etapas-selecionadas").on('dragenter','.card', function (ev) {//
+                var $ghostItem = $("<div></div>",{class: 'ghost arrow-right'});
+                $(this).after($ghostItem);
             });
 
             $("#etapas-selecionadas").on('dragleave','.card', function (ev) {
@@ -147,10 +157,6 @@
                 if(!submeteu){
                     ev.preventDefault();
                     submeteu = true;
-                    var contadorDeOrdem = 1;
-//                    $("input[name='etapas[]'").each(function(index){
-//                        $("#trilhadevenda-form").append($("<input>", { type:"hidden", value:contadorDeOrdem}))
-//                    });
 
                     $(this).trigger('submit');
                 }

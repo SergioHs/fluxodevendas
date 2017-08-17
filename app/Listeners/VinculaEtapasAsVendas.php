@@ -31,34 +31,39 @@ class VinculaEtapasAsVendas
      */
     public function handle(VendaCadastrada $event)
     {
-        $trilha = TrilhaDeVendas::with('etapas.subetapas')->findOrFail($event->venda->trilhadevendas_id);
-        $this->vinculaPrimeiraEtapa($event->venda, $trilha);
-        $this->vinculaSubEtapasDaPrimeiraEtapa($event->venda, $trilha);
-        $this->vinculaEtapasRestantes($event->venda, $trilha);
+        $trilha = TrilhaDeVendas::with(['etapas.subetapas','vendas'])->findOrFail($event->venda->trilhadevendas_id);
+        $etapasEmOrdem = $trilha->etapas->sortBy(function($etapa,$key){
+            return $etapa->pivot->ordem;
+        });
+
+        $primeiraEtapa = $etapasEmOrdem->shift();
+
+        $this->vinculaPrimeiraEtapa($event->venda, $primeiraEtapa);
+        $this->vinculaSubEtapasDaPrimeiraEtapa($event->venda, $primeiraEtapa);
+        $this->vinculaEtapasRestantes($event->venda, $etapasEmOrdem);
     }
 
-    private function vinculaPrimeiraEtapa($venda, $trilha)
+    private function vinculaPrimeiraEtapa($venda, $etapa)
     {
-        $prazo = DataService::Adia($trilha->etapas[0]->prazo, new \DateTime());
-        $venda->etapas()->attach($trilha->etapas[0]->id,['prazo' => $prazo, 'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
+        $prazo = DataService::Adia($etapa->prazo, new \DateTime());
+        $venda->etapas()->attach($etapa->id,['prazo' => $prazo, 'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
     }
 
-    private function vinculaSubEtapasDaPrimeiraEtapa($venda, $trilha)
+    private function vinculaSubEtapasDaPrimeiraEtapa($venda, $etapa)
     {
         $subEtapasIds = [];
-        foreach($trilha->etapas[0]->subetapas as $s){
+        foreach($etapa->subetapas as $s){
             $subEtapasIds[$s->id] =  ['statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO];
         }
 
         $venda->subEtapas()->attach($subEtapasIds);
     }
 
-    private function vinculaEtapasRestantes($venda, $trilha)
+    private function vinculaEtapasRestantes($venda, $etapas)
     {
-        $trilha->etapas->shift();
         $etapasIds = [];
         $subEtapasIds = [];
-        foreach($trilha->etapas as $e){
+        foreach($etapas as $e){
             $etapasIds[$e->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA];
             foreach($e->subetapas as $s){
                 $subEtapasIds[$s->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA];

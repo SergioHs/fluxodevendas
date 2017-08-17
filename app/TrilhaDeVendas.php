@@ -10,12 +10,12 @@ class TrilhaDeVendas extends Model
 
     public function vendas()
     {
-        return $this->hasMany('App\Venda');
+        return $this->hasMany('App\Venda','trilhadevendas_id');
     }
 
     public function etapas()
     {
-        return $this->belongsToMany('App\Etapa','trilhasdevendas_etapas','trilhadevendas_id', 'etapa_id');
+        return $this->belongsToMany('App\Etapa','trilhasdevendas_etapas','trilhadevendas_id', 'etapa_id')->withPivot('ordem');
     }
 
 }

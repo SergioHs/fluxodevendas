@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Etapa;
 use App\TrilhaDeVendas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class TrilhaDeVendaController extends Controller
 {
@@ -21,7 +22,23 @@ class TrilhaDeVendaController extends Controller
 
     public function edit($id)
     {
-        return view('trilhadevenda.create');
+        $trilha = TrilhaDeVendas::with(['etapas.subetapas','vendas'])->findOrFail($id);
+        $trilha->etapas = $trilha->etapas->sortBy(function($etapa,$key){
+            return $etapa->pivot->ordem;
+        });
+
+//        if(count($trilha->vendas) > 0){
+//            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esta participando');
+//            return redirect()->action('TrilhaDeVendaController@index');
+//        }
+
+        $etapasJaCadastradas = [];
+        foreach($trilha->etapas as $e)
+            array_push($etapasJaCadastradas, $e->id);
+
+        $etapas = Etapa::whereNotIn('id',$etapasJaCadastradas)->get();
+
+        return view('trilhasdevenda.create',['etapas' => $etapas, 'trilha' =>$trilha]);
     }
 
 
@@ -34,7 +51,11 @@ class TrilhaDeVendaController extends Controller
             'etapas' => 'required'
         ]);
 
-        $trilha = new TrilhaDeVendas();
+        if(isset($request->id))
+            $trilha = TrilhaDeVendas::findOrFail($request->id);
+        else
+            $trilha = new TrilhaDeVendas();
+
         $trilha->nome = $request->nome;
         $trilha->descricao = $request->descricao;
         $trilha->observacoes = $request->observacoes;
@@ -42,6 +63,8 @@ class TrilhaDeVendaController extends Controller
 
         $i = 1;
         $etapas = [];
+
+
         foreach($request->etapas as $e){
             $etapas[$e] = ['ordem' => $i];
             $i++;
@@ -55,6 +78,9 @@ class TrilhaDeVendaController extends Controller
     public function detail($id)
     {
         $trilha = TrilhaDeVendas::with('etapas.subetapas')->findOrFail($id);
+        $trilha->etapas = $trilha->etapas->sortBy(function($etapa,$key){
+            return $etapa->pivot->ordem;
+        });
         return view('trilhasdevenda.detail',['trilha' => $trilha]);
     }
 }

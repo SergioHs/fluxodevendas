@@ -40,3 +40,15 @@ div.reveal.has-scroll {
 .has-line-through {
     text-decoration: line-through;
 }
+
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid #81B03E;
+}
+
+.ghost {
+    margin-left: 5px;
+}
