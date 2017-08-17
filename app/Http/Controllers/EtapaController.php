@@ -21,8 +21,9 @@ class EtapaController extends Controller
     public function store(Request $req)
     {
         $this->validate($req,[
-            'nome' => 'required'
+            'nome' => 'required|unique:etapas,nome'
         ]);
+
         $etapa = new Etapa();
         $etapa->fill($req->except('subetapas'));
         $etapa->save();
