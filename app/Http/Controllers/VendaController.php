@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\DB;
 
 class VendaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $vendas = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status'])->get();

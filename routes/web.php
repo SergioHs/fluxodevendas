@@ -15,6 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/logout', function(){
+    Auth::logout();
+    return redirect('/');
+});
+
+
 Route::get('/empreendimento/adicionar', 'EmpreendimentoController@create');
 Route::get('/empreendimento/editar/{id}','EmpreendimentoController@edit');
 Route::get('/empreendimento', 'EmpreendimentoController@index');
@@ -52,3 +58,6 @@ Route::get('/venda/{id}/concluir-etapa-em-andamento', 'VendaController@concluirE
 Route::get('/venda/{vendaId}/mudar-status-subetapa/{subEtapId}', 'VendaController@mudarStatusSubEtapa');
 Route::get('/venda/{id}/mudar-status/{status}', 'VendaController@mudarStatusVenda');
 Route::get('/pendencias','VendaController@pendencies');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

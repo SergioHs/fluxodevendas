@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.logged')
 @section('title','Cadastro de Etapa')
 @section('content')
 

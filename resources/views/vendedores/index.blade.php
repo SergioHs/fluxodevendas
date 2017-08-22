@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.logged')
 @section('title', 'Vendedores')
 @section('content')
     <div class="grid-x grid-padding-x grid-padding-y">
