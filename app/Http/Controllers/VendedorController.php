@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 
 class VendedorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-
         $vendedores = Vendedor::all();
         return view('vendedores.index',['vendedores' => $vendedores]);
     }

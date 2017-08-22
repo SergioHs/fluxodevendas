@@ -8,6 +8,11 @@ use App\SubEtapa;
 
 class EtapaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         return view('etapas.index');
