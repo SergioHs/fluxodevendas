@@ -16,7 +16,7 @@
             <select name="vendedor_id">
                 <option value="">Selecione um vendedor</option>
                 @foreach($vendedores as $v)
-                    <option value="{{$v->id}}">{{$v->nome}}</option>
+                    <option {{$v->id == old('vendedor_id') ? "selected" : ""}}  value="{{$v->id}}">{{$v->nome}}</option>
                 @endforeach
             </select>
         </div>
@@ -24,7 +24,7 @@
             <select name="cliente_id">
                 <option value="">Selecione um cliente</option>
                 @foreach($clientes as $c)
-                    <option value="{{$c->id}}">{{$c->nome}}</option>
+                    <option {{$c->id == old('cliente_id') ? "selected" : ""}}  value="{{$c->id}}">{{$c->nome}}</option>
                 @endforeach
             </select>
         </div>
@@ -32,7 +32,7 @@
             <select name="empreendimento_id">
                 <option value="">Selecione um empreendimento</option>
                 @foreach($empreendimentos as $e)
-                    <option value="{{$e->id}}">{{$e->nome}}</option>
+                    <option {{$e->id == old('empreendimento_id') ? "selected" : ""}} value="{{$e->id}}">{{$e->nome}}</option>
                 @endforeach
             </select>
         </div>

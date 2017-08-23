@@ -45,6 +45,7 @@ class VendaController extends Controller
         }
 
         $vendas = $vendas->get();
+        $request->flash();
 
         return view('vendas.index',
             [
@@ -53,7 +54,7 @@ class VendaController extends Controller
                 'vendedores' => $vendedores,
                 'clientes' => $clientes
             ]
-        )->withInput($request);
+        );
     }
 
     public function detail($id)
