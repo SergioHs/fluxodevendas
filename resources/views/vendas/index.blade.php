@@ -4,13 +4,43 @@
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="auto cell">
         <h3 style="display:inline">Vendas</h3>
-        {{--<a class="button" href="{{action('VendaController@create')}}">Iniciar venda</a>--}}
     </div>
     <div class="auto cell">
 
     </div>
 </div>
-
+<form method="post" action="{{action("VendaController@index")}}">
+<div class="grid-x grid-padding-x grid-padding-y">
+        {{csrf_field()}}
+        <div class="medium-3 cell">
+            <select name="vendedor_id">
+                <option value="">Selecione um vendedor</option>
+                @foreach($vendedores as $v)
+                    <option {{$v->id == old('vendedor_id') ? "selected" : ""}}  value="{{$v->id}}">{{$v->nome}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="medium-3 cell">
+            <select name="cliente_id">
+                <option value="">Selecione um cliente</option>
+                @foreach($clientes as $c)
+                    <option {{$c->id == old('cliente_id') ? "selected" : ""}}  value="{{$c->id}}">{{$c->nome}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="medium-3 cell">
+            <select name="empreendimento_id">
+                <option value="">Selecione um empreendimento</option>
+                @foreach($empreendimentos as $e)
+                    <option {{$e->id == old('empreendimento_id') ? "selected" : ""}} value="{{$e->id}}">{{$e->nome}}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="medium-3 cell">
+            <button  type="submit" class="button secondary">Filtrar</button>
+        </div>
+    </div>
+</form>
 
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="medium-12 cell">
@@ -53,8 +83,6 @@
         @endif
     </div>
 </div>
-
-
 
 <div class="reveal has-scroll" id="venda-detail-modal" data-reveal>
 
