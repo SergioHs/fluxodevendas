@@ -51,6 +51,7 @@ Route::get('/etapa/adicionar','EtapaController@create');
 Route::post('/etapa/store','EtapaController@store');
 
 Route::get('/venda', 'VendaController@index');
+Route::post('/venda', 'VendaController@index');
 Route::get('/venda/detail/{id}','VendaController@detail');
 Route::get('/venda/adicionar', 'VendaController@create');
 Route::post('/venda/store', 'VendaController@store');
@@ -58,6 +59,8 @@ Route::get('/venda/{id}/concluir-etapa-em-andamento', 'VendaController@concluirE
 Route::get('/venda/{vendaId}/mudar-status-subetapa/{subEtapId}', 'VendaController@mudarStatusSubEtapa');
 Route::get('/venda/{id}/mudar-status/{status}', 'VendaController@mudarStatusVenda');
 Route::get('/pendencias','VendaController@pendencies');
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -22,10 +22,38 @@ class VendaController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $vendas = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status'])->get();
-        return view('vendas.index',['vendas' => $vendas]);
+        $vendedores = Vendedor::all();
+        $clientes = Cliente::all();
+        $empreendimentos = Empreendimento::all();
+
+        $vendas = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status']);
+
+        if($request->isMethod('post'))
+        {
+            if($request->has('vendedor_id'))
+                $vendas->where('vendedor_id','=',$request->vendedor_id);
+
+            if($request->has('cliente_id'))
+                $vendas->where('cliente_id','=',$request->cliente_id);
+
+            if(isset($request->empreendimento_id))
+                $vendas->whereHas('apartamento.bloco',function($q) use ($request){
+                    $q->where('empreendimento_id','=',$request->empreendimento_id);
+                });
+        }
+
+        $vendas = $vendas->get();
+
+        return view('vendas.index',
+            [
+                'vendas' => $vendas,
+                'empreendimentos' => $empreendimentos,
+                'vendedores' => $vendedores,
+                'clientes' => $clientes
+            ]
+        )->withInput($request);
     }
 
     public function detail($id)
