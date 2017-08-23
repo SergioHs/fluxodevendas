@@ -13,17 +13,21 @@
                     <dd>{{$empreendimento->cidade->cidade .  " " . $empreendimento->cidade->estado->sigla}}</dd>
                 </dl>
             </div>
-            @if(count($apartamentos) > 0)
-            <div class="medium-12 cell">
-                <p class="lead">Apartamentos</p>
-                @foreach($apartamentos as $a)
-                    <a @if($a->status == "DISPONIVEL") href={{action("VendaController@create",['apartamento' => $a->id, 'cliente' => null])}} @endif data-open="modal-venda" class="button small {{$a->status == "VENDIDO" ? "alert disabled" : ($a->status == "RESERVADO" ? "warning disabled " : "success")}}">
-                        <strong>Numero:</strong> {{ $a->numero }} <strong>Bloco: </strong> {{ $a->bloco }} <strong> Andar:</strong> {{$a->andar }}
-                    </a>
-                @endforeach
-            </div>
 
-            @endif
+            @foreach($empreendimento->blocos as $b)
+                @if(count($apartamentos) > 0)
+                <div class="medium-12 cell">
+                    <p class="lead">Bloco {{$b->nome}}</p>
+                    @foreach($apartamentos as $a)
+                        @if($a->bloco->nome == $b->nome)
+                        <a @if($a->status == "DISPONIVEL") href={{action("VendaController@create",['apartamento' => $a->id, 'cliente' => null])}} @endif data-open="modal-venda" class="button small {{$a->status == "VENDIDO" ? "alert disabled" : ($a->status == "RESERVADO" ? "warning disabled " : "success")}}">
+                            <strong>Numero:</strong> {{ $a->numero }}<strong> Andar:</strong> {{$a->andar }}
+                        </a>
+                        @endif
+                    @endforeach
+                </div>
+                @endif
+            @endforeach
         </div>
     </div>
 </div>
