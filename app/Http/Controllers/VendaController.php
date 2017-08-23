@@ -24,15 +24,13 @@ class VendaController extends Controller
 
     public function index()
     {
-        $vendas = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status'])->get();
+        $vendas = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status'])->get();
         return view('vendas.index',['vendas' => $vendas]);
     }
 
     public function detail($id)
     {
-        $venda = Venda::with(['apartamento.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas','subetapas'])->findOrFail($id);
-        //var_dump($venda->subEtapas->toArray());die;
-
+        $venda = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas','subetapas'])->findOrFail($id);
 
         $etapasConcluidas = $venda->etapas->filter(function($v,$k){
             return $v->pivot->statusetapas_id == StatusEtapasEnum::COMPLETA;
@@ -63,7 +61,7 @@ class VendaController extends Controller
     public function create(Request $r)
     {
         if ($r->query('apartamento')) {
-            $apartamento = Apartamento::with('empreendimento')->findOrFail($r->query('apartamento'));
+            $apartamento = Apartamento::with('bloco.empreendimento')->findOrFail($r->query('apartamento'));
         }
 
         if ($r->query('cliente')) {

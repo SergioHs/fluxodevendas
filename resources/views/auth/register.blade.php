@@ -16,12 +16,12 @@
                 </label>
                 @component('components.form-errors',['field' => 'email'])
                 @endcomponent
-                <label>Password
+                <label>Senha
                     <input name="password" type="password">
                 </label>
                 @component('components.form-errors',['field' => 'password'])
                 @endcomponent
-                <label>Password
+                <label>Confirmar senha
                     <input name="password_confirmation" type="password">
                 </label>
                 @component('components.form-errors',['field' => 'password-confirm'])

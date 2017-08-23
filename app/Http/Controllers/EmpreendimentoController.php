@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Apartamento;
 use App\Empreendimento;
+use App\Bloco;
 use App\Utils;
 use App\Estado;
 use Illuminate\Http\Request;
@@ -60,29 +61,33 @@ class EmpreendimentoController extends Controller
                 $empreendimento->cidade_id = $r->cidade_id;
                 $empreendimento->saveOrFail();
 
-                $apartamentos = [];
+
 
                 for ($bloco = 0; $bloco < $r->numero_blocos; $bloco++) {
+                    $blocoEntity = new Bloco();
+                    $blocoEntity->nome = $r->nomenclatura_bloco == "algarismo" ? $bloco + 1 : Utils::alfabeto[$bloco];
+                    $blocoEntity->empreendimento_id = $empreendimento->id;
+                    $blocoEntity->saveOrFail();
+                    $apartamentos = [];
                     for ($andar = 0; $andar <= $r->numero_andares; $andar++) {
                         for ($k = 0; $k <= $r->numero_ap_andares; $k++) {
                             $ap = new Apartamento();
-                            $ap->bloco = $r->nomenclatura_bloco == "algarismo" ? $bloco + 1 : Utils::alfabeto[$bloco];
+                            $ap->bloco_id = $blocoEntity->id;
                             $ap->andar = $andar + 1;
                             $ap->numero = (int)substr_replace($r->numero_inicial_apartamentos, $andar + 1, 0, 1) + $k;
-                            $ap->empreendimento_id = $empreendimento->id;
 
                             array_push($apartamentos, $ap);
                         }
                     }
+                    $blocoEntity->apartamentos()->saveMany($apartamentos);
                 }
-
-                $empreendimento->apartamentos()->saveMany($apartamentos);
             });
 
             $r->session()->flash('success', 'Empreendimento cadastrado com sucesso');
             return redirect()->action('EmpreendimentoController@index');
         } catch(\Exception $e) {
-
+            $r->session()->flash('error', "Ocorreu um erro. Contate o administrador. Erro: " . $e->getMessage());
+            return redirect()->action('EmpreendimentoController@create');
         }
     }
 
@@ -100,12 +105,14 @@ class EmpreendimentoController extends Controller
                                            WHEN (sum(if(vendas.statusvendas_id = 1, 1,0)) > 0)  THEN \"VENDIDO\"
                                            WHEN (sum(if(vendas.statusvendas_id = 2, 1,0)) > 0)  THEN \"RESERVADO\"
                                            ELSE \"DISPONIVEL\"
-                                           END) as status"))->leftJoin("vendas","apartamentos.id","=","vendas.apartamento_id")
-                                            ->where('apartamentos.empreendimento_id','=',$id)
+                                           END) as status"))
+                                            ->join("blocos", "blocos.id", "=","apartamentos.bloco_id")
+                                            ->leftJoin("vendas","apartamentos.id","=","vendas.apartamento_id")
+                                            ->where('blocos.empreendimento_id','=',$id)
                                             ->groupBy('apartamentos.id')
                                             ->get();
 
-        $empreendimento = Empreendimento::with(['cidade.estado','apartamentos.vendas.status'])->findOrFail($id);
+        $empreendimento = Empreendimento::with(['cidade.estado', 'blocos'])->findOrFail($id);
 
         return view('empreendimentos.detail',['empreendimento' => $empreendimento, 'apartamentos' => $apartamento]);
     }

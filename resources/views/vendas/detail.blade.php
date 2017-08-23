@@ -21,7 +21,7 @@
     <div class="medium-6 cell">
         <dl>
             <dt>Empreendimento</dt>
-            <dd>{{$venda->apartamento->empreendimento->nome}}</dd>
+            <dd>{{$venda->apartamento->bloco->empreendimento->nome}}</dd>
 
             <dt>Trilha de venda</dt>
             <dd>{{$venda->trilhadevenda->nome}}</dd>
@@ -30,7 +30,7 @@
     <div class="medium-6 cell">
         <dl>
             <dt>Apartamento</dt>
-            <dd>{{$venda->apartamento->numero}}, bloco {{$venda->apartamento->bloco}}, {{$venda->apartamento->andar}}&deg; andar</dd>
+            <dd>{{$venda->apartamento->numero}}, bloco {{$venda->apartamento->bloco->nome}}, {{$venda->apartamento->andar}}&deg; andar</dd>
             <dt> Status </dt>
             <dd>@component('components.status-vendas',['status' => $venda->status]) @endcomponent</dd>
         </dl>

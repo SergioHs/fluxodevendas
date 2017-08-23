@@ -8,9 +8,9 @@ class Empreendimento extends Model
 {
     protected $table = 'empreendimentos';
 
-    public function apartamentos()
+    public function blocos()
     {
-        return $this->hasMany('App\Apartamento');
+        return $this->hasMany('App\Bloco');
     }
 
     public function cidade()

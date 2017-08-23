@@ -9,9 +9,9 @@ class Apartamento extends Model
     protected $table = 'apartamentos';
     protected $guarded = ['id'];
 
-    public function empreendimento()
+    public function bloco()
     {
-        return $this->belongsTo('App\Empreendimento');
+        return $this->belongsTo('App\Bloco');
     }
 
     public function vendas()
