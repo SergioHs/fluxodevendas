@@ -34,6 +34,7 @@ Route::get('/cliente/detail/{id}', 'ClienteController@detail');
 Route::post('/cliente/store', 'ClienteController@store');
 
 Route::get('/vendedor/adicionar', 'VendedorController@create');
+Route::get('/vendedor/editar/{id}','VendedorController@edit');
 Route::get('/vendedor', 'VendedorController@index');
 Route::get('/vendedor/detail/{id}', 'VendedorController@detail');
 Route::post('/vendedor/store', 'VendedorController@store');
@@ -48,6 +49,7 @@ Route::get('/trilhadevenda/detail/{id}', 'TrilhaDeVendaController@detail');
 
 Route::get('/etapa', 'EtapaController@index');
 Route::get('/etapa/adicionar','EtapaController@create');
+Route::get('/etapa/detail/{id}','EtapaController@detail');
 Route::post('/etapa/store','EtapaController@store');
 
 Route::get('/venda', 'VendaController@index');

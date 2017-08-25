@@ -15,13 +15,21 @@ class EtapaController extends Controller
 
     public function index()
     {
-        return view('etapas.index');
+        $etapas = Etapa::all();
+        return view('etapas.index',['etapas' => $etapas]);
     }
 
     public function create()
     {
         return view('etapas.create');
     }
+
+    public function detail($id)
+    {
+        $etapa = Etapa::with('subetapas')->findOrFail($id);
+        return view('etapas.detail',['etapa' =>$etapa]);
+    }
+
 
     public function store(Request $req)
     {

@@ -89,27 +89,28 @@
             $("#select-etapas").on('change', function(ev){
                 if(!$(this).val()) return;
                 var nomeEtapa = $(this).children(':selected').text();
+                console.log(nomeEtapa.replaceAll(" ",""));
                 var idEtapa = $(this).val();
                 $("#etapas-selecionadas").fadeIn();
                 $("#etapas-selecionadas").removeClass("hidden");//.append($("<p></p>").text(nomeEtapa));
                 //$("#etapas-selecionadas");
-                var $etapaCard = $("<div>",{class: 'card', draggable: true, id: 'card-'+(nomeEtapa.replace(" ",""))});
+                var $etapaCard = $("<div>",{class: 'card', draggable: true, id: 'card-'+(nomeEtapa.replaceAll(" ",""))});
                 var $etapaGrid = $("<div></div>",{class: "grid-x"});
                 var $etapaTextWrapper = $("<div></div>", {class : "medium-11 cell"}).append($("<p>").text(nomeEtapa));
                 var $etapaBtnWrapper = $("<div></div>",{class: "medium-1 cell"}).append($("<button>",{class: 'button alert tiny', type: "button", text: "X", }));
                 $etapaGrid.append($etapaTextWrapper).append($etapaBtnWrapper);
                 var $etapaCardContent = $("<div>",{class: 'card-section'})
                         .append($etapaGrid);
-                $etapaCard.append($("<input>",{type:"hidden",value:idEtapa,id:nomeEtapa.replace(" ",""),name:"etapas[]"})).append($etapaCardContent).appendTo($("#etapas-selecionadas"));
+                $etapaCard.append($("<input>",{type:"hidden",value:idEtapa,id:nomeEtapa.replaceAll(" ",""),name:"etapas[]"})).append($etapaCardContent).appendTo($("#etapas-selecionadas"));
                 $('option:selected', this).remove();
             });
 
             $("#etapas-selecionadas").on('click', 'button', function(){
                 //ARRUMAR
                 var removedEtapaText = $(this).parent().prev().first("p").text();
-                var removedEtapaId = $("#etapas-selecionadas input#"+(removedEtapaText.replace(" ",""))).val();
+                var removedEtapaId = $("#etapas-selecionadas input#"+(removedEtapaText.replaceAll(" ",""))).val();
                 $("#select-etapas").append($("<option></option>",{value:removedEtapaId}).text(removedEtapaText));
-                $("input#"+(removedEtapaText.replace(" ",""))).remove();
+                $("input#"+(removedEtapaText.replaceAll(" ",""))).remove();
                 $(this).closest("div.card").remove();
             });
 
