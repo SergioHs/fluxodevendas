@@ -62,7 +62,10 @@
 <script type="text/javascript">
         $(document).ready(function(){
             $("#select-estados").val({{$cliente->cidade->estado->id}});
-            $("#select-cidades").val({{$cliente->cidade->id}});
+            $("#select-estados").trigger("change");
+            setTimeout(function(){
+                $("#select-cidades").val({{$cliente->cidade->id}});
+            },4000);
         });
 </script>
 @endsection

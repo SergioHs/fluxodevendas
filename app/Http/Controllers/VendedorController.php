@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Vendedor;
 use App\Estado;
+use App\Cidade;
 use Illuminate\Http\Request;
 
 class VendedorController extends Controller
@@ -25,6 +26,15 @@ class VendedorController extends Controller
         return view('vendedores.create', ['estados' => $estados]);
     }
 
+    public function edit($id)
+    {
+        $estados = Estado::all();
+        $vendedor = Vendedor::with('cidade.estado')->findOrFail($id);
+        $cidades = Cidade::where("estado_id", $vendedor->toArray()['cidade']['estado_id'])->get();
+
+        return view('vendedores.create', ['vendedor' => $vendedor, 'estados' => $estados, 'cidades' => $cidades]);
+    }
+
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -34,7 +44,11 @@ class VendedorController extends Controller
 
         ]);
 
-        $vendedor = new Vendedor();
+        if(isset($request->id))
+            $vendedor = Vendedor::findOrFail($request->id);
+        else
+            $vendedor = new Vendedor();
+
         $vendedor->fill($request->all());
         $vendedor->save();
 

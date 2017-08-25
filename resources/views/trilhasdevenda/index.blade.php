@@ -3,13 +3,8 @@
 @section('content')
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="auto cell">
-        <h3>Trilhas de vendas</h3>
-        <div class="button-group stacked-for-small">
-            <a class="button" href="{{action('TrilhaDeVendaController@create')}}">Cadastrar trilha</a>
-            <a class="secondary button" href="{{action('EtapaController@create')}}">Cadastrar etapa</a>
-            {{--<a class="secondary button" href="{{action('TrilhaDeVendaController@create')}}">Cadastrar sub-etapa</a>--}}
-        </div>
-
+        <h3 style="display: inline">Trilhas de vendas</h3>
+        <a class="button" href="{{action('TrilhaDeVendaController@create')}}">Cadastrar</a>
     </div>
     <div class="auto cell">
 

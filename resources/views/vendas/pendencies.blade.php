@@ -11,6 +11,12 @@
     </div>
 </div>
 
+@if($nenhumaPendencia)
+<div class="callout warning">
+    <h5>Você não tem nenhuma pendência</h5>
+</div>
+@endif
+
 @if(count($venceLogo) > 0)
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="medium-12 cell">
@@ -32,10 +38,10 @@
                         {{$v->cliente->nome}}
                     </td>
                     <td>
-                        {{$v->apartamento->empreendimento->nome}}
+                        {{$v->apartamento->bloco->empreendimento->nome}}
                     </td>
                     <td>
-                        {{$v->apartamento->numero}}, bloco {{$v->apartamento->bloco}}, {{$v->apartamento->andar}}&deg; andar
+                        {{$v->apartamento->numero}}, bloco {{$v->apartamento->bloco->nome}}, {{$v->apartamento->andar}}&deg; andar
                     </td>
                     <td>
                         {{$v->vendedor->nome}}
@@ -50,7 +56,6 @@
     </div>
 </div>
 @endif
-
 
 @if(count($emVencimento) > 0)
 <div class="grid-x grid-padding-x grid-padding-y">

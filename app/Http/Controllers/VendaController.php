@@ -204,14 +204,17 @@ class VendaController extends Controller
             )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
 
         })
-            ->with(['etapas','cliente','status','vendedor','apartamento'])
+            ->with(['etapas','cliente','status','vendedor','apartamento.bloco.empreendimento'])
             ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
             ->get();
+
+        $nenhumaPendencia = !$vencidas->count() && !$emVencimento->count() && !$venceLogo->count();
 
         return view('vendas.pendencies',[
             'vencidas' => $vencidas,
             'emVencimento' => $emVencimento,
-            'venceLogo' => $venceLogo
+            'venceLogo' => $venceLogo,
+            'nenhumaPendencia' => $nenhumaPendencia
         ]);
 
     }
