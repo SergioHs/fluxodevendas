@@ -62,6 +62,7 @@ Route::get('/venda/{vendaId}/mudar-status-subetapa/{subEtapId}', 'VendaControlle
 Route::get('/venda/{id}/mudar-status/{status}', 'VendaController@mudarStatusVenda');
 Route::get('/pendencias','VendaController@pendencies');
 
+Route::get('/logs', 'LogController@index');
 
 Auth::routes();
 

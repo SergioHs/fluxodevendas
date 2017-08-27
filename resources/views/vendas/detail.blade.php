@@ -4,7 +4,7 @@
     </button>
     <input type="hidden" value="{{$venda->id}}" id="input-venda-id">
     <div class="medium-12 cell">
-        <h3> Detalhe da venda </h3>
+        <h3> Detalhe da venda <small>#{{$venda->id}}</small></h3>
     </div>
     <div class="medium-6 cell">
         <dl>

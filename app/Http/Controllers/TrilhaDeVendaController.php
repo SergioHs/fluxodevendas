@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Etapa;
 use App\TrilhaDeVendas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class TrilhaDeVendaController extends Controller
@@ -15,7 +16,7 @@ class TrilhaDeVendaController extends Controller
 
     public function index()
     {
-        $trilhas = TrilhaDeVendas::all();
+        $trilhas = TrilhaDeVendas::orderBy('created_at','desc')->get();
         return view('trilhasdevenda.index', ['trilhas' => $trilhas]);
     }
 
@@ -32,10 +33,10 @@ class TrilhaDeVendaController extends Controller
             return $etapa->pivot->ordem;
         });
 
-//        if(count($trilha->vendas) > 0){
-//            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esta participando');
-//            return redirect()->action('TrilhaDeVendaController@index');
-//        }
+        if(count($trilha->vendas) > 0){
+            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esta participando');
+            return redirect()->action('TrilhaDeVendaController@index');
+        }
 
         $etapasJaCadastradas = [];
         foreach($trilha->etapas as $e)
@@ -56,10 +57,19 @@ class TrilhaDeVendaController extends Controller
             'etapas' => 'required'
         ]);
 
-        if(isset($request->id))
+        if(isset($request->id)){
             $trilha = TrilhaDeVendas::findOrFail($request->id);
-        else
+            activity()
+                ->by(Auth::id())
+                ->on($trilha)
+                ->log("Editou a trilha de vendas " . $trilha->nome);
+        } else {
             $trilha = new TrilhaDeVendas();
+            activity()
+                ->by(Auth::id())
+                ->on($trilha)
+                ->log("Cadastrou a trilha de vendas " . $request->nome);
+        }
 
         $trilha->nome = $request->nome;
         $trilha->descricao = $request->descricao;

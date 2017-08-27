@@ -8,6 +8,7 @@ use App\Bloco;
 use App\Utils;
 use App\Estado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EmpreendimentoController extends Controller
@@ -24,7 +25,7 @@ class EmpreendimentoController extends Controller
      */
     public function index()
     {
-        $empreendimentos = Empreendimento::with('cidade.estado')->get();
+        $empreendimentos = Empreendimento::with('cidade.estado')->orderBy('created_at','desc')->get();
         return view('empreendimentos.index',['empreendimentos' => $empreendimentos]);
     }
 
@@ -50,7 +51,11 @@ class EmpreendimentoController extends Controller
         $this->validate($r,[
             'nome' => 'required|max:255',
             'cidade_id' => 'required|numeric',
-            'endereco' => 'nullable|max:255'
+            'endereco' => 'nullable|max:255',
+            'numero_blocos' => 'required|numeric',
+            'nomenclatura_bloco' => 'required',
+            'numero_andares' => 'required|numeric',
+            'numero_ap_andares' => 'required|numeric'
         ]);
 
         try {
@@ -81,7 +86,14 @@ class EmpreendimentoController extends Controller
                     }
                     $blocoEntity->apartamentos()->saveMany($apartamentos);
                 }
+
+                activity()
+                    ->by(Auth::id())
+                    ->on($empreendimento)
+                    ->log("Cadastrou o empreendimento " . $empreendimento->nome);
             });
+
+
 
             $r->session()->flash('success', 'Empreendimento cadastrado com sucesso');
             return redirect()->action('EmpreendimentoController@index');

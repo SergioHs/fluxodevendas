@@ -48,6 +48,7 @@
         <table class="hover stack ajax-modal-table" data-modal="#venda-detail-modal" data-route="/venda/detail">
             <thead>
             <tr>
+                <td> Código </td>
                 <td> Cliente </td>
                 <td> Empreendimento</td>
                 <td> Apartamento </td>
@@ -58,6 +59,9 @@
             <tbody  data-open="cliente-detail-modal">
             @foreach($vendas as $v)
             <tr data-entity-id="{{$v->id}}">
+                <td>
+                    #{{$v->id}}
+                </td>
                 <td>
                     {{$v->cliente->nome}}
                 </td>

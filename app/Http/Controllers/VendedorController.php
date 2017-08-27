@@ -6,6 +6,7 @@ use App\Vendedor;
 use App\Estado;
 use App\Cidade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VendedorController extends Controller
 {
@@ -44,15 +45,24 @@ class VendedorController extends Controller
 
         ]);
 
-        if(isset($request->id))
+        if(isset($request->id)){
             $vendedor = Vendedor::findOrFail($request->id);
-        else
+            activity()
+                ->by(Auth::id())
+                ->on($vendedor)
+                ->log("Editou o vendedor " . $vendedor->nome);
+        } else {
             $vendedor = new Vendedor();
+            activity()
+                ->by(Auth::id())
+                ->on($vendedor)
+                ->log("Cadastrou o vendedor " . $request->nome);
+        }
 
         $vendedor->fill($request->all());
         $vendedor->save();
 
-        $request->session()->flash('success', 'vendedor cadastrado com sucesso');
+        $request->session()->flash('success', 'Vendedor cadastrado com sucesso');
 
         return redirect()->action('VendedorController@index');
     }
