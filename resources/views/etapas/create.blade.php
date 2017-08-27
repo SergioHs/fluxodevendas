@@ -34,12 +34,14 @@
     <div class="grid-x grid-padding-x grid-padding-y">
         <div class="medium-4 cell">
             <ul class="accordion" data-accordion>
-                <li class="accordion-item" data-accordion-item>
+                <li class="accordion-item is-active" data-accordion-item>
                     <!-- Accordion tab title -->
                     <a href="#" class="accordion-title">Vincule sub-etapas</a>
                     <!-- Accordion tab content: it would start in the open state due to using the `is-active` state class. -->
                     <div class="accordion-content is-active" data-tab-content>
                         <input type="text" id="nome-subetapa" title="Nome da sub-etapa">
+                        @component('components.form-errors',['field' => 'subetapas'])
+                        @endcomponent
                         <div id="nome-subetapa-error" class="callout alert small hidden">
 
                         </div>

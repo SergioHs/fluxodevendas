@@ -107,6 +107,12 @@ class VendaController extends Controller
 
     public function store(Request $r)
     {
+        $this->validate($r,[
+            'cliente_id' => 'required|numeric',
+            'vendedor_id' => 'required|numeric',
+            'trilhadevendas_id' => 'required|numeric'
+        ]);
+
         $venda = new Venda();
         $venda->fill($r->all());
         $venda->statusvendas_id = StatusVendasEnum::RESERVADO;

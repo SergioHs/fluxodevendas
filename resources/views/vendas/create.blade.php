@@ -18,6 +18,8 @@
                     <option value="{{$v->id}}">{{$v->nome}}</option>
                 @endforeach
             </select>
+            @component('components.form-errors',['field' => 'vendedor_id'])
+            @endcomponent
         </div>
         <div class="medium-4 cell">
             <label>Cliente</label>
@@ -26,6 +28,8 @@
                     <option value="{{$c->id}}">{{$c->nome}}</option>
                 @endforeach
             </select>
+            @component('components.form-errors',['field' => 'cliente_id'])
+            @endcomponent
         </div>
         <div class="medium-4 cell">
             <label>Trilha de venda</label>
@@ -34,6 +38,8 @@
                     <option value="{{$t->id}}">{{$t->nome}}</option>
                 @endforeach
             </select>
+            @component('components.form-errors',['field' => 'trilhadevendas_id'])
+            @endcomponent
         </div>
     </div>
     <div class="grid-x grid-padding-y grid-padding-x">
@@ -42,13 +48,3 @@
         </div>
     </div>
 </form>
-@endsection
-@section('footer')
-    @if($cliente)
-        <script type="text/javascript">
-            $(function(){
-
-            })
-        </script>
-    @endif
-@endsection

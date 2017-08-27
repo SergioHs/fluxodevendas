@@ -34,7 +34,9 @@ class EtapaController extends Controller
     public function store(Request $req)
     {
         $this->validate($req,[
-            'nome' => 'required|unique:etapas,nome'
+            'nome' => 'required|unique:etapas,nome',
+            'subetapas' => 'required',
+            'prazo' => 'required'
         ]);
 
         $etapa = new Etapa();
