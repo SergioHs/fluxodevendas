@@ -6,6 +6,8 @@
         <h3>Iniciar venda </h3>
         <p>{{$apartamento->bloco->empreendimento->nome}}, apartamento {{$apartamento->numero}}, bloco {{$apartamento->bloco->nome}},  {{$apartamento->andar}}&deg; andar</p>
     </div>
+    @component('components.form-errors',['field' => 'apartamento_id'])
+    @endcomponent
 </div>
 <form action="{{action("VendaController@store")}}" method="POST">
     {{csrf_field()}}
@@ -48,3 +50,4 @@
         </div>
     </div>
 </form>
+@endsection

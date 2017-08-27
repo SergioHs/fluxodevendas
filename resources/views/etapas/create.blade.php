@@ -16,7 +16,7 @@
             </div>
             <label>
                 Nome
-                <input type="text" name="nome" required>
+                <input type="text" name="nome" value="{{old('nome')}}" required>
                 @component('components.form-errors',['field' => 'nome'])
                 @endcomponent
             </label>
@@ -24,7 +24,7 @@
         <div class="medium-4 cell">
             <label>
                 Prazo (em dias)
-                <input type="number" name="prazo" required>
+                <input type="number" name="prazo" value="{{old('prazo')}}" required>
                 @component('components.form-errors',['field' => 'prazo'])
                 @endcomponent
             </label>

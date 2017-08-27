@@ -6,6 +6,7 @@ use App\Cliente;
 use App\Estado;
 use App\Cidade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class ClienteController extends Controller
@@ -45,15 +46,26 @@ class ClienteController extends Controller
             'email' => 'nullable|email'
         ]);
 
-        if(isset($request->id))
+        if(isset($request->id)){
             $cliente = Cliente::findOrFail($request->id);
-        else
+            activity()
+                ->by(Auth::id())
+                ->on($cliente)
+                ->log("Editou cliente " . $cliente->nome);
+        } else {
             $cliente = new Cliente();
+            activity()
+                ->by(Auth::id())
+                ->on($cliente)
+                ->log("Cadastrou cliente " . $request->nome);
+        }
 
         $cliente->fill($request->all());
         $cliente->save();
 
         $request->session()->flash('success', 'Cliente cadastrado com sucesso');
+
+
 
         return redirect()->action('ClienteController@index');
     }

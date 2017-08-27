@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Etapa;
 use App\SubEtapa;
+use Illuminate\Support\Facades\Auth;
 
 
 class EtapaController extends Controller
@@ -15,7 +16,7 @@ class EtapaController extends Controller
 
     public function index()
     {
-        $etapas = Etapa::all();
+        $etapas = Etapa::orderBy('created_at','desc')->get();
         return view('etapas.index',['etapas' => $etapas]);
     }
 
@@ -42,6 +43,11 @@ class EtapaController extends Controller
         $etapa = new Etapa();
         $etapa->fill($req->except('subetapas'));
         $etapa->save();
+
+        activity()
+            ->by(Auth::id())
+            ->on($etapa)
+            ->log("Cadastrou a etapa " . $etapa->nome);
 
         $subEtapas = [];
 
