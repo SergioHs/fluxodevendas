@@ -46,9 +46,9 @@
         <li class="has-submenu ">
             <a href="#">Minha conta</a>
             <ul class="submenu menu vertical nested " data-submenu>
-                <li><a href="{{url("/logout")}}">Sair</a></li>
-                <li><a>Redefinir senha</a></li>
+                {{--<li disabled><a>Redefinir senha</a></li>--}}
                 <li><a href="{{url("/logs")}}">Logs</a></li>
+                <li><a href="{{url("/logout")}}">Sair</a></li>
             </ul>
         </li>
         </ul>
