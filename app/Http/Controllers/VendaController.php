@@ -209,7 +209,7 @@ class VendaController extends Controller
             )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
 
         })
-            ->with('etapas')
+            ->with(['etapas','cliente','status','vendedor','apartamento.bloco.empreendimento'])
             ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
             ->get();
 
@@ -219,7 +219,7 @@ class VendaController extends Controller
             )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
 
         })
-            ->with('etapas')
+            ->with(['etapas','cliente','status','vendedor','apartamento.bloco.empreendimento'])
             ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
             ->get();
 
