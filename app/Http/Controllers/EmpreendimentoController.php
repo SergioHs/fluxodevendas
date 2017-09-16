@@ -74,8 +74,8 @@ class EmpreendimentoController extends Controller
                     $blocoEntity->empreendimento_id = $empreendimento->id;
                     $blocoEntity->saveOrFail();
                     $apartamentos = [];
-                    for ($andar = 0; $andar <= $r->numero_andares; $andar++) {
-                        for ($k = 0; $k <= $r->numero_ap_andares; $k++) {
+                    for ($andar = 0; $andar < $r->numero_andares; $andar++) {
+                        for ($k = 0; $k < $r->numero_ap_andares; $k++) {
                             $ap = new Apartamento();
                             $ap->bloco_id = $blocoEntity->id;
                             $ap->andar = $andar + 1;

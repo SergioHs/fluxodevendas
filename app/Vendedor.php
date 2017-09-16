@@ -19,6 +19,4 @@ class Vendedor extends Model
     {
         return $this->belongsTo('App\Cidade');
     }
-
-
 }

@@ -9,10 +9,25 @@
                 <label>Nome
                     <input name="name" type="text" value="{{old('name')}}" required autofocus>
                 </label>
+
                 @component('components.form-errors',['field' => 'name'])
                 @endcomponent
+
+                <label>
+                    CPF
+                    <input type="text" name="cpf_cnpj" value="">
+                </label>
+
+                <label>
+                    Telefone
+                    <input type="text" name="telefone" value="">
+                </label>                
+                 <label>
+                    Observações
+                    <textarea name="observacoes" rows="3" value=""></textarea>
+                </label>
                 <label>Email
-                    <input name="email" type="email" value="{{old('email')}}" required>
+                    <input name="email" type="email" value="" required>
                 </label>
                 @component('components.form-errors',['field' => 'email'])
                 @endcomponent

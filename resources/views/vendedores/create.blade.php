@@ -66,7 +66,6 @@
             setTimeout(function(){
                 $("#select-cidades").val({{$vendedor->cidade->id}});
             },4000);
-
         });
     </script>
 @endsection
