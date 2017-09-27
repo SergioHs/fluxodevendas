@@ -24,7 +24,7 @@
                 <tbody  data-open="vendedor-detail-modal">
                 @foreach($vendedores as $v)
                     <tr data-entity-id="{{$v->id}}">
-                        <td>{{$v->nome}}</td>
+                        <td>{{$v->name}}</td>
                         <td>{{$v->email}}</td>
                         <td>{{$v->cpf_cnpj}}</td>
                     </tr>

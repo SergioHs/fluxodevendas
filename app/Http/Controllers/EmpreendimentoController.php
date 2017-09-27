@@ -112,7 +112,7 @@ class EmpreendimentoController extends Controller
     public function detail($id)
     {
 
-        $apartamento = Apartamento::select(DB::raw("apartamentos.*,
+        $apartamento = Apartamento::select(DB::raw("apartamentos.*, apartamentos.numero,
                                           (CASE
                                            WHEN (sum(if(vendas.statusvendas_id = 1, 1,0)) > 0)  THEN \"VENDIDO\"
                                            WHEN (sum(if(vendas.statusvendas_id = 2, 1,0)) > 0)  THEN \"RESERVADO\"
@@ -123,6 +123,8 @@ class EmpreendimentoController extends Controller
                                             ->where('blocos.empreendimento_id','=',$id)
                                             ->groupBy('apartamentos.id')
                                             ->get();
+       
+//       dd($apartamento);
 
         $empreendimento = Empreendimento::with(['cidade.estado', 'blocos'])->findOrFail($id);
 

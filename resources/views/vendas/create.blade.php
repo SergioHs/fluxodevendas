@@ -15,10 +15,14 @@
     <div class="grid-x grid-padding-y grid-padding-x">
         <div class="medium-4 cell">
             <label>Vendedor</label>
-            <select id="select-vendedor" name="vendedor_id">
-                @foreach($vendedores as $v)
-                    <option value="{{$v->id}}">{{$v->nome}}</option>
-                @endforeach
+            <select id="select-vendedor" name="vendedor_id" @if (Auth::user()->permissao > 1) disabled @endif>
+               @if (Auth::user()->permissao == 1)
+                   @foreach($vendedores as $v)
+                       <option value="{{$v->id}}">{{$v->name}}</option>
+                   @endforeach
+               @else
+                  <option value="{{Auth::user()->id}}">{{Auth::user()->name}}</option>
+               @endif
             </select>
             @component('components.form-errors',['field' => 'vendedor_id'])
             @endcomponent

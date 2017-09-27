@@ -12,6 +12,7 @@ use App\SubEtapa;
 use App\TrilhaDeVendas;
 use App\Venda;
 use App\Vendedor;
+use App\User;
 use Illuminate\Http\Request;
 use App\StatusVendasEnum;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class VendaController extends Controller
 
     public function index(Request $request)
     {
-        $vendedores = Vendedor::all();
+        $vendedores = Vendedor::all(); // TODO: filtrar apenas ativos
         $clientes = Cliente::all();
         $empreendimentos = Empreendimento::all();
 
@@ -99,7 +100,8 @@ class VendaController extends Controller
             $cliente = Cliente::findOrFail($r->query('cliente'));
         }
 
-        $vendedores = Vendedor::get();
+//        $vendedores = Vendedor::get();
+        $vendedores = User::get();
         $clientes = Cliente::get();
         $trilhas = TrilhaDeVendas::get();
         $empreendimentos = Empreendimento::get();
@@ -243,9 +245,4 @@ class VendaController extends Controller
         ]);
 
     }
-
-
-
-
-
 }

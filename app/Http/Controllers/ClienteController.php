@@ -75,6 +75,4 @@ class ClienteController extends Controller
         $cliente = Cliente::with('cidade')->findOrFail($id);
         return view('clientes.detail',['cliente' => $cliente]);
     }
-
-
 }

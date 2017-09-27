@@ -15,17 +15,26 @@
             <div class="medium-4 cell">
                 <label>
                     Nome
-                    <input type="text" name="nome" value="{{old('nome') ?: $vendedor->nome ?? ''}}">
-                    @component('components.form-errors',['field' => 'nome'])
+                    <input type="text" name="name" value="{{old('name') ?: $vendedor->name ?? ''}}">
+                    @component('components.form-errors',['field' => 'name'])
                     @endcomponent
                 </label>
             </div>
+           
             <div class="medium-4 cell">
                 <label>
                     CPF
                     <input type="text" name="cpf_cnpj" value="{{old('cpf_cnpj') ?: $vendedor->cpf_cnpj ?? ''}}">
                 </label>
             </div>
+           
+            <div class="medium-4 cell">
+                <label>
+                    Telefone
+                    <input type="text" name="telefone" value="{{old('telefone') ?: $vendedor->telefone ?? ''}}">
+                </label>
+            </div>
+           
             <div class="medium-4 cell">
                 <label>
                     Email
@@ -34,22 +43,72 @@
                     @endcomponent
                 </label>
             </div>
+           
+
+         <div class="medium-4 cell form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+             <label>
+                Password
+                 <input id="password" type="password" class="form-control" name="password" required>
+
+                 @if ($errors->has('password'))
+                     <span class="help-block">
+                         <strong>{{ $errors->first('password') }}</strong>
+                     </span>
+                 @endif
+             </label>
+         </div>
+
+         <div class="medium-4 cell form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+             <label>
+                Confirm Password
+                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+
+                 @if ($errors->has('password_confirmation'))
+                     <span class="help-block">
+                         <strong>{{ $errors->first('password_confirmation') }}</strong>
+                     </span>
+                 @endif
+             </label>
+         </div>
+           
             <div class="medium-4 cell">
                 <label>
-                    Telefone
-                    <input type="text" name="telefone" value="{{old('telefone') ?: $vendedor->telefone ?? ''}}">
+                    Endereço
+                    <input type="text" name="endereco" value="{{old('endereco') ?: $vendedor->endereco ?? ''}}">
+                    @component('components.form-errors',['field' => 'endereco'])
+                    @endcomponent
                 </label>
             </div>
 
             @component('components.cidades',['estados' => $estados])
             @endcomponent
+           
+            <div class="form-group medium-4 cell">
+               <label for="situacao">Permissão</label>
+               <select class="form-control" name="permissao" required>
+                  @if(isset($vendedor))
+                  <option value="1" @if ($vendedor->permissao == 1) 'selected' @endif>Administrador</option>
+                  <option value="2" @if ($vendedor->permissao == 2) 'selected' @endif>Vendedor</option>
+                  @else
+                  <option value="1">Administrador</option>
+                  <option value="2" selected>Vendedor</option>
+                  @endif
+               </select>
+            </div>
+           
+            <div class="form-group medium-4 cell">
+               <label for="ativo">Situação do usuário</label>
+               <input type="hidden" name="ativo" value="0">
+               <input type="checkbox" name="ativo" value="1" {{old('ativo') ?: 'checked' ?? ''}}> Ativo<br>
+            </div>
 
             <div class="medium-8 cell">
                 <label>
                     Observações
-                    <textarea name="observacoes" rows="3" value="{{old('observacoes') ?: $vendedor->observacoes ?? ''}}"></textarea>
+                    <textarea name="observacoes" rows="3">{{old('observacoes') ?: $vendedor->observacoes ?? ''}}</textarea>
                 </label>
             </div>
+           
             <div class="medium-12 cell small-12">
                 <button class="button" type="submit">Enviar</button>
             </div>
