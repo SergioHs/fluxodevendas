@@ -4,7 +4,9 @@
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="auto cell">
         <h3 style="display: inline;">Empreendimentos</h3>
+        @if (Auth::user()->permissao == 1)
         <a class="button" href="{{action('EmpreendimentoController@create')}}">Cadastrar</a>
+        @endif
     </div>
 </div>
 <div class="grid-x grid-padding-x grid-padding-y">
@@ -29,8 +31,13 @@
                 </tbody>
             </table>
         @else
-            @component('components.nenhum-resultado',['link' => 'EmpreendimentoController@create'])
-            @endcomponent
+            @if (Auth::user()->permissao == 1)
+               @component('components.nenhum-resultado',['link' => 'EmpreendimentoController@create'])
+               @endcomponent
+            @else
+               @component('components.nenhum-resultado')
+               @endcomponent
+            @endif
         @endif
     </div>
 </div>

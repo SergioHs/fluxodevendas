@@ -24,12 +24,17 @@
         <ul class=" medium-horizontal vertical dropdown menu" data-responsive-menu="accordion medium-dropdown">
             <li><a href="{{action("VendaController@pendencies")}}">Pendências</a></li>
             <li class="has-submenu ">
+               @if (Auth::user()->permissao == 1)
                 <a href="#">Pessoas</a>
                 <ul class="submenu menu vertical nested " data-submenu>
                     <li><a href="{{action("ClienteController@index")}}" title="Listar clientes">Clientes</a></li>
                     <li><a href="{{action("VendedorController@index")}}" title="Listar vendedores">Vendedores</a></li>
                 </ul>
+               @else
+               <li><a href="{{action("ClienteController@index")}}" title="Listar clientes">Clientes</a></li>
+               @endif
             </li>
+            @if (Auth::user()->permissao == 1)
             <li class="has-submenu ">
                 <a href="#">Trilhas de venda</a>
                 <ul class="submenu menu vertical nested " data-submenu>
@@ -37,6 +42,7 @@
                     <li><a href="{{action("EtapaController@index")}}" title="Listar etapas">Etapas</a></li>
                 </ul>
             </li>
+            @endif
             <li><a href="{{action("EmpreendimentoController@index")}}" title="Listar empreendimentos">Empreendimentos</a></li>
             <li><a href="{{action("VendaController@index")}}" title="Listar vendas">Vendas</a></li>
         </ul>

@@ -32,9 +32,11 @@ class TrilhaDeVendaController extends Controller
         $trilha->etapas = $trilha->etapas->sortBy(function($etapa,$key){
             return $etapa->pivot->ordem;
         });
+       
+//       dd($trilha);
 
         if(count($trilha->vendas) > 0){
-            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esta participando');
+            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esteja participando');
             return redirect()->action('TrilhaDeVendaController@index');
         }
 
