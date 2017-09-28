@@ -36,4 +36,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Cidade');
     }
+
+    public function imobiliaria()
+    {
+        return $this->belongsTo('App\Imobiliaria');
+    }
 }

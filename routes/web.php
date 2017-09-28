@@ -31,6 +31,7 @@ Route::get('/cliente', 'ClienteController@index');
 Route::get('/cliente/detail/{id}', 'ClienteController@detail');
 Route::post('/cliente/store', 'ClienteController@store');
 
+Route::resource('imobiliaria', 'ImobiliariaController');
 
 Route::group(['middleware' => ['web', 'FiltraAdmin']], function(){
    Route::get('/vendedor/adicionar', 'VendedorController@create');

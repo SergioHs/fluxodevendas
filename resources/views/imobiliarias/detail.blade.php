@@ -5,37 +5,33 @@
     <div class="grid-x">
         <div class="grid-x grid-padding-x">
             <div class="medium-12 cell">
-                <h3> Detalhe do cliente <small>{{$cliente->nome}}</small></h3>
+                <h3> Detalhe da imobiliária <small>{{$registro->nome}}</small></h3>
             </div>
         </div>
-        <div class="medium-6 cell">
-            <dl>
-                <dt>CPF/CNPJ</dt>
-                <dd>{{$cliente->cpf_cnpj ?: "Não definido"}}</dd>
-                <dt>Email</dt>
-                <dd>{{$cliente->email ?: "Não definido"}}</dd>
-                <dt>Telefone</dt>
-                <dd>{{$cliente->telefone ?: "Não definido"}}</dd>
-            </dl>
-        </div>
-        <div class="medium-6 cell">
+       <div class="medium-12 cell">
             <dl>
                 <dt>Endereço</dt>
-                <dd>{{$cliente->endereco ?: "Não definido"}}</dd>
-                <dt>Cidade</dt>
-                <dd>{{$cliente->cidade->cidade ?: "Não definido"}}</dd>
-                <dt>Estado</dt>
-                <dd>{{$cliente->cidade->estado->sigla ?: "Não definido"}}</dd>
-            </dl>
-        </div>
-        <div class="medium-12 cell">
+                <dd>{{$registro->endereco ?: "Não definido"}}</dd>
+          </dl>
+       </div>
+        <div class="medium-6 cell">
             <dl>
-                <dt>Observações</dt>
-                <dd>{{$cliente->observacoes ?: ""}}</dd>
+                <dt>Email</dt>
+                <dd>{{$registro->email ?: "Não definido"}}</dd>
+                <dt>Telefone</dt>
+                <dd>{{$registro->telefone ?: "Não definido"}}</dd>
+            </dl>
+        </div>
+        <div class="medium-6 cell">
+            <dl>
+                <dt>Cidade</dt>
+                <dd>{{$registro->cidade->cidade ?: "Não definido"}}</dd>
+                <dt>Estado</dt>
+                <dd>{{$registro->cidade->estado->sigla ?: "Não definido"}}</dd>
             </dl>
         </div>
         <div class="medium-12 cell">
-            <a href="{{action('ClienteController@edit',['id' => $cliente->id])}}" class="button secondary">Editar</a>
+            <a href="{{action('ImobiliariaController@edit',['id' => $registro->id])}}" class="button secondary">Editar</a>
         </div>
     </div>
 </div>
