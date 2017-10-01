@@ -14,11 +14,8 @@ class DatabaseSeeder extends Seeder {
 	{
 		Model::unguard();
 
-
-        $this->call(UserTableSeeder::class);
-
-
         $this->call(StatusVendasSeeder::class);
+        $this->call(StatusEtapasTableSeeder::class);
 
 		// Estados
         $this->call(EstadosTableSeeder::class);
@@ -51,6 +48,9 @@ class DatabaseSeeder extends Seeder {
         $this->call('CidadesSaoPauloSeeder');
         $this->call('CidadesSergipeSeeder');
         $this->call('CidadesTocantinsSeeder');
+
+        $this->call(ImobiliariaTableSeeder::class);
+        $this->call(UserTableSeeder::class);
 	}
 
 }

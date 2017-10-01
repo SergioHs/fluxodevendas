@@ -28,6 +28,18 @@
                 </div>
                 @endif
             @endforeach
+           @if (Auth::user()->permissao == 1)
+           <div class="medium-12 cell">
+               <a href="{{action('EmpreendimentoController@edit',['id' => $empreendimento->id])}}" class="button secondary">Editar</a>
+           </div>
+           @endif
+           
+           <div class="medium-12 cell">
+              <p class="lead">Legenda</p>
+               <span class="button small success">Apto Disponível</span>
+               <span class="button small warning disabled">Apto Reservado</span>
+               <span class="button small alert disabled">Apto Vendido</span>
+           </div>
         </div>
     </div>
 </div>

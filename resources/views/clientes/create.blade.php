@@ -23,7 +23,7 @@
     <div class="medium-4 cell">
         <label>
             CPF
-            <input type="text" name="cpf_cnpj" value="{{old('cpf_cnpj') ?: $cliente->cpf_cnpj ?? ''}}">
+            <input type="text" id='cpf_cnpj' name="cpf_cnpj" value="{{old('cpf_cnpj') ?: $cliente->cpf_cnpj ?? ''}}">
         </label>
     </div>
     <div class="medium-4 cell">
@@ -57,10 +57,13 @@
 </form>
 @endsection
 
-@isset($cliente)
+@if(isset($cliente))
 @section('footer')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
 <script type="text/javascript">
         $(document).ready(function(){
+            $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
             $("#select-estados").val({{$cliente->cidade->estado->id}});
             $("#select-estados").trigger("change");
             setTimeout(function(){
@@ -69,4 +72,14 @@
         });
 </script>
 @endsection
-@endisset
+@else
+@section('footer')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+<script type="text/javascript">
+   $(document).ready(function () { 
+        $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
+    });
+</script>
+@endsection
+@endif

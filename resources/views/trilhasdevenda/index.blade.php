@@ -18,6 +18,7 @@
                 <tr>
                     <td> Nome </td>
                     <td> Descrição </td>
+                    <td> Situação </td>
                 </tr>
             </thead>
             <tbody  data-open="cliente-detail-modal">
@@ -29,6 +30,11 @@
                     <td>
                         {{$t->descricao}}
                     </td>
+                    @if($t->ativo)
+                    <td><span class="label success">Ativa</span></td>
+                    @else
+                    <td><span class="label alert">Suspensa</span></td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
