@@ -6,7 +6,7 @@
         <h3>{{isset($registro) ? 'Editar' : 'Cadastrar'}} Imobiliária</h3>
     </div>
 </div>
-<form method="post" action="{{url('/imobiliaria/store')}}">
+<form role="form" method="post" action="{{route('imobiliaria.store')}}">
    {{ csrf_field() }}
    @if(isset($registro))
    <input name="id" value="{{$registro->id}}" type="hidden">

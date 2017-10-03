@@ -21,6 +21,14 @@
                 @endcomponent
             </label>
         </div>
+       <div class="medium-4 cell">
+           <label>
+               Descrição
+               <input type="text" name="descricao" value="{{old('descricao')}}">
+               @component('components.form-errors',['field' => 'descricao'])
+               @endcomponent
+           </label>
+       </div>
         <div class="medium-4 cell">
             <label>
                 Prazo (em dias)

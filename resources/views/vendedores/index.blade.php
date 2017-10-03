@@ -18,7 +18,8 @@
                 <tr>
                     <td>Nome</td>
                     <td>Email</td>
-                    <td>CNPJ/CPF</td>
+                    <td>Imobiliária</td>
+                    <td>Situação</td>
                 </tr>
                 </thead>
                 <tbody  data-open="vendedor-detail-modal">
@@ -26,7 +27,12 @@
                     <tr data-entity-id="{{$v->id}}">
                         <td>{{$v->name}}</td>
                         <td>{{$v->email}}</td>
-                        <td>{{$v->cpf_cnpj}}</td>
+                        <td>{{$v->imobiliaria->nome}}</td>
+                       @if($v->ativo)
+                       <td><span class="label success">Ativo</span></td>
+                       @else
+                       <td><span class="label alert">Suspenso</span></td>
+                       @endif
                     </tr>
                 @endforeach
                 </tbody>

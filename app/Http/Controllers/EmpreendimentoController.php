@@ -7,6 +7,7 @@ use App\Empreendimento;
 use App\Bloco;
 use App\Utils;
 use App\Estado;
+use App\Cidade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -93,8 +94,6 @@ class EmpreendimentoController extends Controller
                     ->log("Cadastrou o empreendimento " . $empreendimento->nome);
             });
 
-
-
             $r->session()->flash('success', 'Empreendimento cadastrado com sucesso');
             return redirect()->action('EmpreendimentoController@index');
         } catch(\Exception $e) {
@@ -139,7 +138,14 @@ class EmpreendimentoController extends Controller
      */
     public function edit($id)
     {
-        //
+       $estados = Estado::all();
+       $registro = Empreendimento::with('cidade.estado')->findOrFail($id);
+       $cidades = Cidade::where("estado_id", $registro->toArray()['cidade']['estado_id'])->get();
+       
+       return view('empreendimentos.edit',['registro' => $registro, 'estados' => $estados, 'cidades' => $cidades]);
+       
+//        $estados = Estado::all();
+//        return view('empreendimentos.edit', ['estados' => $estados]);
     }
 
     /**
@@ -151,7 +157,32 @@ class EmpreendimentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'nome' => 'required|max:255',
+            'cidade_id' => 'required|numeric',
+            'endereco' => 'nullable|max:255'
+        ]);
+       
+       try{
+            $registro = Empreendimento::findOrFail($request->id);
+            activity()
+                ->by(Auth::id())
+                ->on($registro)
+                ->log("Editou o empreendimento " . $registro->nome);
+          
+            $registro->nome      = $request->nome;
+            $registro->endereco  = $request->endereco;
+            $registro->cidade_id = $request->cidade_id;
+          
+            $registro->saveOrFail();
+
+            $request->session()->flash('success', 'Empreendimento atualizado com sucesso');
+            return redirect()->action('EmpreendimentoController@index');
+          
+       } catch(\Exception $e) {
+            $request->session()->flash('error', "Ocorreu um erro. Contate o administrador. Erro: " . $e->getMessage());
+            return redirect()->action('EmpreendimentoController@index');
+        }
     }
 
     /**

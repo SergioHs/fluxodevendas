@@ -15,7 +15,7 @@
     <div class="medium-6 cell">
         <dl>
             <dt>Vendedor</dt>
-            <dd>{{$venda->vendedor->nome}}</dd>
+            <dd>{{$venda->user->name}}</dd>
         </dl>
     </div>
     <div class="medium-6 cell">

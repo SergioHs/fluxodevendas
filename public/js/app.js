@@ -45,8 +45,8 @@ function fetch(url, success, error, complete){
         var protocol = window.location.protocol;
         var separator = '//';
         var currentHost = window.location.hostname;
-//        baseUrl = protocol+separator+currentHost+'/projetos/fluxodevendas/fluxodevendas';
         baseUrl = protocol+separator+currentHost;
+//        baseUrl = protocol+separator+currentHost+'/projetos/fluxodevendas/fluxodevendas';
         if(url.indexOf("/") !== 0)
             baseUrl += "/";
 

@@ -15,6 +15,7 @@ class AddFieldsImobiliariasTable extends Migration
     {
         Schema::table('imobiliarias', function (Blueprint $table) {
             $table->string('telefone')->nullable();
+            $table->string('email')->nullable();
             $table->string('endereco')->nullable();
 			$table->integer('cidade_id')->unsigned()->default(4464);
             $table->foreign('cidade_id')->
@@ -31,6 +32,7 @@ class AddFieldsImobiliariasTable extends Migration
     {
         Schema::table('imobiliarias', function (Blueprint $table) {
             $table->dropColumn('telefone');
+            $table->dropColumn('email');
             $table->dropColumn('endereco');
             $table->dropForeign(['cidade_id']);
             $table->dropColumn('cidade_id');

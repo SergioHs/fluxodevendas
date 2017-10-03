@@ -34,6 +34,14 @@ class Venda extends Model
     public function vendedor()
     {
 //        return $this->belongsTo('App\Vendedor');
+//       dd($this->belongsTo('App\User'));
+       return $this->belongsTo('App\User');
+    }
+
+    public function user()
+    {
+//        return $this->belongsTo('App\Vendedor');
+//       dd($this->belongsTo('App\User'));
        return $this->belongsTo('App\User');
     }
 

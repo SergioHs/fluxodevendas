@@ -14,7 +14,7 @@ class AddStatusFieldOnTrilhasdevendasTable extends Migration
     public function up()
     {
         Schema::table('trilhasdevendas', function (Blueprint $table) {
-            $table->boolean('ativo')->nullable();
+			$table->boolean('ativo')->default(1);
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Imobiliaria;
 use App\Estado;
 use App\Cidade;
@@ -27,7 +28,8 @@ class ImobiliariaController extends Controller
     public function index()
     {
        $registros = Imobiliaria::all();
-       return view('imobiliaria.index',['registros' => $registros]);
+//       dd($registros);
+       return view('imobiliarias.index',['registros' => $registros]);
     }
 
     /**
@@ -38,7 +40,7 @@ class ImobiliariaController extends Controller
     public function create()
     {
         $estados = Estado::all();
-        return view('imobiliaria.create', ['estados' => $estados]);
+        return view('imobiliarias.create', ['estados' => $estados]);
     }
 
     /**
@@ -72,7 +74,7 @@ class ImobiliariaController extends Controller
         $request->session()->flash('success', 'Imobiliária cadastrada com sucesso');
 
         return redirect()->action('ImobiliariaController@index');
-//        return redirect()->route('imobiliaria.index');;
+//        return redirect()->route('imobiliarias.index');;
     }
 
     /**
@@ -95,8 +97,11 @@ class ImobiliariaController extends Controller
      */
     public function edit($id)
     {
-       $registro = Imobiliaria::findOrFail($id);
-       return view('imobiliaria.edit',compact('imobiliaria'));
+       $estados = Estado::all();
+       $registro = Imobiliaria::with('cidade.estado')->findOrFail($id);
+       $cidades = Cidade::where("estado_id", $registro->toArray()['cidade']['estado_id'])->get();
+       
+       return view('imobiliarias.create',['registro' => $registro, 'estados' => $estados, 'cidades' => $cidades]);
     }
 
     /**
@@ -115,7 +120,7 @@ class ImobiliariaController extends Controller
        $registro->nome = $request->nome;
        $registro->save();
        
-       return redirect()->route('imobiliaria.index')->with('alert-success','Registro atualizado com sucesso!');
+       return redirect()->route('imobiliarias.index')->with('alert-success','Registro atualizado com sucesso!');
     }
 
     /**
@@ -132,7 +137,7 @@ class ImobiliariaController extends Controller
           return redirect()->route('imobiliaria.index')->with('alert-success','O registro não pode ser excluído, pois possui vendedores cadastrados');
        } else{
           $registro->delete();
-          return redirect()->route('imobiliaria.index')->with('alert-success','Registro excluído com sucesso!');
+          return redirect()->route('imobiliarias.index')->with('alert-success','Registro excluído com sucesso!');
        }
     }
 }

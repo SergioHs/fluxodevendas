@@ -6,6 +6,7 @@ use App\Vendedor;
 use App\User;
 use App\Estado;
 use App\Cidade;
+use App\Imobiliaria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,26 +20,29 @@ class VendedorController extends Controller
     public function index()
     {
 //        $vendedores = Vendedor::all();
-        $vendedores = User::all();
+//        $vendedores = User::all();
+        $vendedores = User::with('imobiliaria')->get();
         return view('vendedores.index',['vendedores' => $vendedores]);
     }
 
     public function create()
     {
         $estados = Estado::all();
-        return view('vendedores.create', ['estados' => $estados]);
+        $imobiliarias = Imobiliaria::all();
+        return view('vendedores.create', ['estados' => $estados, 'imobiliarias' => $imobiliarias]);
     }
 
     public function edit($id)
     {
         $estados = Estado::all();
 //        $vendedor = Vendedor::with('cidade.estado')->findOrFail($id);
-        $vendedor = User::with('cidade.estado')->findOrFail($id);
+        $imobiliarias = Imobiliaria::all();
+        $vendedor = User::with('cidade.estado','imobiliaria')->findOrFail($id);
         $cidades = Cidade::where("estado_id", $vendedor->toArray()['cidade']['estado_id'])->get();
        
 //       dd($vendedor);
 
-        return view('vendedores.create', ['vendedor' => $vendedor, 'estados' => $estados, 'cidades' => $cidades]);
+        return view('vendedores.create', ['vendedor' => $vendedor, 'estados' => $estados, 'cidades' => $cidades, 'imobiliarias' => $imobiliarias]);
     }
 
     public function store(Request $request)
@@ -47,7 +51,8 @@ class VendedorController extends Controller
             'name' => 'required|max:255',
             'cidade_id' => 'required|numeric',
             'email' => 'nullable|email',
-            'password' => 'required|string|min:6|confirmed'
+            'password' => 'required|string|min:6|confirmed',
+           'imobiliaria_id' => 'required|numeric'
         ]);
        
 //       dd($request);
@@ -69,6 +74,7 @@ class VendedorController extends Controller
         }
 
         $vendedor->fill($request->all());
+        $vendedor->imobiliaria_id = $request->imobiliaria_id;
         $vendedor->password = bcrypt($request->password);
        
 //       dd($request);

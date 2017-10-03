@@ -78,6 +78,16 @@
 
                     </div>
                 </div>
+           
+               <div class="form-group medium-4 cell">
+                  <label for="ativo">Situação da trilha</label>
+                  <input type="hidden" name="ativo" value="0">
+                  @if(isset($trilha))
+                  <input type="checkbox" name="ativo" value="1" @if ($trilha->ativo == 1) checked @endif> Ativa<br>
+                  @else
+                  <input type="checkbox" name="ativo" value="1" checked> Ativa<br>
+                  @endif
+               </div>
             </div>
 
         </form>
