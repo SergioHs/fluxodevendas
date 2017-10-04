@@ -59,26 +59,24 @@
 
 @if(isset($cliente))
 @section('footer')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
 <script type="text/javascript">
-        $(document).ready(function(){
-            $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
-            $("#select-estados").val({{$cliente->cidade->estado->id}});
-            $("#select-estados").trigger("change");
-            setTimeout(function(){
-                $("#select-cidades").val({{$cliente->cidade->id}});
-            },4000);
-        });
+  $(document).ready(function(){
+      $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
+      $("#select-estados").val({{$cliente->cidade->estado->id}});
+      $("#select-estados").trigger("change");
+      setTimeout(function(){
+          $("#select-cidades").val({{$cliente->cidade->id}});
+      },4000);
+  });
 </script>
 @endsection
 @else
 @section('footer')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
 <script type="text/javascript">
    $(document).ready(function () { 
-        $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
+      $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
     });
 </script>
 @endsection
