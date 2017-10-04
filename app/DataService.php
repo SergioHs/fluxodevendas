@@ -38,4 +38,20 @@ class DataService
         return $tomorrow->format('Y-m-d');
     }
 
+    public static function SqlThreeDays()
+    {
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+        $tomorrow = $now->add(new \DateInterval('P3D'));
+        return $tomorrow->format('Y-m-d');
+    }
+
+    public static function SqlOneWeek()
+    {
+        $now = new \DateTime();
+        $now->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+        $tomorrow = $now->add(new \DateInterval('P7D'));
+        return $tomorrow->format('Y-m-d');
+    }
+
 }

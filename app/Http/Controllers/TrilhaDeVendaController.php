@@ -45,6 +45,8 @@ class TrilhaDeVendaController extends Controller
             array_push($etapasJaCadastradas, $e->id);
 
         $etapas = Etapa::whereNotIn('id',$etapasJaCadastradas)->get();
+       
+//       dd($trilha);
 
         return view('trilhasdevenda.create',['etapas' => $etapas, 'trilha' =>$trilha]);
     }
@@ -76,6 +78,7 @@ class TrilhaDeVendaController extends Controller
         $trilha->nome = $request->nome;
         $trilha->descricao = $request->descricao;
         $trilha->observacoes = $request->observacoes;
+        $trilha->ativo = $request->ativo;
         $trilha->save();
 
         $i = 1;

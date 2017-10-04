@@ -13,16 +13,22 @@
 <div class="grid-x grid-padding-x grid-padding-y">
     <div class="medium-12 cell">
         @if(count($registros) > 0)
-        <table class="hover ajax-modal-table" data-modal="#imobiliaria-detail-modal" data-route="{{route('imobiliaria.show',$registro->id)}}">
+        <table class="hover ajax-modal-table" data-modal="#imobiliaria-detail-modal" data-route="/imobiliaria/detail">
             <thead>
                 <tr>
                     <td>Nome</td>
+                    <td>Telefone</td>
+                    <td>Endereço</td>
+                    <td>E-mail</td>
                 </tr>
             </thead>
             <tbody  data-open="cliente-detail-modal">
             @foreach($registros as $registro)
-                <tr data-entity-id="{{$c->id}}">
+                <tr data-entity-id="{{$registro->id}}">
                     <td>{{$registro->nome}}</td>
+                    <td>{{$registro->telefone}}</td>
+                    <td>{{$registro->endereco}}</td>
+                    <td>{{$registro->email}}</td>
                 </tr>
             @endforeach
             </tbody>

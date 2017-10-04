@@ -12,4 +12,9 @@ class Imobiliaria extends Model
     {
         return $this->hasMany('App\User');
     }
+
+    public function cidade()
+    {
+        return $this->belongsTo('App\Cidade');
+    }
 }

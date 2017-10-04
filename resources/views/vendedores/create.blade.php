@@ -24,7 +24,7 @@
             <div class="medium-4 cell">
                 <label>
                     CPF
-                    <input type="text" name="cpf_cnpj" value="{{old('cpf_cnpj') ?: $vendedor->cpf_cnpj ?? ''}}">
+                    <input type="text" id='cpf_cnpj' name="cpf_cnpj" value="{{old('cpf_cnpj') ?: $vendedor->cpf_cnpj ?? ''}}">
                 </label>
             </div>
            
@@ -84,22 +84,30 @@
             @endcomponent
            
             <div class="form-group medium-4 cell">
-               <label for="situacao">Permissão</label>
+               <label for="permissao">Permissão</label>
                <select class="form-control" name="permissao" required>
                   @if(isset($vendedor))
-                  <option value="1" @if ($vendedor->permissao == 1) 'selected' @endif>Administrador</option>
-                  <option value="2" @if ($vendedor->permissao == 2) 'selected' @endif>Vendedor</option>
+                  <option value="1" @if ($vendedor->permissao == 1) selected @endif>Administrador</option>
+                  <option value="2" @if ($vendedor->permissao == 2) selected @endif>Vendedor</option>
                   @else
                   <option value="1">Administrador</option>
                   <option value="2" selected>Vendedor</option>
                   @endif
                </select>
             </div>
+
+            @component('components.imobiliarias',['imobiliarias' => $imobiliarias])
+            @endcomponent
            
             <div class="form-group medium-4 cell">
                <label for="ativo">Situação do usuário</label>
                <input type="hidden" name="ativo" value="0">
-               <input type="checkbox" name="ativo" value="1" {{old('ativo') ?: 'checked' ?? ''}}> Ativo<br>
+<!--               <input type="checkbox" name="ativo" value="1" {{old('ativo') ?: 'checked' ?? ''}}> Ativo<br>-->
+               @if(isset($vendedor))
+               <input type="checkbox" name="ativo" value="1" @if ($vendedor->ativo == 1) checked  @endif> Ativo<br>
+               @else
+               <input type="checkbox" name="ativo" value="1" checked> Ativo<br>
+               @endif
             </div>
 
             <div class="medium-8 cell">
@@ -116,16 +124,30 @@
     </form>
 @endsection
 
-@isset($vendedor)
-@section('footer')
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#select-estados").val({{$vendedor->cidade->estado->id}});
-            $("#select-estados").trigger("change");
-            setTimeout(function(){
-                $("#select-cidades").val({{$vendedor->cidade->id}});
-            },4000);
-        });
-    </script>
-@endsection
-@endisset
+@if(isset($vendedor))
+   @section('footer')
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+      <script type="text/javascript">
+           $(document).ready(function(){
+               $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
+               $("#select-estados").val({{$vendedor->cidade->estado->id}});
+               $("#select-estados").trigger("change");
+               $("#select-imobiliarias").val({{$vendedor->imobiliaria_id}});
+               $("#select-imobiliarias").trigger("change");
+               setTimeout(function(){
+                   $("#select-cidades").val({{$vendedor->cidade->id}});
+                   $("#select-imobiliarias").val({{$vendedor->imobiliaria_id}});
+               },2000);
+           });
+       </script>
+   @endsection
+@else
+   @section('footer')
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
+      <script type="text/javascript">
+         $(document).ready(function () { 
+              $("#cpf_cnpj").mask('000.000.000-00', {reverse: true});
+          });
+      </script>
+   @endsection
+@endif

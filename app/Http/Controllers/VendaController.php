@@ -13,6 +13,7 @@ use App\TrilhaDeVendas;
 use App\Venda;
 use App\Vendedor;
 use App\User;
+use App\Imobiliaria;
 use Illuminate\Http\Request;
 use App\StatusVendasEnum;
 use Illuminate\Support\Facades\Auth;
@@ -27,16 +28,27 @@ class VendaController extends Controller
 
     public function index(Request $request)
     {
-        $vendedores = Vendedor::all(); // TODO: filtrar apenas ativos
-        $clientes = Cliente::all();
+//        $vendedores    = Vendedor::all();
+       if (Auth::user()->permissao == 1){
+          $vendedores = User::all();
+       }else{
+          $vendedores = User::where('id', '=', Auth::user()->id)->get();
+       }
+       
+        $clientes        = Cliente::all();
         $empreendimentos = Empreendimento::all();
-
-        $vendas = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status'])->orderBy('created_at','desc');
+        $imobiliarias    = Imobiliaria::all();
+       
+       $vendas = Venda::with(['apartamento.bloco.empreendimento','user','user.imobiliaria', 'cliente', 'status'])->orderBy('created_at','desc');
+       
+       if (Auth::user()->permissao != 1){
+          $vendas->where('user_id','=',Auth::user()->id);
+       }
 
         if($request->isMethod('post'))
         {
-            if($request->has('vendedor_id'))
-                $vendas->where('vendedor_id','=',$request->vendedor_id);
+            if($request->has('user_id'))
+                $vendas->where('user_id','=',$request->user_id);
 
             if($request->has('cliente_id'))
                 $vendas->where('cliente_id','=',$request->cliente_id);
@@ -45,6 +57,11 @@ class VendaController extends Controller
                 $vendas->whereHas('apartamento.bloco',function($q) use ($request){
                     $q->where('empreendimento_id','=',$request->empreendimento_id);
                 });
+
+            if(isset($request->imobiliaria_id))
+                $vendas->with('user')->whereHas('user',function($q) use ($request){
+                    $q->where('imobiliaria_id','=',$request->imobiliaria_id);
+                });
         }
 
         $vendas = $vendas->get();
@@ -52,10 +69,11 @@ class VendaController extends Controller
 
         return view('vendas.index',
             [
-                'vendas' => $vendas,
+                'vendas'          => $vendas,
                 'empreendimentos' => $empreendimentos,
-                'vendedores' => $vendedores,
-                'clientes' => $clientes
+                'vendedores'      => $vendedores,
+                'clientes'        => $clientes,
+               'imobiliarias'     => $imobiliarias
             ]
         );
     }
@@ -101,9 +119,9 @@ class VendaController extends Controller
         }
 
 //        $vendedores = Vendedor::get();
-        $vendedores = User::get();
+        $vendedores = User::where('ativo', '=', 1)->get();
         $clientes = Cliente::get();
-        $trilhas = TrilhaDeVendas::get();
+        $trilhas = TrilhaDeVendas::where('ativo', '=', 1)->get();
         $empreendimentos = Empreendimento::get();
 
         return view('vendas.create', ['vendedores' => $vendedores, 'clientes' => $clientes, 'apartamento' => $apartamento, 'trilhas' => $trilhas, 'empreendimentos' => $empreendimentos, 'cliente' => isset($cliente) ? $cliente : null]);
@@ -113,7 +131,7 @@ class VendaController extends Controller
     {
         $this->validate($r,[
             'cliente_id' => 'required|numeric',
-            'vendedor_id' => 'required|numeric',
+            'user_id' => 'required|numeric',
             'trilhadevendas_id' => 'required|numeric',
             'apartamento_id' => 'required|numeric'
         ]);
@@ -122,6 +140,7 @@ class VendaController extends Controller
         $venda->fill($r->all());
         $venda->statusvendas_id = StatusVendasEnum::RESERVADO;
         $venda->save();
+       
         event(new VendaCadastrada($venda));
 
         $apartamento = Apartamento::with('bloco.empreendimento')->findOrFail($r->apartamento_id);
@@ -129,7 +148,7 @@ class VendaController extends Controller
         activity()
             ->by(Auth::id())
             ->on($venda)
-            ->log("Iniciou uma venda." . " Vendedor: " .  Vendedor::findOrFail($r->vendedor_id)->nome .  ". Cliente: " . Cliente::findOrFail($r->cliente_id)->nome . ". Empreendimento: "  . $apartamento->bloco->empreendimento->nome .  ". Bloco: " .  $apartamento->bloco->nome . ". Apartamento: " . $apartamento->numero);
+            ->log("Iniciou uma venda." . " Vendedor: " .  User::findOrFail($r->user_id)->nome .  ". Cliente: " . Cliente::findOrFail($r->cliente_id)->nome . ". Empreendimento: "  . $apartamento->bloco->empreendimento->nome .  ". Bloco: " .  $apartamento->bloco->nome . ". Apartamento: " . $apartamento->numero);
 
         $r->session()->flash('success', 'Venda iniciada com sucesso');
         return redirect()->action('VendaController@index');
@@ -204,43 +223,79 @@ class VendaController extends Controller
 
     public function pendencies()
     {
-
+       $role = Auth::user()->permissao != 1;
+       
         $vencidas = Venda::whereHas('etapas',function($q){
-            $q->whereDate(
-                'vendas_etapas.prazo','<', DataService::SqlToday()
-            )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
-
-        })
-            ->with(['etapas','cliente','status','vendedor','apartamento.bloco.empreendimento'])
-            ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
-            ->get();
+            $q->whereDate('vendas_etapas.prazo','<', DataService::SqlToday())
+               ->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);})
+           ->with(['etapas','cliente','status','user','apartamento.bloco.empreendimento'])
+           ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+           ->when($role, function ($query) use ($role) {
+                    return $query->where('user_id', '=', Auth::user()->id);})
+           ->get();
+       
+//        if (Auth::user()->permissao != 1){
+//           $query->where('user_id', '=', Auth::user()->id);
+//        }
+//       
+//        $vencidas = $query->get();
+       
+//       dd($vencidas);
 
         $emVencimento = Venda::whereHas('etapas',function($q){
-            $q->whereDate(
-                'vendas_etapas.prazo','=', DataService::SqlToday()
-            )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
-
-        })
-            ->with(['etapas','cliente','status','vendedor','apartamento.bloco.empreendimento'])
-            ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
-            ->get();
+            $q->whereDate('vendas_etapas.prazo','=', DataService::SqlToday())
+               ->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);})
+           ->with(['etapas','cliente','status','user','apartamento.bloco.empreendimento'])
+           ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+           ->when($role, function ($query) use ($role) {
+                    return $query->where('user_id', '=', Auth::user()->id);})
+           ->get();
+       
+//        if (Auth::user()->permissao != 1){
+//           $emVencimento->where('user_id', '=', Auth::user()->id)->get();
+//        }
+       
+//        $emVencimento->get();
 
         $venceLogo = Venda::whereHas('etapas',function($q){
-            $q->whereDate(
-                'vendas_etapas.prazo','=', DataService::SqlTomorrow()
-            )->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);
+            $q->whereDate('vendas_etapas.prazo','>=', DataService::SqlTomorrow())
+               ->whereDate('vendas_etapas.prazo','<', DataService::SqlThreeDays())
+               ->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);})
+           ->with(['etapas','cliente','status','user','apartamento.bloco.empreendimento'])
+           ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+           ->when($role, function ($query) use ($role) {
+                    return $query->where('user_id', '=', Auth::user()->id);})
+           ->get();
+       
 
-        })
-            ->with(['etapas','cliente','status','vendedor','apartamento.bloco.empreendimento'])
-            ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
-            ->get();
+        $venceTresDias = Venda::whereHas('etapas',function($q){
+            $q->whereDate('vendas_etapas.prazo','>=', DataService::SqlThreeDays())
+               ->whereDate('vendas_etapas.prazo','<', DataService::SqlOneWeek())
+               ->where('vendas_etapas.statusetapas_id','=',StatusEtapasEnum::EM_ADANTAMENTO);})
+           ->with(['etapas','cliente','status','user','apartamento.bloco.empreendimento'])
+           ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+           ->when($role, function ($query) use ($role) {
+                    return $query->where('user_id', '=', Auth::user()->id);})
+           ->get();
+       
+
+        $venceUmaSemana = Venda::whereHas('etapas',function($q){
+            $q->whereDate('vendas_etapas.prazo','>=', DataService::SqlOneWeek())
+               ->where('vendas_etapas.statusetapas_id','>=',StatusEtapasEnum::EM_ADANTAMENTO);})
+           ->with(['etapas','cliente','status','user','apartamento.bloco.empreendimento'])
+           ->where('statusvendas_id','=', StatusVendasEnum::RESERVADO)
+           ->when($role, function ($query) use ($role) {
+                    return $query->where('user_id', '=', Auth::user()->id);})
+           ->get();
 
         $nenhumaPendencia = !$vencidas->count() && !$emVencimento->count() && !$venceLogo->count();
-
+       
         return view('vendas.pendencies',[
             'vencidas' => $vencidas,
             'emVencimento' => $emVencimento,
             'venceLogo' => $venceLogo,
+            'venceTresDias' => $venceTresDias,
+            'venceUmaSemana' => $venceUmaSemana,
             'nenhumaPendencia' => $nenhumaPendencia
         ]);
 
