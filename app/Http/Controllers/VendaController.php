@@ -129,7 +129,7 @@ class VendaController extends Controller
 
     public function store(Request $r)
     {
-        $this->validate($r,[
+       $this->validate($r,[
             'cliente_id' => 'required|numeric',
             'user_id' => 'required|numeric',
             'trilhadevendas_id' => 'required|numeric',
