@@ -31,6 +31,8 @@ Route::get('/cliente', 'ClienteController@index');
 Route::get('/cliente/detail/{id}', 'ClienteController@detail');
 Route::post('/cliente/store', 'ClienteController@store');
 
+Route::get('/cidades/por-estado/{id}', 'CidadeController@getByEstado');
+
 
 Route::group(['middleware' => ['web', 'FiltraAdmin']], function(){
    Route::get('/vendedor/adicionar', 'VendedorController@create');
@@ -41,8 +43,6 @@ Route::group(['middleware' => ['web', 'FiltraAdmin']], function(){
    
    Route::resource('imobiliaria', 'ImobiliariaController');
    Route::get('/imobiliaria/detail/{id}', 'ImobiliariaController@show');
-
-   Route::get('/cidades/por-estado/{id}', 'CidadeController@getByEstado');
 
    Route::get('/trilhadevenda', 'TrilhaDeVendaController@index');
    Route::get('/trilhadevenda/adicionar', 'TrilhaDeVendaController@create');
