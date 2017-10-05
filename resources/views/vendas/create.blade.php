@@ -21,7 +21,8 @@
                        <option value="{{$v->id}}">{{$v->name}}</option>
                    @endforeach
                @else
-                  <option value="{{Auth::user()->id}}" selected>{{Auth::user()->name}}</option>
+                  <option name="user_id" value="{{Auth::user()->id}}" selected>{{Auth::user()->name}}</option>
+                  <input type="hidden" name="user_id" value="{{Auth::user()->id}}" />
                @endif
             </select>
             @component('components.form-errors',['field' => 'vendedor_id'])
