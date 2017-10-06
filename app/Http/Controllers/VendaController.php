@@ -290,6 +290,8 @@ class VendaController extends Controller
 
         $nenhumaPendencia = !$vencidas->count() && !$emVencimento->count() && !$venceLogo->count();
        
+//       dd($emVencimento);
+       
         return view('vendas.pendencies',[
             'vencidas' => $vencidas,
             'emVencimento' => $emVencimento,
