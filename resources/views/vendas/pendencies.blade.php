@@ -78,10 +78,10 @@
                         {{$v->cliente->nome}}
                     </td>
                     <td>
-                        {{$v->apartamento->empreendimento->nome}}
+                        {{$v->apartamento->bloco->empreendimento->nome}}
                     </td>
                     <td>
-                        {{$v->apartamento->numero}}, bloco {{$v->apartamento->bloco}}, {{$v->apartamento->andar}}&deg; andar
+                        {{$v->apartamento->numero}}, bloco {{$v->apartamento->bloco->nome}}, {{$v->apartamento->andar}}&deg; andar
                     </td>
                     <td>
                         {{$v->user->name}}
