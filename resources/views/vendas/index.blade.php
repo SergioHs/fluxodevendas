@@ -66,20 +66,17 @@
         <table class="hover stack ajax-modal-table" data-modal="#venda-detail-modal" data-route="/venda/detail">
             <thead>
             <tr>
-                <td> Código </td>
                 <td> Cliente </td>
                 <td> Empreendimento</td>
                 <td> Apartamento </td>
                 <td> Vendedor </td>
                 <td> Status </td>
+                <td> Início </td>
             </tr>
             </thead>
             <tbody  data-open="cliente-detail-modal">
             @foreach($vendas as $v)
             <tr data-entity-id="{{$v->id}}">
-                <td>
-                    #{{$v->id}}
-                </td>
                 <td>
                     {{$v->cliente->nome}}
                 </td>
@@ -94,6 +91,9 @@
                 </td>
                 <td>
                     @component('components.status-vendas',['status' => $v->status])@endcomponent
+                </td>
+                <td>
+                    {{date('d/m/Y',strtotime($v->created_at))}}
                 </td>
             </tr>
             @endforeach
