@@ -4,7 +4,8 @@
     </button>
     <div class="grid-x">
         <div class="grid-x grid-padding-x">
-            <div class="medium-12 cell">
+           
+            <div class="medium-8 cell d-inline float-left">
                 <h3> Detalhe do empreendimento <small>{{$empreendimento->nome}}</small></h3>
                 <dl>
                     <dt> Endereço </dt>
@@ -13,6 +14,13 @@
                     <dd>{{$empreendimento->cidade->cidade .  " " . $empreendimento->cidade->estado->sigla}}</dd>
                 </dl>
             </div>
+           
+           <div class="medium-4 cell d-inline float-right">
+              <p>Legenda</p>
+               <span class="button small success">Apto Disponível</span>
+               <span class="button small warning disabled">Apto Reservado</span>
+               <span class="button small alert disabled">Apto Vendido</span>
+           </div>
 
             @foreach($empreendimento->blocos as $b)
                 @if(count($apartamentos) > 0)
@@ -33,13 +41,6 @@
                <a href="{{action('EmpreendimentoController@edit',['id' => $empreendimento->id])}}" class="button secondary">Editar</a>
            </div>
            @endif
-           
-           <div class="medium-12 cell">
-              <p class="lead">Legenda</p>
-               <span class="button small success">Apto Disponível</span>
-               <span class="button small warning disabled">Apto Reservado</span>
-               <span class="button small alert disabled">Apto Vendido</span>
-           </div>
         </div>
     </div>
 </div>
