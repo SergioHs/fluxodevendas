@@ -13,7 +13,7 @@ class Venda extends Model
 
     public function etapas()
     {
-        return $this->belongsToMany('App\Etapa', 'vendas_etapas', 'venda_id', 'etapa_id')->withPivot(['statusetapas_id','prazo']);
+        return $this->belongsToMany('App\Etapa', 'vendas_etapas', 'venda_id', 'etapa_id')->withPivot(['statusetapas_id','prazo', 'ordem']);
     }
 
     public function subEtapas()
