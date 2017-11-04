@@ -46,7 +46,9 @@ class VinculaEtapasAsVendas
     private function vinculaPrimeiraEtapa($venda, $etapa)
     {
         $prazo = DataService::Adia($etapa->prazo, new \DateTime());
-        $venda->etapas()->attach($etapa->id,['prazo' => $prazo, 'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO]);
+        $venda->etapas()->attach($etapa->id,['prazo' => $prazo,
+            'statusetapas_id' => StatusEtapasEnum::EM_ADANTAMENTO,
+            'ordem' => $etapa->pivot->ordem]);
     }
 
     private function vinculaSubEtapasDaPrimeiraEtapa($venda, $etapa)
@@ -64,7 +66,7 @@ class VinculaEtapasAsVendas
         $etapasIds = [];
         $subEtapasIds = [];
         foreach($etapas as $e){
-            $etapasIds[$e->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA];
+            $etapasIds[$e->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA, 'ordem' => $e->pivot->ordem];
             foreach($e->subetapas as $s){
                 $subEtapasIds[$s->id] = ['statusetapas_id' => StatusEtapasEnum::EM_ESPERA];
             }

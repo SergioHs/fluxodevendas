@@ -80,7 +80,13 @@ class VendaController extends Controller
 
     public function detail($id)
     {
-        $venda = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas','subetapas'])->findOrFail($id);
+        $venda = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas','subetapas'])
+            ->findOrFail($id);
+
+        $venda->etapas = $venda->etapas->sortBy(function($v) {
+            return $v->pivot->ordem;
+        });
+
 
         $etapasConcluidas = $venda->etapas->filter(function($v,$k){
             return $v->pivot->statusetapas_id == StatusEtapasEnum::COMPLETA;
@@ -167,8 +173,9 @@ class VendaController extends Controller
             ->on($venda)
             ->log("Concluiu etapa " . $etapaEmAndamento->nome . " da venda #" . $venda->id);
 
-        $proximaEtapaEmEspera = $venda->etapas->filter(function($v,$k){
-            return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ESPERA;
+        $proximaEtapaEmEspera = $venda->etapas->filter(function($v,$k) use ($etapaEmAndamento){
+            return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ESPERA &&
+                $v->pivot->ordem == $etapaEmAndamento->pivot->ordem + 1;
         })->first();
 
         $venda->etapas()->updateExistingPivot($etapaEmAndamento->id, ['statusetapas_id' => StatusEtapasEnum::COMPLETA]);
