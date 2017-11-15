@@ -6,6 +6,13 @@
  * foundation.zurb.com
  * Licensed under MIT Open Source
  */
+ @media print {
+  #example-menu{
+    display:none; 
+  }
+
+
+}
 
 @media print, screen and (min-width: 40em) {
   .reveal,
