@@ -2,7 +2,7 @@
 
 /**
  * Laravel - A PHP Framework For Web Artisans
- *
+ * If you reading this, welcome for Fluxo de Vendas 
  * @package  Laravel
  * @author   Taylor Otwell <taylor@laravel.com>
  */
