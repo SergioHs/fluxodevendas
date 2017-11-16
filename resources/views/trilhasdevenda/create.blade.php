@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    @if(count($etapas) == 0)
+    @if($cadastrarEtapas)
         <div class="grid-x grid-padding-x">
             <div class="medium-12 cell">
                 <div class="callout secondary">
