@@ -23,7 +23,16 @@ class TrilhaDeVendaController extends Controller
     public function create()
     {
         $etapas = Etapa::all();
-        return view('trilhasdevenda.create', ['etapas' => $etapas]);
+       
+        //variável de controle para a mensagem que alerta quando não existem etapas cadastradas
+        //não é possível duas condições no if de um arquivo Blade (etapas->count() ==0 && isset(trilha))
+        $cadastrarEtapas = 0;
+        if($etapas->count() == 0){
+           $cadastrarEtapas = 1;
+        }
+       
+        return view('trilhasdevenda.create', 
+                    ['etapas' => $etapas, 'cadastrarEtapas' => $cadastrarEtapas]);
     }
 
     public function edit($id)
@@ -46,9 +55,14 @@ class TrilhaDeVendaController extends Controller
 
         $etapas = Etapa::whereNotIn('id',$etapasJaCadastradas)->get();
        
-//       dd($trilha);
+        $cadastrarEtapas = 0;
+       
+//       dd($cadastrarEtapas);
 
-        return view('trilhasdevenda.create',['etapas' => $etapas, 'trilha' =>$trilha]);
+        return view('trilhasdevenda.create',
+                    ['etapas' => $etapas, 
+                     'trilha' => $trilha, 
+                     'cadastrarEtapas' => $cadastrarEtapas]);
     }
 
 
