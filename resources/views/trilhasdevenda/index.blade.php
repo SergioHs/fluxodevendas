@@ -2,7 +2,7 @@
 @section('title', 'Trilhas de vendas')
 @section('content')
 <div class="grid-x grid-padding-x grid-padding-y">
-    <div class="auto cell">
+    <div class="auto cell" id="titulo-top">
         <h3 style="display: inline">Trilhas de vendas</h3>
         <a class="button" href="{{action('TrilhaDeVendaController@create')}}">Cadastrar</a>
     </div>
@@ -11,7 +11,7 @@
     </div>
 </div>
 <div class="grid-x grid-padding-x grid-padding-y">
-    <div class="medium-12 cell">
+    <div class="medium-12 cell" id="tabela-middle">
         @if(count($trilhas) > 0)
         <table class="hover ajax-modal-table" data-modal="#trilha-detail-modal" data-route="/trilhadevenda/detail">
             <thead>

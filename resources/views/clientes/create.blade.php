@@ -46,7 +46,7 @@
 
     <div class="medium-8 cell">
         <label>
-            Observações
+            Observações - <B> IMPORTANTE: </B>Informar endereço completo!
             <textarea name="observacoes" rows="3">{{old('observacoes') ?: $cliente->observacoes ?? ''}}</textarea>
         </label>
     </div>
