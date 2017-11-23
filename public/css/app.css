@@ -13,6 +13,10 @@
   form {
    display:none;  
   }
+ #titulo-top,
+ #tabela-middle {
+    display:none;
+  }
 
 
 }

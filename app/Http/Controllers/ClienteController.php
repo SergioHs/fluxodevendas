@@ -43,7 +43,8 @@ class ClienteController extends Controller
         $this->validate($request,[
             'nome' => 'required|max:255',
             'cidade_id' => 'required|numeric',
-            'email' => 'nullable|email'
+            'email' => 'required|nullable|email',
+            'observacoes' => 'required'
         ]);
 
         if(isset($request->id)){
