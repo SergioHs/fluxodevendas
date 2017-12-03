@@ -44,7 +44,8 @@ class ClienteController extends Controller
             'nome' => 'required|max:255',
             'cidade_id' => 'required|numeric',
             'email' => 'required|nullable|email',
-            'observacoes' => 'required'
+            'observacoes' => 'required',
+            'cpf_cnpj' => 'required|unique:clientes,cpf_cnpj'
         ]);
 
         if(isset($request->id)){
