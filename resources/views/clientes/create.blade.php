@@ -24,6 +24,8 @@
         <label>
             CPF
             <input type="text" id='cpf_cnpj' name="cpf_cnpj" value="{{old('cpf_cnpj') ?: $cliente->cpf_cnpj ?? ''}}">
+            @component('components.form-errors',['field' => 'cpf_cnpj'])
+            @endcomponent
         </label>
     </div>
     <div class="medium-4 cell">
@@ -48,6 +50,8 @@
         <label>
             Observações - <B> IMPORTANTE: </B>Informar endereço completo!
             <textarea name="observacoes" rows="3">{{old('observacoes') ?: $cliente->observacoes ?? ''}}</textarea>
+            @component('components.form-errors',['field' => 'observacoes'])
+            @endcomponent
         </label>
     </div>
     <div class="medium-12 cell small-12">

@@ -28,14 +28,14 @@ class VendaController extends Controller
 
     public function index(Request $request)
     {
-//        $vendedores    = Vendedor::all();
        if (Auth::user()->permissao == 1){
           $vendedores = User::all();
+          $clientes   = Cliente::all();
        }else{
           $vendedores = User::where('id', '=', Auth::user()->id)->get();
+          $clientes   = Cliente::where('user_id', '=', Auth::user()->id)->get();
        }
-       
-        $clientes        = Cliente::all();
+        
         $empreendimentos = Empreendimento::all();
         $imobiliarias    = Imobiliaria::all();
        
@@ -126,7 +126,13 @@ class VendaController extends Controller
 
 //        $vendedores = Vendedor::get();
         $vendedores = User::where('ativo', '=', 1)->get();
-        $clientes = Cliente::get();
+       
+       if (Auth::user()->permissao == 1){
+          $clientes   = Cliente::all();
+       }else{
+          $clientes   = Cliente::where('user_id', '=', Auth::user()->id)->get();
+       }
+       
         $trilhas = TrilhaDeVendas::where('ativo', '=', 1)->get();
         $empreendimentos = Empreendimento::get();
 

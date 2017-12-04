@@ -6,6 +6,7 @@ use App\Cliente;
 use App\Estado;
 use App\Cidade;
 use Illuminate\Http\Request;
+use App\Http\Requests\ClienteRequest;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -18,9 +19,14 @@ class ClienteController extends Controller
 
     public function index()
     {
-
-        $clientes = Cliente::all();
-        return view('clientes.index',['clientes' => $clientes]);
+       if (Auth::user()->permissao == 1){
+          $clientes = Cliente::all();
+       }
+       else{
+          $clientes = Cliente::where('user_id', '=', Auth::user()->id)->get();
+       }
+       
+       return view('clientes.index',['clientes' => $clientes]);
     }
 
     public function create()
@@ -38,16 +44,8 @@ class ClienteController extends Controller
         return view('clientes.create', ['cliente' => $cliente, 'estados' => $estados, 'cidades' => $cidades]);
     }
 
-    public function store(Request $request)
+    public function store(ClienteRequest $request)
     {
-        $this->validate($request,[
-            'nome' => 'required|max:255',
-            'cidade_id' => 'required|numeric',
-            'email' => 'required|nullable|email',
-            'observacoes' => 'required',
-            'cpf_cnpj' => 'required|unique:clientes,cpf_cnpj'
-        ]);
-
         if(isset($request->id)){
             $cliente = Cliente::findOrFail($request->id);
             activity()
@@ -63,6 +61,7 @@ class ClienteController extends Controller
         }
 
         $cliente->fill($request->all());
+        $cliente->user_id = Auth::user()->id;
         $cliente->save();
 
         $request->session()->flash('success', 'Cliente cadastrado com sucesso');
