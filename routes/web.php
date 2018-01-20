@@ -67,6 +67,8 @@ Route::get('/venda/detail/{id}','VendaController@detail');
 Route::get('/venda/adicionar', 'VendaController@create');
 Route::post('/venda/store', 'VendaController@store');
 Route::get('/venda/{id}/concluir-etapa-em-andamento', 'VendaController@concluirEtapaEmAndamento');
+Route::get('/venda/{id}/excluirJustificativa', 'VendaController@excluirJustificativa');
+Route::get('/venda/{id}/salvarJustificativa/{texto}', 'VendaController@salvarJustificativa');
 Route::get('/venda/{vendaId}/mudar-status-subetapa/{subEtapId}', 'VendaController@mudarStatusSubEtapa');
 Route::get('/venda/{id}/mudar-status/{status}', 'VendaController@mudarStatusVenda');
 Route::get('/pendencias','VendaController@pendencies');
