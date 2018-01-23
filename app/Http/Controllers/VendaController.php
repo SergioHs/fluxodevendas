@@ -99,16 +99,24 @@ class VendaController extends Controller
         $etapasEmEspera = $venda->etapas->filter(function($v,$k){
             return $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ESPERA;
         });
+       
+        $etapasEmAtraso = $venda->etapas->filter(function($v,$k){
+            return $v->pivot->prazo < DataService::SqlToday() 
+               && $v->pivot->statusetapas_id == StatusEtapasEnum::EM_ADANTAMENTO;
+        });
+       
+//        dd($etapasEmAtraso);
 
         $todasEtapasForamConcluidas = count($etapasConcluidas) === count($venda->etapas);
         $mostraBotaoDeConcluir = $todasEtapasForamConcluidas && $venda->status->id != StatusVendasEnum::VENDIDO;
 
         return view('vendas.detail',
             [
-            'venda' => $venda,
-            'etapasConcluidas' => $etapasConcluidas,
-            'etapaEmAndamento' => $etapaEmAndamento,
-            'etapasEmEspera' => $etapasEmEspera,
+            'venda'                 => $venda,
+            'etapasConcluidas'      => $etapasConcluidas,
+            'etapaEmAndamento'      => $etapaEmAndamento,
+            'etapasEmEspera'        => $etapasEmEspera,
+            'etapasEmAtraso'        => $etapasEmAtraso,
             'mostraBotaoDeConcluir' => $mostraBotaoDeConcluir
             ]
         );
@@ -315,4 +323,32 @@ class VendaController extends Controller
         ]);
 
     }
+   
+   public function excluirJustificativa($id){
+      $venda = Venda::findOrFail($id);
+      
+      if($venda->user_id != Auth::user()->id) return;
+      
+      $venda->justificativa = null;
+      $venda->save();
+      
+      activity()
+         ->by(Auth::id())
+         ->on($venda)
+         ->log("Apagou a justificativa de atraso da venda #" . $venda->id);
+   }
+   
+   public function salvarJustificativa($id, $texto){
+      $venda = Venda::findOrFail($id);
+      
+      if($venda->user_id != Auth::user()->id) return;
+      
+      $venda->justificativa = $texto;
+      $venda->save();
+      
+      activity()
+         ->by(Auth::id())
+         ->on($venda)
+         ->log("Informou justificativa de atraso '" . $texto . "', na venda #" . $venda->id);
+   }
 }

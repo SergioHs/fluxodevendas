@@ -9,6 +9,10 @@
     <div class="auto cell">
 
     </div>
+           
+     <div class="medium-4 cell d-inline float-right">
+        <h4>Total de vencidas: {{count($vencidas)}} </h4>
+     </div>
 </div>
 
 @if($nenhumaPendencia)

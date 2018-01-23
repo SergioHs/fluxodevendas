@@ -105,6 +105,65 @@ $('#venda-detail-modal').on('click', 'button#concluir-etapa', function(ev){
         });
 });
 
+$('#venda-detail-modal').on('click', 'button#justificar', function(ev){
+   
+   $('#justificativa').empty();
+   $('#justificativa').append("<input type='text' id='texto-justificativa'>");
+   $('#justificativa').append("<button class='button secondary small' id='cancelar-justificativa'>Cancelar</button>");
+   $('#justificativa').append("<button class='button success small' id='salvar-justificativa'>Salvar</button>");
+   $("#texto-justificativa").focus();
+});
+
+$('#venda-detail-modal').on('click', 'button#editar-justificativa', function(ev){
+   var txtJustificativa = $('#p-justificativa').text();
+   
+   $('#justificativa').empty();
+   $('#justificativa').append("<input type='text' id='texto-justificativa' value='" 
+                              + txtJustificativa.substring(0, txtJustificativa.indexOf(" - atualizado em:")) + "'>");
+   $('#justificativa').append("<button class='button secondary small' id='cancelar-justificativa'>Cancelar</button>");
+   $('#justificativa').append("<button class='button success small' id='salvar-justificativa'>Salvar</button>");
+   $("#texto-justificativa").focus();
+});
+
+$('#venda-detail-modal').on('click', 'button#cancelar-justificativa', function(ev){
+   var vendaId = $("#input-venda-id").val();
+   
+   fetch('/venda/detail/'+vendaId, function(data){
+      $("#venda-detail-modal").html(data).foundation('open');
+   });
+});
+
+$('#venda-detail-modal').on('click', 'button#salvar-justificativa', function(ev){
+   var vendaId = $("#input-venda-id").val();
+   var texto = $("#texto-justificativa").val();
+   
+   fetch('/venda/'+vendaId+'/salvarJustificativa/'+texto,
+      function(){
+         fetch('/venda/detail/'+vendaId,
+            function(data){
+               $("#venda-detail-modal").html(data).foundation('open');
+            });
+      });
+});
+
+$('#venda-detail-modal').on('click', 'button#excluir-justificativa', function(ev){
+   var vendaId = $("#input-venda-id").val();
+   
+   fetch('/venda/'+vendaId+'/excluirJustificativa', function(){
+      fetch('/venda/detail/'+vendaId, function(data){
+         $("#venda-detail-modal").html(data).foundation('open');
+      });
+   });
+});
+
+$('#venda-detail-modal').on('keypress', 'input#texto-justificativa', function(ev){
+   if(ev.keyCode == 13){
+      ev.preventDefault();
+      $("button#salvar-justificativa").click();
+      return false;
+   }
+});
+
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);

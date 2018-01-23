@@ -35,6 +35,31 @@
             <dd>@component('components.status-vendas',['status' => $venda->status]) @endcomponent</dd>
         </dl>
     </div>
+   @if(isset($etapasEmAtraso) && count($etapasEmAtraso) > 0)
+    <div class="medium-12 cell">
+        <dl>
+            <dt>Justificativa de atraso</dt>
+            <dd id='justificativa'>
+               
+            @if(isset($venda->justificativa))
+               <p id="p-justificativa">{{$venda->justificativa}}<small><em> - atualizado em: {{date('d/m/Y',strtotime($venda->updated_at))}}</em></small></p>
+               @if (Auth::user()->id == $venda->user_id)
+                  <button class="button warning small" id="editar-justificativa">Editar</button>
+                  <button class="button alert small" id="excluir-justificativa">Excluir</button>
+               @endif
+            @else
+               Sem justificativa
+               
+               @if (Auth::user()->id == $venda->user_id)
+                  <div class="medium-4">
+                     <button class="button success small" id="justificar">Justificar</button>
+                  </div>
+               @endif
+            @endif
+            </dd>
+       </dl>
+    </div>
+    @endif
     <div class="medium-12 cell" id="etapas-container">
         <h5>Etapas</h5>
             @if(isset($etapasConcluidas) && count($etapasConcluidas) > 0)
