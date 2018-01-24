@@ -27,7 +27,7 @@
                     <tr data-entity-id="{{$v->id}}">
                         <td>{{$v->name}}</td>
                         <td>{{$v->email}}</td>
-                        <td>{{$v->imobiliaria->nome}}</td>
+                        <td></td>
                        @if($v->ativo)
                        <td><span class="label success">Ativo</span></td>
                        @else
