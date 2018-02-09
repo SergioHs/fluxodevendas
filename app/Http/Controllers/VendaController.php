@@ -16,6 +16,7 @@ use App\User;
 use App\Imobiliaria;
 use Illuminate\Http\Request;
 use App\StatusVendasEnum;
+use App\StatusVenda;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -38,6 +39,7 @@ class VendaController extends Controller
         
         $empreendimentos = Empreendimento::all();
         $imobiliarias    = Imobiliaria::all();
+        $statusVendas    = StatusVenda::all();
        
        $vendas = Venda::with(['apartamento.bloco.empreendimento','user','user.imobiliaria', 'cliente', 'status'])->orderBy('created_at','desc');
        
@@ -62,6 +64,11 @@ class VendaController extends Controller
                 $vendas->with('user')->whereHas('user',function($q) use ($request){
                     $q->where('imobiliaria_id','=',$request->imobiliaria_id);
                 });
+
+            if(isset($request->statusvenda_id))
+                $vendas->with('status')->whereHas('user',function($q) use ($request){
+                    $q->where('statusvendas_id','=',$request->statusvenda_id);
+                });
         }
 
         $vendas = $vendas->get();
@@ -73,7 +80,8 @@ class VendaController extends Controller
                 'empreendimentos' => $empreendimentos,
                 'vendedores'      => $vendedores,
                 'clientes'        => $clientes,
-               'imobiliarias'     => $imobiliarias
+                'imobiliarias'    => $imobiliarias,
+                'statusvendas'    => $statusVendas
             ]
         );
     }
