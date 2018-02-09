@@ -8,11 +8,15 @@
     <div class="auto cell">
 
     </div>
+           
+     <div class="medium-4 cell d-inline float-right">
+        <h4>Total de vendas: {{count($vendas)}} </h4>
+     </div>
 </div>
 <form method="post" action="{{action("VendaController@index")}}">
 <div class="grid-x grid-padding-x grid-padding-y">
         {{csrf_field()}}
-        <div class="medium-3 cell">
+        <div class="medium-2 cell">
             <select name="user_id" @if (Auth::user()->permissao > 1) disabled @endif>
                 <option value="">Selecione um vendedor</option>
                @if (Auth::user()->permissao == 1)
@@ -24,7 +28,7 @@
                @endif
             </select>
         </div>
-        <div class="medium-3 cell">
+        <div class="medium-2 cell">
             <select name="cliente_id">
                 <option value="">Selecione um cliente</option>
                 @foreach($clientes as $c)
@@ -32,15 +36,19 @@
                 @endforeach
             </select>
         </div>
-         @if (Auth::user()->permissao == 1)
          <div class="medium-2 cell">
-         @else
-         <div class="medium-3 cell">
-         @endif
             <select name="empreendimento_id">
                 <option value="">Selecione um empreendimento</option>
                 @foreach($empreendimentos as $e)
                     <option {{$e->id == old('empreendimento_id') ? "selected" : ""}} value="{{$e->id}}">{{$e->nome}}</option>
+                @endforeach
+            </select>
+        </div>
+         <div class="medium-2 cell">
+            <select name="statusvenda_id">
+                <option value="">Selecione um status de venda</option>
+                @foreach($statusvendas as $s)
+                    <option {{$s->id == old('statusvenda_id') ? "selected" : ""}} value="{{$s->id}}">{{$s->nome}}</option>
                 @endforeach
             </select>
         </div>
