@@ -14,9 +14,9 @@
      </div>
    
    @if($totais->count())
-     <div class="medium-3 cell d-inline float-right text-right">
+     <div class="medium-3 cell d-inline float-right text-right" style="background-color:silver !important">
         <h5>Outros totais <button class="menu-icon" type="button" data-toggle></button></h5>
-        <div>
+        <div class="totais-etapas">
            <ul>
               @foreach($totais as $key => $trilha)
               <h6>Trilha {{$trilha['nomeTrilha']}}</h6>
