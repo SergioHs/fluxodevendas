@@ -49,6 +49,8 @@ Route::group(['middleware' => ['web', 'FiltraAdmin']], function(){
    Route::post('/trilhadevenda/store','TrilhaDeVendaController@store');
    Route::get('/trilhadevenda/editar/{id}', 'TrilhaDeVendaController@edit');
    Route::get('/trilhadevenda/detail/{id}', 'TrilhaDeVendaController@detail');
+   Route::get('/trilhadevenda/config/{id}','TrilhaDeVendaController@config');
+   Route::post('/trilhadevenda/salvarconfig','TrilhaDeVendaController@salvarConfig');
 
    Route::get('/etapa', 'EtapaController@index');
    Route::get('/etapa/adicionar','EtapaController@create');

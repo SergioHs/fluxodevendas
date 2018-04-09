@@ -15,7 +15,14 @@ class TrilhaDeVendas extends Model
 
     public function etapas()
     {
-        return $this->belongsToMany('App\Etapa','trilhasdevendas_etapas','trilhadevendas_id', 'etapa_id')->withPivot('ordem');
+        return $this->belongsToMany('App\Etapa','trilhasdevendas_etapas','trilhadevendas_id', 'etapa_id')->withPivot('ordem', 'totalizar');
     }
 
+   public function totalizaEtapas(){
+      return $this->etapas()->wherePivot('totalizar', '=', 1)->count();
+   }
+
+   public function etapasComTotal(){
+      return $this->etapas()->wherePivot('totalizar', '=', 1)->get()->toArray();
+   }
 }

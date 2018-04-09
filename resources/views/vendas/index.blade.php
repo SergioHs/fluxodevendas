@@ -9,9 +9,39 @@
 
     </div>
            
-     <div class="medium-4 cell d-inline float-right">
-        <h4>Total de vendas: {{count($vendas)}} </h4>
+     <div class="medium-3 cell d-inline float-right text-right">
+        <h5>Total de vendas: {{count($vendas)}} </h5>
      </div>
+   
+   @if($totais->count())
+     <div class="medium-3 cell d-inline float-right text-right">
+        <h5>Outros totais <button class="menu-icon" type="button" data-toggle></button></h5>
+        <div>
+           <ul>
+              @foreach($totais as $key => $trilha)
+              <h6>Trilha {{$trilha['nomeTrilha']}}</h6>
+              <table class="hover stack">
+                 <thead>
+                    <tr>
+                       <td> Etapa </td>
+                       <td> Quantidade</td>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    @foreach($trilha['etapas'] as $key => $etapa)
+                    <tr>
+                       <td>{{$etapa['nomeEtapa']}}</td>
+                       <td>{{$etapa['quantidade']}}</td>
+                    </tr>
+                    @endforeach
+                 </tbody>
+              </table>
+              @endforeach
+           </ul>
+        </div>
+     </div>
+   @endif
+   
 </div>
 <form method="post" action="{{action("VendaController@index")}}">
 <div class="grid-x grid-padding-x grid-padding-y">
