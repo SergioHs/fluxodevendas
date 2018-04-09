@@ -45,7 +45,7 @@ class TrilhaDeVendaController extends Controller
 //       dd($trilha);
 
         if(count($trilha->vendas) > 0){
-            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esteja participando');
+            Session::flash('error', 'Não é possível editar uma trilha que uma venda já esteja sendo utilizada');
             return redirect()->action('TrilhaDeVendaController@index');
         }
 
@@ -115,6 +115,42 @@ class TrilhaDeVendaController extends Controller
         $trilha->etapas = $trilha->etapas->sortBy(function($etapa,$key){
             return $etapa->pivot->ordem;
         });
+       
+//       dd($trilha);
         return view('trilhasdevenda.detail',['trilha' => $trilha]);
     }
+   
+   public function config($id){
+      $trilha = TrilhaDeVendas::with('etapas.subetapas')->findOrFail($id);
+      $trilha->etapas = $trilha->etapas->sortBy(function($etapa,$key){
+         return $etapa->pivot->ordem;
+      });
+      return view('trilhasdevenda.config',['trilha' => $trilha]);
+   }
+   
+   public function salvarConfig(Request $request){
+      $this->validate($request,[
+         'id' => 'required',
+         'checkbox' => 'required'
+      ]);
+      
+      foreach($request->checkbox as $key => $value){
+         TrilhaDeVendas::find($request->id)->etapas()->updateExistingPivot($key, array('totalizar' => $value));
+      }
+      
+      $request->session()->flash('success', 'Trilha de venda configurada com sucesso');
+      return redirect()->action('TrilhaDeVendaController@index');
+   }
+   
+   public function toogleTotalizar($id){
+      $trilha = TrilhaDeVendas::with('etapas.subetapas')->findOrFail($id);
+      
+//      dd($trilha->pivot->);
+//      User::TrilhaDeVendas(1)->etapas()->updateExistingPivot($roleId, $attributes);
+      
+//      $venda->totalizar = $totalizar;
+//      $venda->save();
+//      
+      
+   }
 }

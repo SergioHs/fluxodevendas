@@ -75,12 +75,12 @@ class VendaController extends Controller
        
 //       ********************* AQUI COMEÇA A TRETA ********************* 
        
+//       dd($vendas[0]->trilhadevendas_id);
 //       dd($vendas);
        
        $etapasComTotais = DB::table('trilhasdevendas_etapas')
           ->where('totalizar', '=', 1)
           ->join('trilhasdevendas', 'trilhasdevendas.id', '=', 'trilhasdevendas_etapas.trilhadevendas_id')
-          ->where('ativo', '=', 1)
           ->join('etapas', 'etapas.id', '=', 'trilhasdevendas_etapas.etapa_id')
           ->select('trilhasdevendas_etapas.*', 'trilhasdevendas.nome as nomeTrilha', 'etapas.nome as nomeEtapa')
           ->get();
@@ -88,51 +88,173 @@ class VendaController extends Controller
 //       dd($etapasComTotais);
        
        $totais = collect([]);
-              
+//       $totais = [];
+       
+//       $teste = collect([
+//          1 => [
+//             'trilhaNome' => 'Minha casa minha vida',
+//             'etapas' => [
+//                2 => [
+//                   'etapaNome' => 'Teste',
+//                   'qtd' => 5
+//                ],
+//                3 => [
+//                   'etapaNome' => 'Outra etapa',
+//                   'qtd' => 3
+//                ]
+//             ]
+//          ],
+//          3 => [
+//             'trilhaNome' => 'outra trilha',
+//             'etapas' => [
+//                1 => [
+//                   'etapaNome' => 'Nada',
+//                   'qtd' => 5
+//                ]
+//             ]
+//          ]
+//       ]);
+//       
+//       $encontrado = $teste->get(1);
+//       
+//       dd($encontrado);
+//       dd($teste);
+       
+//       array where
+//       $filtered = array_where($array, function ($value, $key) {
+//          return is_string($value);
+//       });
+       
        foreach($etapasComTotais as $etapa){
-          $vendasTrilha = $vendas->where('trilhadevendas_id', $etapa->trilhadevendas_id);
-//          dd($vendasTrilha);
+//          dd($etapa);
+//          $qtdRegistros = 1; //trocar esse resultado por uma busca marota de trilha e etapa na coleção de vendas
+//          $qtdRegistros = $vendas->where('trilhadevendas_id', $etapa->trilhadevendas_id)->count();
+          $t = $vendas->where('trilhadevendas_id', $etapa->trilhadevendas_id);
           
-          $total = 0;
-          foreach($vendasTrilha as $vendaTrilha){
-             if($vendaTrilha->statusvendas_id == 3)
-                continue;
-             
-             $reg = $vendaTrilha->etapas()->where('id', $etapa->etapa_id)->wherePivot('statusetapas_id', 2);
-             if($reg)
-               $total += $reg->count();
-//             dd($total);
-          }
+          echo $etapa->nomeTrilha . ', etapa ' . $etapa->nomeEtapa . ', result ' . $t->count() . '<br/>';
+//          dd($t);
+//          $t2 = $t->filter(function ($v) use ($etapa) {
+////                $r = $v->etapas->where('id', $etapa->etapa_id)->where('pivot_statusetapas_id', 2);
+//                return $v->etapas->where('pivot_statusetapas_id', 2);
+//             });
           
-//          dd($total);
+          $t2 = $t[0]->etapas[0]->pivot->statusetapas_id;//assim está encontrando
+//          $t2 = $t->where('etapas.pivot.statusetapas_id', 2);
           
-          if(!$total)
+          dd($t2);
+          
+          echo 'filtro ' . $t2->count() . '<br/>';
+          
+          $qtdRegistros = $vendas->where('trilhadevendas_id', $etapa->trilhadevendas_id)
+             ->filter(function ($v) use ($etapa) {
+                $r = $v->etapas->where('id', $etapa->etapa_id)->where('pivot_statusetapas_id', 2);
+//                dd($r);
+             })->count();
+//          dd($qtdRegistros);
+//          $qtdRegistros = $vendas->where('trilhadevendas_id', $etapa->trilhadevendas_id)
+//             ->where('etapas.id', $etapa->etapa_id)->count();
+//          echo 'trilha ' . $etapa->nomeTrilha . ', etapa ' . $etapa->nomeEtapa . '<br/>';
+          
+          if(!$qtdRegistros)
              continue;
           
-          $temp = collect([
-             'nomeEtapa' => $etapa->nomeEtapa, 
-             'quantidade' => $total
-          ]);
-          
-          // se não tiver trilha, incluir
+          // se não tiver trilha, incluir *** definido
           if (!$totais->get($etapa->trilhadevendas_id)){
+             echo 'if1 ' . $etapa->nomeTrilha . ', etapa ' . $etapa->nomeEtapa . '<br/>';
+             $temp = collect([
+                   'nomeEtapa' => $etapa->nomeEtapa, 
+                   'quantidade' => $qtdRegistros
+                ]);
+             
              $totais->put($etapa->trilhadevendas_id, [
                 'nomeTrilha' => $etapa->nomeTrilha, 
-                'etapas' => [$etapa->etapa_id => $temp]
+                $etapa->etapa_id => $temp
              ]);
              continue;
           }
+          
 //          dd($totais);
           
-          if (!array_key_exists($etapa->etapa_id, $totais[$etapa->trilhadevendas_id]['etapas'])){
-             $temp2 = $totais[$etapa->trilhadevendas_id];
-             $temp2['etapas'] = array_add($totais[$etapa->trilhadevendas_id]['etapas'], $etapa->etapa_id, $temp);
-             $totais[$etapa->trilhadevendas_id] = $temp2;
+//          $teste = $totais->get($etapa->trilhadevendas_id)->get($etapa->etapa_id);
+//          dd($teste);
+          
+//          if (!$totais[$etapa->trilhadevendas_id]->get($etapa->etapa_id)){
+          if (!array_key_exists($etapa->etapa_id, $totais[$etapa->trilhadevendas_id])){
+             echo 'if2 ' . $etapa->nomeTrilha . ', etapa ' . $etapa->nomeEtapa . '<br/>';
+             $temp = collect([
+                   'nomeEtapa' => $etapa->nomeEtapa, 
+                   'quantidade' => $qtdRegistros
+                ]);
+             
+//             $totais[$etapa->trilhadevendas_id]->put($etapa->etapa_id, $temp);
+//             array_set($totais, $etapa->etapa_id, $temp);
+//             array_push($totais[$etapa->trilhadevendas_id], $etapa->etapa_id, $temp);
+             $totais[$etapa->trilhadevendas_id] = array_add($totais[$etapa->trilhadevendas_id], $etapa->etapa_id, $temp);
+             
              continue;
           }
+          
+//          $totais[$etapa->trilhadevendas_id][$etapa->etapa_id]['quantidade'] = 10;
+//          dd($totais);
+          
+          
+//          $totais = array_add($totais, $etapa->trilhadevendas_id, [
+//             'nomeTrilha' => $etapa->nomeTrilha, 
+//             'etapas' => []
+//          ]);
+          
+//          if(!array_key_exists($etapa->trilhadevendas_id, $totais))
+//          array_push($totais, $etapa->trilhadevendas_id => [
+//             'nomeTrilha' => $etapa->nomeTrilha, 
+//             'etapa' => []
+//          ]);
+          
+//          array_push($totais, [
+//             $etapa->trilhadevendas_id => [
+//                'nomeTrilha' => $etapa->nomeTrilha, 
+//                'etapa' => [
+//                   etapa->etapa_id, [
+//                      'nomeEtapa' => $etapa->nomeEtapa, 
+//                      'quantidade' => $qtdRegistros
+//                   ]
+//                ]
+//             ]
+//          ]);
        }
        
-//       dd($totais);
+       
+       
+//       foreach($vendas as $venda){
+//          // descobrir se a trilha e etapa da venda existem nas trilhas com totais
+////          if() // se não existe segue para a próxima
+////             continue;
+//          
+//          // se forem totalizáveis, buscar no array de totais para somar ou incluir
+////          if(){
+////             
+////          } else{
+//             array_push($totais, [$venda->trilhaDeVenda->etapas, 1]);
+////          }
+//       }
+       
+       dd($totais);
+       
+       
+       // essa merda aqui é para testar os metodos idiotas que fiz antes
+       // fiquei com pena de excluir
+       foreach($trilhas as $trilha){
+          if($trilha->totalizaEtapas() > 0){
+            echo 'Trilha: ' . $trilha->nome . ', etapasComTotal: ' . $trilha->totalizaEtapas() . '<br/>';
+             $etapas = $trilha->etapasComTotal();
+             dd($etapas);
+             foreach($etapas as $etapa){
+                 echo '- Etapa: ' . $etapa->nome . ', Totalizar: ' . $etapa->pivot->totalizar , '<br/>';
+                dd($etapa);
+             }
+          }
+       }
+       dd($trilhas);
+       //a merda acaba aqui
        
 //       ********************* E VAI ATÉ AQUI ********************* 
        
@@ -145,8 +267,7 @@ class VendaController extends Controller
                 'vendedores'      => $vendedores,
                 'clientes'        => $clientes,
                 'imobiliarias'    => $imobiliarias,
-                'statusvendas'    => $statusVendas,
-                'totais'          => $totais
+                'statusvendas'    => $statusVendas
             ]
         );
     }

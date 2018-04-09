@@ -27,10 +27,30 @@
             </dl>
         </div>
         <div class="medium-12 cell">
-            <p class="lead">Etapas</p>
-            @component('components.etapas',['etapas' => $trilha->etapas])
-            @endcomponent
+           <p class="lead">Etapas</p>
+           <table class="hover" id="config-etapas">
+              <thead>
+                 <tr>
+                    <td>Nome</td>
+                    <td>Descrição</td>
+                    <td>Totalizar</td>
+                 </tr>
+              </thead>
+              <tbody>
+                 @foreach($trilha->etapas as $e)
+                 <tr>
+                    <td>{{$e->nome}}</td>
+                    <td>{{$e->descricao ?: "Não definido" }}</td>
+                    <td>
+                       <input type="checkbox" name="checkbox[{{$e->pivot->etapa_id}}]" 
+                         @if ($e->pivot->totalizar == 1) checked @endif disabled>
+                    </td>
+                 </tr>
+                 @endforeach
+              </tbody>
+           </table>
             <a href="{{action('TrilhaDeVendaController@edit',['id' => $trilha->id])}}" class="button secondary">Editar</a>
+            <a href="{{action('TrilhaDeVendaController@config',['id' => $trilha->id])}}" class="button secondary">Configurar</a>
         </div>
     </div>
 </div>
