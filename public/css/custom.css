@@ -58,3 +58,26 @@ div.reveal.has-scroll {
     padding: 1rem;
     border-radius: 0;
 }
+
+.outros-totais{
+   margin: 0;
+   padding: 2px 2px 2px 2px;
+   background-color: #E6E6E6;
+}
+
+.totais-etapas{
+   display: none;
+   position: absolute;
+   text-align: center;
+   z-index: 999;
+   background-color: #E6E6E6;
+   border-color: silver;
+   padding: 0 1vw 0.1vw 1vw;
+   border-radius: 0 0 4px 4px;
+   box-sizing: border-box;
+}
+
+#btn-totais{
+   padding: 0;
+   margin-bottom: 3px;
+}
