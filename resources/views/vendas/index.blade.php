@@ -9,35 +9,33 @@
 
     </div>
            
-     <div class="medium-3 cell d-inline float-right text-right">
+     <div class="medium-3 cell d-inline float-right text-center">
         <h5>Total de vendas: {{count($vendas)}} </h5>
      </div>
    
    @if($totais->count())
-     <div class="medium-3 cell d-inline float-right text-right" style="background-color:silver !important">
-        <h5>Outros totais <button class="menu-icon" type="button" data-toggle></button></h5>
-        <div class="totais-etapas">
-           <ul>
+     <div class="large-2 medium-3 cell d-inline float-right text-center">
+        <h5 class="outros-totais"><button id="btn-totais" class="menu-icon" type="button"></button> Outros totais</h5>
+        <div class="totais-etapas" id="totaisEtapas">
               @foreach($totais as $key => $trilha)
               <h6>Trilha {{$trilha['nomeTrilha']}}</h6>
               <table class="hover stack">
                  <thead>
                     <tr>
                        <td> Etapa </td>
-                       <td> Quantidade</td>
+                       <td class="text-center"> Quantidade</td>
                     </tr>
                  </thead>
                  <tbody>
                     @foreach($trilha['etapas'] as $key => $etapa)
                     <tr>
                        <td>{{$etapa['nomeEtapa']}}</td>
-                       <td>{{$etapa['quantidade']}}</td>
+                       <td class="text-center">{{$etapa['quantidade']}}</td>
                     </tr>
                     @endforeach
                  </tbody>
               </table>
               @endforeach
-           </ul>
         </div>
      </div>
    @endif
