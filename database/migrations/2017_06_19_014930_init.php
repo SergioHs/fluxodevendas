@@ -105,7 +105,7 @@ class Init extends Migration
             $table->string('endereco')->nullable();
             $table->integer('cidade_id')->unsigned();
             $table->timestamps();
-
+            $table->boolean('gerenciagaragem')->default(0);
             $table->foreign('cidade_id')->references('id')->on('cidades');
         });
 

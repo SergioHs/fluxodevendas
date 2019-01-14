@@ -62,7 +62,20 @@
             @component('components.form-errors',['field' => 'nomenclatura_bloco'])
             @endcomponent
         </div>
+        <div class="medium-3 cell">
+        <label>Venda de garagens</label>
+        <div class="form-check form-check-inline">
+  <input class="form-check-input" type="radio" name="gerenciagaragem" id="" value="1">
+  <label class="form-check-label" for="inlineRadio1">Sim</label>
+
+  <input class="form-check-input" type="radio" name="gerenciagaragem" id="i" value="0">
+  <label class="form-check-label" for="inlineRadio2">Não</label>
+  @component('components.form-errors',['field' => 'gerenciagaragem'])
+        @endcomponent
+</div>
+</div>
     </div>
+    
     <div class="grid-x grid-padding-x">
         <div class="medium-12 cell">
             <button type="submit" class="button">Enviar</button>

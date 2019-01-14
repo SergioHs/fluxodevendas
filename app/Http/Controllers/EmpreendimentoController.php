@@ -56,7 +56,8 @@ class EmpreendimentoController extends Controller
             'numero_blocos' => 'required|numeric',
             'nomenclatura_bloco' => 'required',
             'numero_andares' => 'required|numeric',
-            'numero_ap_andares' => 'required|numeric'
+            'numero_ap_andares' => 'required|numeric',
+            'gerenciagaragem' => 'required|numeric'
         ]);
 
         try {
@@ -65,6 +66,7 @@ class EmpreendimentoController extends Controller
                 $empreendimento->nome = $r->nome;
                 $empreendimento->endereco = $r->endereco;
                 $empreendimento->cidade_id = $r->cidade_id;
+                $empreendimento->gerenciagaragem = $r->gerenciagaragem;
                 $empreendimento->saveOrFail();
 
 
