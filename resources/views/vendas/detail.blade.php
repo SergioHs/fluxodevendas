@@ -35,6 +35,15 @@
             <dd>@component('components.status-vendas',['status' => $venda->status]) @endcomponent</dd>
         </dl>
     </div>
+    @if($venda->vaga)
+
+    <div class="medium-6 cell">
+        <dt><b>Vaga Escolhida</b></dt>
+        <dd>{{$venda->vaga->nome}} </dd>        
+        <br>
+    @endif
+
+    </div>
    @if(isset($etapasEmAtraso) && count($etapasEmAtraso) > 0)
     <div class="medium-12 cell">
         <dl>
@@ -60,6 +69,7 @@
        </dl>
     </div>
     @endif
+  
     <div class="medium-12 cell" id="etapas-container">
         <h5>Etapas</h5>
             @if(isset($etapasConcluidas) && count($etapasConcluidas) > 0)

@@ -54,5 +54,9 @@ class Venda extends Model
     {
         return $this->belongsTo('App\TrilhaDeVendas', 'trilhadevendas_id');
     }
+    public function vaga()
+    {
+        return $this->belongsTo('App\Venda');   
+    }
 
 }

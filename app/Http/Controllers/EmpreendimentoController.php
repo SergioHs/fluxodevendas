@@ -8,6 +8,7 @@ use App\Bloco;
 use App\Utils;
 use App\Estado;
 use App\Cidade;
+use App\Vaga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +58,8 @@ class EmpreendimentoController extends Controller
             'nomenclatura_bloco' => 'required',
             'numero_andares' => 'required|numeric',
             'numero_ap_andares' => 'required|numeric',
-            'gerenciagaragem' => 'required|numeric'
+            'gerenciagaragem' => 'required|numeric',
+            'numero_vagas' => 'nullable|numeric'
         ]);
 
         try {
@@ -68,8 +70,13 @@ class EmpreendimentoController extends Controller
                 $empreendimento->cidade_id = $r->cidade_id;
                 $empreendimento->gerenciagaragem = $r->gerenciagaragem;
                 $empreendimento->saveOrFail();
-
-
+                
+                for($i=0;$i< $r->numero_vagas;$i++) {
+                $vaga = new Vaga();
+                $vaga->nome = $i;
+                $vaga->empreendimento_id = $empreendimento->id;
+                $vaga->saveOrFail();
+                }
 
                 for ($bloco = 0; $bloco < $r->numero_blocos; $bloco++) {
                     $blocoEntity = new Bloco();

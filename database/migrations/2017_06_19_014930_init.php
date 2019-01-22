@@ -108,6 +108,14 @@ class Init extends Migration
             $table->boolean('gerenciagaragem')->default(0);
             $table->foreign('cidade_id')->references('id')->on('cidades');
         });
+        Schema::create('vagas', function(Blueprint $table) {
+            $table->increments('id');
+            $table->string('nome');
+            $table->integer('status')->default(0);
+            $table->integer('empreendimento_id')->unsigned();
+            $table->timestamps();
+            $table->foreign('empreendimento_id')->references('id')->on('empreendimentos');
+        });
 
         Schema::create('apartamentos', function(Blueprint $table){
             $table->increments('id');
@@ -134,7 +142,8 @@ class Init extends Migration
             $table->integer('statusvendas_id')->unsigned();
             $table->integer('apartamento_id')->unsigned();
             $table->integer('trilhadevendas_id')->unsigned();
-
+            $table->integer('vaga_id')->unsigned()->nullable();
+            $table->foreign('vaga_id')->references('id')->on('vagas')->onDelete('cascade');
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('vendedor_id')->references('id')->on('vendedores')->onDelete('cascade');
             $table->foreign('statusvendas_id')->references('id')->on('statusvendas')->onDelete('cascade');
