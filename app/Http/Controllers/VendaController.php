@@ -70,6 +70,11 @@ class VendaController extends Controller
                 $vendas->with('status')->whereHas('user',function($q) use ($request){
                     $q->where('statusvendas_id','=',$request->statusvenda_id);
                 });
+            if(isset($request->mudaStatusGaragem)) {
+                dd($request->mudaStatusGaragem);
+            }
+
+
         }
 
         $vendas = $vendas->get();
@@ -304,23 +309,29 @@ class VendaController extends Controller
 
     public function mudarStatusVenda($id, $status)
     {
-
         $venda = Venda::findOrFail($id);
+        $vaga = Vaga::findOrFail($venda->vaga_id);
+        $vaga->status='0';
+        $vaga->save();
         $venda->statusvendas_id = $status;
         $venda->save();
+    
 
         activity()
             ->by(Auth::id())
             ->on($venda)
             ->log("Trocou status da venda #".$venda->id . " para " . StatusVendasEnum::getVerbose($status));
-
+            
         if($status == StatusVendasEnum::VENDIDO)
             \Illuminate\Support\Facades\Request::session()->flash('success','Venda concluída com sucesso');
-        else
+        else 
+                        
+          
             \Illuminate\Support\Facades\Request::session()->flash('success','Venda cancelada');
+
+            return redirect()->action('VendaController@index');
         
-        return redirect()->action('VendaController@index');
-    }
+        }
 
     public function pendencies()
     {
