@@ -48,11 +48,36 @@
             @component('components.form-errors',['field' => 'trilhadevendas_id'])
             @endcomponent
         </div>
+                    
+                        @if($apartamento->bloco->empreendimento->gerenciagaragem == 1)
+                        <div class="large-12 cell container">
+                    <div class="container">
+                        <p class="lead">Garagem</p>
+                @foreach($vagas as $vaga)
+                    @if ($vaga->status===0)
+                <a id="vaga {{$vaga->id}}" onclick="preencheVagaId(this, {{$vaga->id}}, event)" class="button small success">
+                <b>Vaga: </b> {{$vaga->nome}}
+                </a>
+                    @endif
+                    @if($vaga->status==1)
+                    <a class="button small alert disabled">
+                            <b>Vaga: </b> {{$vaga->nome}} 
+                    </a>
+                    @endif
+                @endforeach 
+        @endif                       
+        <input id="vagaId" type="hidden" name="vaga_id">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </div>
+        </div>
+        </div>
+        </div>
+        </div>
     </div>
+
     <div class="grid-x grid-padding-y grid-padding-x">
         <div class="medium-12 cell">
             <input type="submit" class="button primary" value="Iniciar venda">
         </div>
+   
     </div>
 </form>
 @endsection

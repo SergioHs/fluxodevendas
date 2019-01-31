@@ -91,10 +91,8 @@ class Init extends Migration
             $table->integer('etapa_id')->unsigned();
             $table->integer('ordem');
             $table->timestamps();
-
             $table->foreign('trilhadevendas_id')->references('id')->on('trilhasdevendas');
             $table->foreign('etapa_id')->references('id')->on('etapas');
-
             $table->primary(['trilhadevendas_id','etapa_id']);
         });
 
@@ -105,7 +103,6 @@ class Init extends Migration
             $table->string('endereco')->nullable();
             $table->integer('cidade_id')->unsigned();
             $table->timestamps();
-
             $table->foreign('cidade_id')->references('id')->on('cidades');
         });
 
@@ -116,7 +113,6 @@ class Init extends Migration
             $table->string('bloco')->nullable();
             $table->integer('empreendimento_id')->unsigned();
             $table->timestamps();
-
             $table->foreign('empreendimento_id')->references('id')->on('empreendimentos')->onDelete('cascade');
         });
 
@@ -134,7 +130,6 @@ class Init extends Migration
             $table->integer('statusvendas_id')->unsigned();
             $table->integer('apartamento_id')->unsigned();
             $table->integer('trilhadevendas_id')->unsigned();
-
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('vendedor_id')->references('id')->on('vendedores')->onDelete('cascade');
             $table->foreign('statusvendas_id')->references('id')->on('statusvendas')->onDelete('cascade');

@@ -65,7 +65,12 @@ html {
 body {
   margin: 0;
 }
-
+.active {
+  background-color:red !important;
+}
+#numeroDeVagas {
+  display:none;
+}
 /**
      * Add the correct display in IE 9-.
      */

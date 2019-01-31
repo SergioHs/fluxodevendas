@@ -12,6 +12,10 @@ class Empreendimento extends Model
     {
         return $this->hasMany('App\Bloco');
     }
+    public function vagas()
+    {
+        return $this->hasMany('App\Vaga');
+    }
 
     public function cidade()
     {

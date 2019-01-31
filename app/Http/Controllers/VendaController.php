@@ -11,6 +11,7 @@ use App\StatusEtapasEnum;
 use App\SubEtapa;
 use App\TrilhaDeVendas;
 use App\Venda;
+use App\Vaga;
 use App\Vendedor;
 use App\User;
 use App\Imobiliaria;
@@ -69,6 +70,11 @@ class VendaController extends Controller
                 $vendas->with('status')->whereHas('user',function($q) use ($request){
                     $q->where('statusvendas_id','=',$request->statusvenda_id);
                 });
+            if(isset($request->mudaStatusGaragem)) {
+                dd($request->mudaStatusGaragem);
+            }
+
+
         }
 
         $vendas = $vendas->get();
@@ -76,7 +82,6 @@ class VendaController extends Controller
 //       ********************* AQUI COMEÇA A TRETA ********************* 
        
 //       dd($vendas);
-       
        $etapasComTotais = DB::table('trilhasdevendas_etapas')
           ->where('totalizar', '=', 1)
           ->join('trilhasdevendas', 'trilhasdevendas.id', '=', 'trilhasdevendas_etapas.trilhadevendas_id')
@@ -156,6 +161,10 @@ class VendaController extends Controller
         $venda = Venda::with(['apartamento.bloco.empreendimento','vendedor', 'cliente', 'status', 'trilhaDeVenda','etapas','subetapas'])
             ->findOrFail($id);
 
+        if($venda->vaga_id!==NULL) {
+            $vaga = Vaga::findOrFail($venda->vaga_id);
+            $venda->vaga = $vaga;
+        }
         $venda->etapas = $venda->etapas->sortBy(function($v) {
             return $v->pivot->ordem;
         });
@@ -188,7 +197,7 @@ class VendaController extends Controller
             'etapaEmAndamento'      => $etapaEmAndamento,
             'etapasEmEspera'        => $etapasEmEspera,
             'etapasEmAtraso'        => $etapasEmAtraso,
-            'mostraBotaoDeConcluir' => $mostraBotaoDeConcluir
+            'mostraBotaoDeConcluir' => $mostraBotaoDeConcluir,
             ]
         );
     }
@@ -214,8 +223,8 @@ class VendaController extends Controller
        
         $trilhas = TrilhaDeVendas::where('ativo', '=', 1)->get();
         $empreendimentos = Empreendimento::get();
-
-        return view('vendas.create', ['vendedores' => $vendedores, 'clientes' => $clientes, 'apartamento' => $apartamento, 'trilhas' => $trilhas, 'empreendimentos' => $empreendimentos, 'cliente' => isset($cliente) ? $cliente : null]);
+        $vagas = Vaga::where('empreendimento_id','=', $apartamento->bloco->empreendimento->id)->get();
+        return view('vendas.create', ['vagas'=>$vagas, 'vendedores' => $vendedores, 'clientes' => $clientes, 'apartamento' => $apartamento, 'trilhas' => $trilhas, 'empreendimentos' => $empreendimentos, 'cliente' => isset($cliente) ? $cliente : null]);
     }
 
     public function store(Request $r)
@@ -224,14 +233,19 @@ class VendaController extends Controller
             'cliente_id' => 'required|numeric',
             'user_id' => 'required|numeric',
             'trilhadevendas_id' => 'required|numeric',
-            'apartamento_id' => 'required|numeric'
+            'apartamento_id' => 'required|numeric',
+            'vaga_id' => 'nullable|numeric'
         ]);
 
         $venda = new Venda();
         $venda->fill($r->all());
         $venda->statusvendas_id = StatusVendasEnum::RESERVADO;
         $venda->save();
-       
+       if($r->vaga_id) {
+           $vaga = Vaga::findOrFail($r->vaga_id);
+           $vaga->status = 1;
+           $vaga->save();
+       }
         event(new VendaCadastrada($venda));
 
         $apartamento = Apartamento::with('bloco.empreendimento')->findOrFail($r->apartamento_id);
@@ -295,23 +309,29 @@ class VendaController extends Controller
 
     public function mudarStatusVenda($id, $status)
     {
-
         $venda = Venda::findOrFail($id);
+        $vaga = Vaga::findOrFail($venda->vaga_id);
+        $vaga->status='0';
+        $vaga->save();
         $venda->statusvendas_id = $status;
         $venda->save();
+    
 
         activity()
             ->by(Auth::id())
             ->on($venda)
             ->log("Trocou status da venda #".$venda->id . " para " . StatusVendasEnum::getVerbose($status));
-
+            
         if($status == StatusVendasEnum::VENDIDO)
             \Illuminate\Support\Facades\Request::session()->flash('success','Venda concluída com sucesso');
-        else
+        else 
+                        
+          
             \Illuminate\Support\Facades\Request::session()->flash('success','Venda cancelada');
+
+            return redirect()->action('VendaController@index');
         
-        return redirect()->action('VendaController@index');
-    }
+        }
 
     public function pendencies()
     {
