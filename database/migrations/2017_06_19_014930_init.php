@@ -130,8 +130,6 @@ class Init extends Migration
             $table->integer('statusvendas_id')->unsigned();
             $table->integer('apartamento_id')->unsigned();
             $table->integer('trilhadevendas_id')->unsigned();
-            $table->integer('vaga_id')->unsigned()->nullable();
-            $table->foreign('vaga_id')->references('id')->on('vagas')->onDelete('cascade');
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('vendedor_id')->references('id')->on('vendedores')->onDelete('cascade');
             $table->foreign('statusvendas_id')->references('id')->on('statusvendas')->onDelete('cascade');

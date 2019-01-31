@@ -16,6 +16,7 @@ class AddGaragem extends Migration
         Schema::table('empreendimentos', function (Blueprint $table) {
             $table->boolean('gerenciagaragem')->default(0);
         });
+
         Schema::create('vagas', function(Blueprint $table) {
             $table->increments('id');
             $table->string('nome');
@@ -24,6 +25,10 @@ class AddGaragem extends Migration
             $table->timestamps();
             $table->foreign('empreendimento_id')->references('id')->on('empreendimentos');
         });
+        Schema::table('vendas', function (Blueprint $table) {
+            $table->integer('vaga_id')->unsigned()->nullable();
+            $table->foreign('vaga_id')->references('id')->on('vagas')->onDelete('cascade');
+            });
 
         //
     }
