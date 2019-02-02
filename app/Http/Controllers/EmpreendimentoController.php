@@ -71,7 +71,7 @@ class EmpreendimentoController extends Controller
                 $empreendimento->gerenciagaragem = $r->gerenciagaragem;
                 $empreendimento->saveOrFail();
                 
-                for($i=1;$i< $r->numero_vagas;$i++) {
+                for($i=0;$i< $r->numero_vagas;$i++) {
                 $vaga = new Vaga();
                 $vaga->nome = $i;
                 $vaga->empreendimento_id = $empreendimento->id;
