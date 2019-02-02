@@ -310,9 +310,11 @@ class VendaController extends Controller
     public function mudarStatusVenda($id, $status)
     {
         $venda = Venda::findOrFail($id);
+        if($venda->vaga_id) {
         $vaga = Vaga::findOrFail($venda->vaga_id);
         $vaga->status='0';
         $vaga->save();
+        }
         $venda->statusvendas_id = $status;
         $venda->save();
     
