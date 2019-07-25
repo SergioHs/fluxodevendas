@@ -237,7 +237,7 @@ class VendaController extends Controller
             'apartamento_id' => 'required|numeric',
             'vaga_id' => 'nullable|numeric'
         ]);
-        if (Venda::where('apartamento_id', '=', $r->apartamento_id)->where('trilhadevendas_id', '=', $r->trilhadevendas_id)->exists()) {
+        if (Venda::where('apartamento_id', '=', $r->apartamento_id)->exists()) {
             Session::flash('error', 'O apartamento selecionada já foi reservado');
             return redirect('empreendimento');
             die();
@@ -247,7 +247,7 @@ class VendaController extends Controller
         $venda->statusvendas_id = StatusVendasEnum::RESERVADO;
         $venda->save();
        if($r->vaga_id) {
-            if (Venda::where('apartamento_id', '=', $r->apartamento_id)->where('trilhadevendas_id', '=', $r->trilhadevendas_id)->where('vaga_id', '=', '')->exists()) {
+            if (Venda::join('vagas', 'vendas.vaga_id', '=', 'vagas.id')->where('apartamento_id', '=', $r->apartamento_id)->where('vaga_id', '=', $r->vaga_id)->where('status', '=', '1')->exists()) {
                 Session::flash('error', 'A vaga selecionada já foi reservada');
                 return redirect('empreendimento');
                 die();
