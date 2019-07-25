@@ -20,6 +20,7 @@ use App\StatusVendasEnum;
 use App\StatusVenda;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class VendaController extends Controller
 {
@@ -236,12 +237,21 @@ class VendaController extends Controller
             'apartamento_id' => 'required|numeric',
             'vaga_id' => 'nullable|numeric'
         ]);
-
+        if (Venda::where('apartamento_id', '=', $r->apartamento_id)->exists()) {
+            Session::flash('error', 'O apartamento selecionada já foi reservado');
+            return redirect('empreendimento');
+            die();
+         }
         $venda = new Venda();
         $venda->fill($r->all());
         $venda->statusvendas_id = StatusVendasEnum::RESERVADO;
         $venda->save();
        if($r->vaga_id) {
+            if (Venda::join('vagas', 'vendas.vaga_id', '=', 'vagas.id')->where('apartamento_id', '=', $r->apartamento_id)->where('vaga_id', '=', $r->vaga_id)->where('status', '=', '1')->exists()) {
+                Session::flash('error', 'A vaga selecionada já foi reservada');
+                return redirect('empreendimento');
+                die();
+            }
            $vaga = Vaga::findOrFail($r->vaga_id);
            $vaga->status = 1;
            $vaga->save();
