@@ -237,7 +237,7 @@ class VendaController extends Controller
             'apartamento_id' => 'required|numeric',
             'vaga_id' => 'nullable|numeric'
         ]);
-        if (Venda::where('apartamento_id', '=', $r->apartamento_id)->exists()) {
+        if (Venda::where('apartamento_id', '=', $r->apartamento_id)->where('statusvendas_id', '=', '2')->exists()) {
             Session::flash('error', 'O apartamento selecionada já foi reservado');
             return redirect('empreendimento');
             die();
@@ -322,24 +322,23 @@ class VendaController extends Controller
         $venda = Venda::findOrFail($id);
         if($venda->vaga_id) {
         $vaga = Vaga::findOrFail($venda->vaga_id);
-        $vaga->status='0';
-        $vaga->save();
+        // $vaga->status='0';
         }
         $venda->statusvendas_id = $status;
-        $venda->save();
     
-
+        if ($status == StatusVendasEnum::VENDIDO) {
+            \Illuminate\Support\Facades\Request::session()->flash('success','Venda concluída com sucesso');
+            $venda->save();
+        } else    {                 
+            $vaga->status='0';
+            $vaga->save();
+            $venda->save();
+            \Illuminate\Support\Facades\Request::session()->flash('success','Venda cancelada');
+        }
         activity()
             ->by(Auth::id())
             ->on($venda)
             ->log("Trocou status da venda #".$venda->id . " para " . StatusVendasEnum::getVerbose($status));
-            
-        if($status == StatusVendasEnum::VENDIDO)
-            \Illuminate\Support\Facades\Request::session()->flash('success','Venda concluída com sucesso');
-        else 
-                        
-          
-            \Illuminate\Support\Facades\Request::session()->flash('success','Venda cancelada');
 
             return redirect()->action('VendaController@index');
         
