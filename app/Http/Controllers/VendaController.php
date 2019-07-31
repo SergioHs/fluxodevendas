@@ -246,7 +246,7 @@ class VendaController extends Controller
         $venda->fill($r->all());
         $venda->statusvendas_id = StatusVendasEnum::RESERVADO;
         $venda->save();
-       if($r->vaga_id) {
+       if(isset($r->vaga_id)) {
             if (Venda::join('vagas', 'vendas.vaga_id', '=', 'vagas.id')->where('apartamento_id', '=', $r->apartamento_id)->where('vaga_id', '=', $r->vaga_id)->where('status', '=', '1')->exists()) {
                 Session::flash('error', 'A vaga selecionada já foi reservada');
                 return redirect('empreendimento');
@@ -320,7 +320,7 @@ class VendaController extends Controller
     public function mudarStatusVenda($id, $status)
     {
         $venda = Venda::findOrFail($id);
-        if($venda->vaga_id) {
+        if(isset($venda->vaga_id)) {
         $vaga = Vaga::findOrFail($venda->vaga_id);
         // $vaga->status='0';
         }
@@ -330,8 +330,10 @@ class VendaController extends Controller
             \Illuminate\Support\Facades\Request::session()->flash('success','Venda concluída com sucesso');
             $venda->save();
         } else    {                 
+          if(isset($vaga)) {
             $vaga->status='0';
             $vaga->save();
+        }
             $venda->save();
             \Illuminate\Support\Facades\Request::session()->flash('success','Venda cancelada');
         }
