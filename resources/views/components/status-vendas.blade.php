@@ -1,0 +1,1 @@
+<label class="label {{$status->id == \App\StatusVendasEnum::VENDIDO ? "success" : ($status->id == \App\StatusVendasEnum::RESERVADO ? "warning" : "alert")}}">{{$status->nome}}</label>

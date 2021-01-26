@@ -1,0 +1,83 @@
+table.hover tbody tr:hover{
+    cursor:pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+div.draggable{
+    border: 3px dashed #b8d7f3;
+}
+
+div.etapas-subetapas div.etapa {
+    background-color: #F7F7F7;
+    padding: 10px;
+}
+
+div.etapas-subetapas div.etapa div.sub-etapa {
+    margin-left: 25px;
+    background-color: #e6e6e6;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+div.etapas-subetapas div.etapa div.sub-etapa div.sub-etapa-content {
+    display: flex;
+    align-items: center;
+}
+
+div.etapas-subetapas div.etapa div.sub-etapa div.sub-etapa-content  input{
+    margin-bottom: 0px;
+    flex-shrink: 0;
+}
+
+div.reveal.has-scroll {
+    overflow:scroll !important;
+    max-height: 90%;
+}
+
+.has-line-through {
+    text-decoration: line-through;
+}
+
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid #81B03E;
+}
+
+.ghost {
+    margin-left: 5px;
+}
+
+.log-in-form {
+    border: 1px solid #cacaca;
+    padding: 1rem;
+    border-radius: 0;
+}
+
+.outros-totais{
+   margin: 0;
+   padding: 2px 2px 2px 2px;
+   background-color: #E6E6E6;
+}
+
+.totais-etapas{
+   display: none;
+   position: absolute;
+   text-align: center;
+   z-index: 999;
+   background-color: #E6E6E6;
+   border-color: silver;
+   padding: 0 1vw 0.1vw 1vw;
+   border-radius: 0 0 4px 4px;
+   box-sizing: border-box;
+}
+
+#btn-totais{
+   padding: 0;
+   margin-bottom: 3px;
+}
